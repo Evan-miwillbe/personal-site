@@ -625,52 +625,60 @@
     to{opacity:1;transform:translateY(0)}
   }
 
-  /* ============ 鼠标跟随：点 + 圈双层（v1 原版） ============ */
+  /* ============ 鼠标跟随：玻璃圆光标（jensbosman.nl 风） ============ */
   @media (hover:hover) and (pointer:fine){
     body, a, button, .btn{cursor:none}
   }
-  .cursor-dot, .cursor-ring{
+  .cursor-dot{display:none}    /* 弃用旧的点 */
+  .cursor-ring{
     position:fixed; top:0; left:0;
+    width:42px; height:42px;
+    margin:-21px 0 0 -21px;
     pointer-events:none; z-index:9999;
     will-change:transform;
-    mix-blend-mode:difference;
+    display:flex; align-items:center; justify-content:center;
+    background:transparent; border:0;
+    /* 闲置默认：scale(0.18) 看起来像一个小点 */
   }
-  .cursor-dot{
-    width:6px; height:6px; border-radius:50%;
-    background:#fff;
-    margin:-3px 0 0 -3px;
+  .cursor-ring .circle{
+    width:100%; height:100%; border-radius:50%;
+    background:rgba(127, 32, 32, 0.18);     /* 半透明酒红 */
+    border:1.5px solid rgba(127, 32, 32, 0.6);
+    backdrop-filter:blur(4px);
+    -webkit-backdrop-filter:blur(4px);
+    transform:scale(.22);                   /* 默认像小点 */
+    transition:transform .45s cubic-bezier(.55,.085,0,.99),
+               background-color .3s ease,
+               border-color .3s ease,
+               backdrop-filter .3s ease,
+               -webkit-backdrop-filter .3s ease;
   }
-  .cursor-ring{
-    width:36px; height:36px; border-radius:50%;
-    border:1px solid #fff;
-    background:transparent;
-    margin:-18px 0 0 -18px;
-    transition:width .3s cubic-bezier(.4,0,.2,1),
-               height .3s cubic-bezier(.4,0,.2,1),
-               margin .3s cubic-bezier(.4,0,.2,1),
-               background .25s ease,
-               border-color .25s ease;
+  /* hover 一般链接/按钮：放大到 0.9，玻璃感更明显 */
+  .cursor-ring.hover .circle{
+    transform:scale(.95);
+    background:rgba(127, 32, 32, 0.22);
+    border-color:rgba(127, 32, 32, 0.8);
+    backdrop-filter:blur(6px);
+    -webkit-backdrop-filter:blur(6px);
   }
-  .cursor-ring.hover{
-    width:64px; height:64px;
-    margin:-32px 0 0 -32px;
-    background:rgba(255,255,255,.06);
-  }
-  .cursor-ring.text{
-    width:92px; height:92px;
-    margin:-46px 0 0 -46px;
-    background:#fff;
-    border-color:transparent;
+  /* hover 项目卡 / 社交卡：放大到 2.5 + 强模糊 + 显示文字 */
+  .cursor-ring.text .circle{
+    transform:scale(2.5);
+    background:rgba(127, 32, 32, 0.28);
+    border-color:rgba(127, 32, 32, 0);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
   }
   .cursor-ring .cr-label{
     position:absolute; top:50%; left:50%;
-    transform:translate(-50%,-50%) scale(.6);
+    transform:translate(-50%,-50%) scale(.3);
     font-family:"Noto Serif SC",serif;
-    font-size:18px; font-weight:500;
-    color:#000; letter-spacing:.08em;
-    white-space:nowrap; opacity:0;
-    transition:opacity .25s .1s, transform .35s cubic-bezier(.34,1.4,.64,1) .05s;
-    mix-blend-mode:normal;
+    font-size:13px; font-weight:500;
+    color:#F6F3EB;
+    letter-spacing:.08em; white-space:nowrap;
+    opacity:0;
+    transition:opacity .25s .15s, transform .4s cubic-bezier(.55,.085,0,.99) .08s;
+    pointer-events:none;
   }
   .cursor-ring.text .cr-label{
     opacity:1;
@@ -678,8 +686,10 @@
   }
   .cursor-ring.text .cr-label.en{
     font-family:"JetBrains Mono",monospace;
-    font-size:11px; letter-spacing:.24em; font-weight:600;
+    font-size:9px; letter-spacing:.28em; font-weight:600;
   }
+  /* 点击瞬间收缩 */
+  .cursor-ring.click .circle{transform:scale(.6)}
 
   /* hl-text wrapper 保留为透明 inline-block，不再添加视觉效果 */
   .hl-text{display:inline-block}
@@ -1122,16 +1132,18 @@
   <a href="play.html">3D 探索</a>
 </div>
 
-<!-- ============ Custom Cursor ============ -->
+<!-- ============ Custom Cursor (玻璃圆) ============ -->
 <div class="cursor-dot" id="cursorDot"></div>
-<div class="cursor-ring" id="cursorRing"><span class="cr-label" id="cursorLabel">VIEW</span></div>
+<div class="cursor-ring" id="cursorRing">
+  <div class="circle"></div>
+  <span class="cr-label" id="cursorLabel">阅读</span>
+</div>
 
 <script>
 (function(){
   // 移动端 / 触屏跳过
   if(!window.matchMedia('(hover:hover) and (pointer:fine)').matches) return;
 
-  const dot = document.getElementById('cursorDot');
   const ring = document.getElementById('cursorRing');
   const label = document.getElementById('cursorLabel');
 
@@ -1139,19 +1151,17 @@
   let rx = mx, ry = my;
   let raf = null;
 
-  dot.style.transform = 'translate3d(-100px,-100px,0)';
   ring.style.transform = 'translate3d(-100px,-100px,0)';
 
   document.addEventListener('mousemove', e=>{
     mx = e.clientX; my = e.clientY;
-    dot.style.transform = `translate3d(${mx}px, ${my}px, 0)`;  // 小点 0 延迟
     if(!raf) raf = requestAnimationFrame(tick);
   });
 
-  // 圈 lerp 0.18 弹性滞后 — v1 原版
+  // lerp 0.22 单一玻璃圆跟随
   function tick(){
-    rx += (mx - rx) * 0.18;
-    ry += (my - ry) * 0.18;
+    rx += (mx - rx) * 0.22;
+    ry += (my - ry) * 0.22;
     ring.style.transform = `translate3d(${rx}px, ${ry}px, 0)`;
     if(Math.abs(mx - rx) > 0.1 || Math.abs(my - ry) > 0.1){
       raf = requestAnimationFrame(tick);
@@ -1159,6 +1169,10 @@
       raf = null;
     }
   }
+
+  // 点击瞬间收缩动画
+  document.addEventListener('mousedown', ()=> ring.classList.add('click'));
+  document.addEventListener('mouseup', ()=> ring.classList.remove('click'));
 
   // 一般交互元素 → ring 放大
   document.querySelectorAll('a, button, .btn').forEach(el=>{
@@ -1188,10 +1202,10 @@
 
   // 离开页面隐藏
   document.addEventListener('mouseleave', ()=>{
-    dot.style.opacity = ring.style.opacity = '0';
+    ring.style.opacity = '0';
   });
   document.addEventListener('mouseenter', ()=>{
-    dot.style.opacity = ring.style.opacity = '1';
+    ring.style.opacity = '1';
   });
 
   // ============ 视差：大字 + 章节数字反向跟随 ============

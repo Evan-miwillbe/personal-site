@@ -113,12 +113,41 @@
   .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--ink)}
   .btn.ghost:hover{border-color:var(--accent);color:var(--accent)}
 
-  /* 双层光标 */
-  @media(hover:hover) and (pointer:fine){body,a,button,.btn{cursor:none}}
-  .cursor-dot,.cursor-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:9999;will-change:transform;mix-blend-mode:difference}
-  .cursor-dot{width:6px;height:6px;border-radius:50%;background:#fff;margin:-3px 0 0 -3px}
-  .cursor-ring{width:36px;height:36px;border-radius:50%;border:1px solid #fff;background:transparent;margin:-18px 0 0 -18px;transition:width .3s cubic-bezier(.4,0,.2,1),height .3s cubic-bezier(.4,0,.2,1),margin .3s cubic-bezier(.4,0,.2,1),background .25s ease}
-  .cursor-ring.hover{width:64px;height:64px;margin:-32px 0 0 -32px;background:rgba(255,255,255,.06)}
+  /* === 玻璃圆光标（jensbosman.nl 风） === */
+  @media (hover:hover) and (pointer:fine){
+    body, a, button, .btn{cursor:none}
+  }
+  .cursor-dot{display:none}
+  .cursor-ring{
+    position:fixed; top:0; left:0;
+    width:42px; height:42px;
+    margin:-21px 0 0 -21px;
+    pointer-events:none; z-index:9999;
+    will-change:transform;
+    display:flex; align-items:center; justify-content:center;
+    background:transparent; border:0;
+  }
+  .cursor-ring .circle{
+    width:100%; height:100%; border-radius:50%;
+    background:rgba(127, 32, 32, 0.18);
+    border:1.5px solid rgba(127, 32, 32, 0.6);
+    backdrop-filter:blur(4px);
+    -webkit-backdrop-filter:blur(4px);
+    transform:scale(.22);
+    transition:transform .45s cubic-bezier(.55,.085,0,.99),
+               background-color .3s ease,
+               border-color .3s ease,
+               backdrop-filter .3s ease,
+               -webkit-backdrop-filter .3s ease;
+  }
+  .cursor-ring.hover .circle{
+    transform:scale(.95);
+    background:rgba(127, 32, 32, 0.22);
+    border-color:rgba(127, 32, 32, 0.8);
+    backdrop-filter:blur(6px);
+    -webkit-backdrop-filter:blur(6px);
+  }
+  .cursor-ring.click .circle{transform:scale(.6)}
 
   /* "未入选" 提示 */
   .note-banner{
@@ -341,32 +370,34 @@
 
 <!-- 双层光标 -->
 <div class="cursor-dot" id="cursorDot"></div>
-<div class="cursor-ring" id="cursorRing"></div>
+<div class="cursor-ring" id="cursorRing">
+  <div class="circle"></div>
+  <span class="cr-label" id="cursorLabel">阅读</span>
+</div>
 <script>
 (function(){
   if(!window.matchMedia('(hover:hover) and (pointer:fine)').matches) return;
-  var dot=document.getElementById('cursorDot');
   var ring=document.getElementById('cursorRing');
   var mx=innerWidth/2,my=innerHeight/2,rx=mx,ry=my,raf=null;
-  dot.style.transform='translate3d(-100px,-100px,0)';
   ring.style.transform='translate3d(-100px,-100px,0)';
   addEventListener('mousemove',function(e){
     mx=e.clientX;my=e.clientY;
-    dot.style.transform='translate3d('+mx+'px,'+my+'px,0)';
     if(!raf)raf=requestAnimationFrame(tick);
   });
   function tick(){
-    rx+=(mx-rx)*.18;ry+=(my-ry)*.18;
+    rx+=(mx-rx)*.22;ry+=(my-ry)*.22;
     ring.style.transform='translate3d('+rx+'px,'+ry+'px,0)';
     if(Math.abs(mx-rx)>.1||Math.abs(my-ry)>.1)raf=requestAnimationFrame(tick);
     else raf=null;
   }
+  document.addEventListener('mousedown',function(){ring.classList.add('click')});
+  document.addEventListener('mouseup',function(){ring.classList.remove('click')});
   document.querySelectorAll('a,button,.btn').forEach(function(el){
     el.addEventListener('mouseenter',function(){ring.classList.add('hover')});
     el.addEventListener('mouseleave',function(){ring.classList.remove('hover')});
   });
-  document.addEventListener('mouseleave',function(){dot.style.opacity=ring.style.opacity='0';});
-  document.addEventListener('mouseenter',function(){dot.style.opacity=ring.style.opacity='1';});
+  document.addEventListener('mouseleave',function(){ring.style.opacity='0';});
+  document.addEventListener('mouseenter',function(){ring.style.opacity='1';});
   document.querySelectorAll('[data-magnet]').forEach(function(el){
     var mr=null,tx=0,ty=0,cx=0,cy=0;
     el.addEventListener('mousemove',function(e){
