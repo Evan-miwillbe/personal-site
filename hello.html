@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>滕美名 · Teng Meiming</title>
+<meta name="description" content="22 岁 · AI Skill 与 Multi-Agent 协作框架开发者 · 飞书 CLI 创作者大赛十佳入选" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Inter:wght@300;400;500;600&family=Noto+Serif+SC:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F6F3EB;
+    --card:#fdfaf3;
+    --ink:#2a2520;
+    --ink-soft:#6b6358;
+    --ink-mute:#a39d8e;
+    --line:#dcd5c1;
+    --line-soft:#ebe5d2;
+    --accent:#7F2020;
+    --accent-hover:#a02828;
+    --accent-soft:#f0e1de;
+    --sage:#869B7E;
+    --sage-soft:#dde2d6;
+    --sand:#C9CAAC;
+    --sand-soft:#e6e3d0;
+
+    --display:"Cormorant Garamond","Noto Serif SC",ui-serif,serif;     /* 戏剧性大字 */
+    --serif:"Fraunces","Noto Serif SC",ui-serif,serif;                  /* 标题 */
+    --hanzi:"Noto Serif SC","Songti SC",serif;                          /* 中文专用 */
+    --sans:"Inter","HarmonyOS Sans SC","PingFang SC",ui-sans-serif,system-ui,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  ::selection{background:var(--accent);color:var(--bg)}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:var(--sans);font-size:16px;line-height:1.7;
+    -webkit-font-smoothing:antialiased;overflow-x:hidden;
+    cursor:default;
+  }
+
+  /* ============ 噪点纸纹背景 ============ */
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:1;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='5'/><feColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.08 0 0 0 0 0.05 0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    opacity:.5;mix-blend-mode:multiply;
+  }
+  /* 米黄绿圆形装饰 */
+  body::after{
+    content:"";position:fixed;
+    top:25%;right:-200px;width:520px;height:520px;
+    background:radial-gradient(circle, var(--sand-soft) 0%, transparent 65%);
+    border-radius:50%;pointer-events:none;z-index:0;opacity:.7;
+  }
+
+  a{color:var(--ink);text-decoration:none;transition:color .25s}
+  a:hover{color:var(--accent)}
+
+  /* link hover 下划线 left→right 展开 */
+  a.line-hover{position:relative;display:inline-block}
+  a.line-hover::after{
+    content:"";position:absolute;left:0;bottom:-2px;
+    width:0;height:1px;background:currentColor;
+    transition:width .35s cubic-bezier(.4,0,.2,1);
+  }
+  a.line-hover:hover::after{width:100%}
+
+  .icon{
+    width:18px;height:18px;stroke:currentColor;stroke-width:1.6;
+    stroke-linecap:round;stroke-linejoin:round;fill:none;flex-shrink:0;
+  }
+  .icon-sm{width:14px;height:14px;stroke-width:1.8}
+
+  .container{
+    max-width:1080px;margin:0 auto;padding:0 32px;
+    position:relative;z-index:2;
+  }
+
+  /* ============ Top Bar ============ */
+  header.top{
+    padding:28px 0;display:flex;align-items:center;justify-content:space-between;
+    position:relative;z-index:10;
+  }
+  .logo{
+    display:flex;align-items:center;gap:12px;
+    font-family:var(--serif);font-size:17px;font-weight:500;letter-spacing:.02em;
+  }
+  .logo .seal{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:32px;height:32px;background:var(--accent);color:var(--bg);
+    font-family:var(--hanzi);font-size:16px;font-weight:600;
+    transform:rotate(-3deg);
+    border-radius:2px;
+    position:relative;
+  }
+  .logo .seal::after{
+    content:"";position:absolute;inset:-3px;
+    border:1px solid var(--accent);border-radius:3px;
+    transform:rotate(2deg);opacity:.4;
+  }
+  nav.top{display:flex;gap:0;font-family:var(--mono);font-size:11.5px;align-items:center}
+  nav.top a{padding:6px 14px;color:var(--ink-mute);letter-spacing:.16em;transition:color .25s}
+  nav.top a:hover{color:var(--accent)}
+  nav.top .sep{width:1px;height:12px;background:var(--line);margin:0 2px}
+
+  /* ============ Hero ============ */
+  section.hero{
+    padding:80px 0 120px;position:relative;
+    min-height:90vh;display:flex;flex-direction:column;justify-content:center;
+  }
+  /* 巨大背景汉字"滕" */
+  .hero-bgchar{
+    position:absolute;
+    top:-40px;right:-60px;
+    font-family:var(--hanzi);
+    font-size:480px;font-weight:600;
+    color:var(--accent);
+    opacity:.05;
+    line-height:1;
+    pointer-events:none;
+    user-select:none;
+    z-index:0;
+    transform:rotate(-4deg);
+  }
+  @media(max-width:880px){.hero-bgchar{font-size:280px;top:0;right:-40px}}
+
+  .hero-grid{
+    display:grid;grid-template-columns:1fr 200px;gap:48px;align-items:start;
+    position:relative;z-index:1;
+  }
+  @media(max-width:880px){.hero-grid{grid-template-columns:1fr}}
+
+  .hero-main{}
+  .hero-eyebrow{
+    display:flex;align-items:center;gap:14px;
+    font-family:var(--mono);font-size:11px;color:var(--accent);
+    letter-spacing:.32em;text-transform:uppercase;font-weight:500;
+    margin-bottom:36px;
+    opacity:0;animation:fadeUp .8s .1s forwards;
+  }
+  .hero-eyebrow::before{content:"";width:48px;height:1px;background:var(--accent)}
+  .hero-eyebrow::after{content:"";flex:1;height:1px;background:var(--line);max-width:160px}
+
+  h1.name{
+    font-family:var(--display);font-weight:500;
+    font-size:clamp(72px, 12vw, 156px);line-height:.95;
+    letter-spacing:-.03em;
+    margin-bottom:28px;
+    opacity:0;animation:fadeUp 1s .25s forwards;
+  }
+  h1.name .row1{display:block}
+  h1.name .row2{
+    display:block;font-style:italic;color:var(--accent);
+    margin-left:.6em;
+  }
+  h1.name .amp{
+    font-family:var(--display);font-style:italic;
+    color:var(--sage);font-weight:500;
+    margin:0 .12em;
+  }
+
+  .tagline{
+    font-family:var(--serif);font-size:22px;
+    color:var(--ink);
+    max-width:560px;line-height:1.5;font-weight:400;
+    margin-bottom:36px;letter-spacing:-.01em;
+    opacity:0;animation:fadeUp 1s .45s forwards;
+  }
+  .tagline .hanzi{font-family:var(--hanzi);font-weight:500}
+  .tagline em{
+    color:var(--accent);font-style:italic;font-weight:500;
+    border-bottom:1px solid var(--accent-soft);
+  }
+
+  .hero-meta{
+    display:flex;flex-wrap:wrap;gap:0;align-items:center;
+    margin-bottom:40px;
+    font-family:var(--mono);font-size:11px;color:var(--ink-soft);
+    letter-spacing:.16em;text-transform:uppercase;
+    opacity:0;animation:fadeUp 1s .6s forwards;
+  }
+  .hero-meta span{padding:6px 14px;border:1px solid var(--line);border-radius:99px;margin-right:6px;margin-bottom:6px;display:inline-flex;align-items:center;gap:7px}
+  .hero-meta .icon{width:11px;height:11px;stroke-width:2}
+  .hero-meta .accent-pill{color:var(--accent);border-color:var(--accent)}
+  .hero-meta .sage-pill{color:var(--sage);border-color:var(--sage)}
+
+  .cta-row{
+    display:flex;gap:16px;flex-wrap:wrap;
+    opacity:0;animation:fadeUp 1s .75s forwards;
+  }
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;
+    padding:14px 26px;border-radius:999px;
+    font-size:14px;font-weight:500;letter-spacing:.02em;
+    transition:all .3s cubic-bezier(.4,0,.2,1);font-family:var(--sans);
+    border:1px solid transparent;
+  }
+  .btn .icon{width:15px;height:15px;stroke-width:2;transition:transform .3s}
+  .btn:hover .icon{transform:translateX(3px)}
+  .btn.primary{background:var(--accent);color:var(--bg)}
+  .btn.primary:hover{background:var(--accent-hover);transform:translateY(-1px);box-shadow:0 8px 24px rgba(127,32,32,.2)}
+  .btn.ghost{color:var(--ink);border-color:var(--ink)}
+  .btn.ghost:hover{color:var(--accent);border-color:var(--accent);transform:translateY(-1px)}
+
+  /* Hero 右侧竖排装饰文字 */
+  .hero-aside{
+    position:relative;height:100%;min-height:400px;
+    display:flex;flex-direction:column;justify-content:space-between;
+    align-items:flex-end;
+    padding-top:80px;
+    opacity:0;animation:fadeUp 1s .9s forwards;
+  }
+  @media(max-width:880px){.hero-aside{display:none}}
+  .vertical-text{
+    writing-mode:vertical-rl;
+    font-family:var(--mono);font-size:11px;
+    color:var(--ink-mute);letter-spacing:.32em;
+    text-transform:uppercase;
+    padding:8px 0;
+    border-left:1px solid var(--line);
+    padding-left:14px;
+  }
+  .stamp-deco{
+    width:74px;height:74px;border:1.5px solid var(--accent);
+    border-radius:4px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    color:var(--accent);position:relative;
+    transform:rotate(4deg);
+    align-self:flex-end;
+    margin-bottom:20px;
+  }
+  .stamp-deco::before{
+    content:"";position:absolute;inset:-4px;
+    border:1px solid var(--accent);border-radius:5px;
+    transform:rotate(-3deg);opacity:.4;
+  }
+  .stamp-deco .sd-cn{
+    font-family:var(--hanzi);font-size:18px;font-weight:600;letter-spacing:.04em;
+    margin-bottom:2px;line-height:1;
+  }
+  .stamp-deco .sd-en{
+    font-family:var(--mono);font-size:8px;letter-spacing:.12em;
+    text-transform:uppercase;
+  }
+
+  /* ============ Marquee ============ */
+  .marquee{
+    margin:0 -32px;padding:24px 0;
+    border-top:1px solid var(--accent);border-bottom:1px solid var(--accent);
+    overflow:hidden;
+    background:var(--accent-soft);
+    position:relative;z-index:2;
+  }
+  .marquee-track{
+    display:flex;gap:0;
+    animation:marquee 40s linear infinite;
+    white-space:nowrap;
+  }
+  .marquee-track span{
+    font-family:var(--display);font-style:italic;
+    font-size:38px;color:var(--accent);font-weight:500;
+    padding:0 36px;display:inline-flex;align-items:center;
+  }
+  .marquee-track span::after{
+    content:"✦";font-style:normal;color:var(--sage);
+    margin-left:36px;font-size:24px;
+  }
+  @keyframes marquee{
+    from{transform:translateX(0)}
+    to{transform:translateX(-50%)}
+  }
+
+  /* ============ 章节通用 ============ */
+  section{padding:120px 0;position:relative}
+  .chapter-num{
+    position:absolute;top:80px;right:0;
+    font-family:var(--display);font-style:italic;font-weight:500;
+    font-size:240px;color:var(--sand-soft);
+    line-height:1;letter-spacing:-.02em;
+    pointer-events:none;user-select:none;
+    z-index:0;
+  }
+  @media(max-width:680px){.chapter-num{font-size:140px;top:60px}}
+
+  .section-head{
+    margin-bottom:64px;position:relative;z-index:1;
+    display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:end;
+  }
+  @media(max-width:680px){.section-head{grid-template-columns:1fr;gap:24px}}
+  .sh-left .eyebrow{
+    font-family:var(--mono);font-size:11px;color:var(--accent);
+    letter-spacing:.32em;text-transform:uppercase;font-weight:500;
+    margin-bottom:14px;display:flex;align-items:center;gap:12px;
+  }
+  .sh-left .eyebrow::before{content:"";width:24px;height:1px;background:var(--accent)}
+  .sh-left h2{
+    font-family:var(--serif);font-size:clamp(36px, 5vw, 56px);font-weight:500;
+    line-height:1.05;letter-spacing:-.02em;
+  }
+  .sh-left h2 em{color:var(--accent);font-style:italic}
+  .sh-right{font-size:15px;color:var(--ink-soft);line-height:1.7;padding-bottom:8px}
+
+  /* ============ 飞书十佳 award banner ============ */
+  .award-banner{
+    background:var(--card);
+    border:1px solid var(--accent);
+    border-radius:2px;
+    padding:0;display:grid;grid-template-columns:80px 1fr 120px;
+    align-items:stretch;
+    position:relative;
+    overflow:hidden;
+  }
+  .award-banner::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:80px;
+    background:var(--accent);
+  }
+  .award-banner .ab-num{
+    grid-column:1;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    color:var(--bg);position:relative;z-index:1;
+    font-family:var(--display);font-style:italic;
+  }
+  .award-banner .ab-num .big{font-size:48px;font-weight:600;line-height:1}
+  .award-banner .ab-num .small{font-family:var(--mono);font-size:10px;letter-spacing:.12em;margin-top:4px;font-style:normal}
+  .award-banner .ab-body{
+    grid-column:2;padding:32px 36px;
+  }
+  .award-banner .ab-label{
+    font-family:var(--mono);font-size:11px;color:var(--accent);
+    letter-spacing:.24em;text-transform:uppercase;margin-bottom:10px;
+  }
+  .award-banner h3{
+    font-family:var(--serif);font-size:24px;font-weight:500;
+    line-height:1.35;margin-bottom:10px;color:var(--ink);
+  }
+  .award-banner h3 em{color:var(--accent);font-style:italic}
+  .award-banner p{font-size:14.5px;color:var(--ink-soft);line-height:1.7}
+  .award-banner .ab-stamp{
+    grid-column:3;display:flex;align-items:center;justify-content:center;
+    padding-right:32px;
+  }
+  .award-banner .stamp-circle{
+    width:68px;height:68px;border-radius:50%;border:2px solid var(--accent);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    color:var(--accent);transform:rotate(-8deg);
+  }
+  .award-banner .stamp-circle .num{font-family:var(--display);font-style:italic;font-size:22px;font-weight:600;line-height:1}
+  .award-banner .stamp-circle .txt{font-family:var(--hanzi);font-size:10px;margin-top:2px;letter-spacing:.04em}
+  @media(max-width:680px){
+    .award-banner{grid-template-columns:60px 1fr}
+    .award-banner::before{width:60px}
+    .award-banner .ab-num .big{font-size:32px}
+    .award-banner .ab-stamp{display:none}
+    .award-banner .ab-body{padding:24px 20px}
+  }
+
+  /* ============ Find me ============ */
+  .socials-list{
+    display:grid;grid-template-columns:repeat(2,1fr);gap:0 64px;
+    border-top:1px solid var(--ink);
+  }
+  @media(max-width:640px){.socials-list{grid-template-columns:1fr;gap:0}}
+  .social-row{
+    display:grid;grid-template-columns:32px 1fr auto;gap:18px;
+    align-items:center;
+    padding:22px 0;
+    border-bottom:1px solid var(--line);
+    transition:padding .3s cubic-bezier(.4,0,.2,1);
+    position:relative;
+  }
+  .social-row:hover{padding-left:16px}
+  .social-row:hover .nm{color:var(--accent);font-style:italic}
+  .social-row .icon{color:var(--ink-soft);width:18px;height:18px}
+  .social-row .info{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+  .social-row .nm{
+    font-family:var(--serif);font-weight:500;font-size:17px;transition:all .3s;
+  }
+  .social-row .hd{
+    font-family:var(--mono);font-size:11.5px;color:var(--ink-mute);
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  }
+  .social-row .arrow{color:var(--ink-mute);transition:transform .3s, color .3s}
+  .social-row:hover .arrow{transform:translateX(6px);color:var(--accent)}
+
+  /* ============ Projects（杂志风：左大数字 + 右内容） ============ */
+  .projects-list{display:flex;flex-direction:column;gap:0}
+  .project-row{
+    display:grid;grid-template-columns:140px 1fr auto;gap:48px;
+    align-items:start;
+    padding:48px 0;
+    border-top:1px solid var(--ink);
+    color:inherit;
+    transition:padding .35s cubic-bezier(.4,0,.2,1);
+    position:relative;
+  }
+  .project-row:last-child{border-bottom:1px solid var(--ink)}
+  .project-row:hover{padding-left:24px}
+  .project-row:hover h3{color:var(--accent)}
+  .project-row:hover h3::before{transform:scaleX(1)}
+  .project-row:hover .p-arrow{transform:translateX(6px);color:var(--accent)}
+  .project-row:hover .p-num{color:var(--accent)}
+  .project-row:hover .p-stamp-mini{opacity:1;transform:rotate(0deg) scale(1)}
+
+  .p-num{
+    font-family:var(--display);font-style:italic;font-weight:500;
+    font-size:88px;line-height:.85;color:var(--ink-mute);
+    transition:color .3s;letter-spacing:-.02em;
+  }
+  .p-body{position:relative}
+  .p-tags-mini{
+    display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;
+    font-family:var(--mono);font-size:10px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--sage);
+  }
+  .p-tags-mini .sep{color:var(--line)}
+  .project-row h3{
+    font-family:var(--serif);font-size:34px;font-weight:500;
+    line-height:1.15;transition:color .3s;
+    margin-bottom:8px;letter-spacing:-.01em;
+    position:relative;display:inline-block;
+  }
+  .project-row h3 .star{
+    display:inline-block;margin-left:10px;
+    font-size:14px;color:var(--accent);font-style:normal;
+    transform:translateY(-12px);
+  }
+  .p-meta{
+    font-family:var(--mono);font-size:11.5px;color:var(--ink-mute);
+    letter-spacing:.06em;margin-bottom:18px;
+  }
+  .p-meta span+span::before{content:"  •  ";color:var(--sand)}
+  .project-row p{
+    color:var(--ink-soft);font-size:15.5px;line-height:1.75;
+    max-width:580px;font-family:var(--sans);
+  }
+  .project-row p strong{color:var(--ink);font-weight:500}
+  .project-row p em{color:var(--accent);font-style:italic;font-family:var(--serif)}
+
+  .p-right{
+    display:flex;flex-direction:column;align-items:flex-end;gap:12px;
+    padding-top:8px;
+  }
+  .p-arrow{
+    width:48px;height:48px;border-radius:50%;
+    border:1px solid var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--ink);transition:all .3s;flex-shrink:0;
+  }
+  .p-arrow .icon{width:18px;height:18px}
+  .p-stamp-mini{
+    width:44px;height:44px;border:1.5px solid var(--accent);
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--hanzi);font-size:13px;color:var(--accent);font-weight:600;
+    opacity:0;transform:rotate(-12deg) scale(.8);
+    transition:opacity .3s, transform .3s cubic-bezier(.4,0,.2,1);
+  }
+  @media(max-width:880px){
+    .project-row{grid-template-columns:80px 1fr;gap:24px}
+    .project-row .p-right{display:none}
+    .p-num{font-size:56px}
+    .project-row h3{font-size:26px}
+  }
+
+  /* ============ Timeline ============ */
+  .timeline{
+    border-top:1px solid var(--ink);
+  }
+  .timeline-row{
+    display:grid;grid-template-columns:180px 1fr auto;gap:48px;
+    padding:28px 0;
+    border-bottom:1px solid var(--line);
+    align-items:start;
+    transition:padding .3s;
+  }
+  .timeline-row:hover{padding-left:8px;background:linear-gradient(90deg, var(--sand-soft) 0%, transparent 60%)}
+  @media(max-width:640px){
+    .timeline-row{grid-template-columns:1fr;gap:6px}
+    .timeline-row .tl-side{display:none}
+  }
+  .timeline-row .tl-date{
+    font-family:var(--mono);font-size:11.5px;color:var(--ink-mute);
+    letter-spacing:.06em;padding-top:6px;
+  }
+  .timeline-row h4{
+    font-family:var(--serif);font-size:19px;font-weight:500;
+    line-height:1.4;margin-bottom:3px;
+  }
+  .timeline-row .tl-role{
+    font-family:var(--mono);font-size:12px;color:var(--sage);
+    letter-spacing:.04em;margin-bottom:12px;text-transform:uppercase;
+  }
+  .timeline-row p{
+    color:var(--ink-soft);font-size:14.5px;line-height:1.7;max-width:520px;
+  }
+  .timeline-row .tl-side{
+    font-family:var(--hanzi);font-size:24px;color:var(--sand);
+    font-weight:500;line-height:1;padding-top:2px;
+    writing-mode:vertical-rl;letter-spacing:.04em;
+  }
+
+  /* ============ Toolkit ============ */
+  .toolkit{
+    display:grid;grid-template-columns:repeat(2,1fr);gap:48px;
+  }
+  @media(max-width:640px){.toolkit{grid-template-columns:1fr;gap:32px}}
+  .tool-group{
+    padding-top:24px;
+    border-top:1px solid var(--ink);
+  }
+  .tool-group .tg-num{
+    font-family:var(--display);font-style:italic;font-size:24px;color:var(--accent);
+    margin-bottom:6px;
+  }
+  .tool-group h4{
+    font-family:var(--serif);font-size:22px;font-weight:500;margin-bottom:16px;
+    letter-spacing:-.01em;
+  }
+  .tool-group .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .tool-group .chips span{
+    font-family:var(--mono);font-size:11.5px;color:var(--ink);
+    background:transparent;
+    border:1px solid var(--line);
+    padding:5px 12px;border-radius:99px;
+    transition:all .25s;
+  }
+  .tool-group .chips span:hover{
+    border-color:var(--accent);color:var(--accent);
+    background:var(--accent-soft);
+  }
+
+  /* ============ Off-screen ============ */
+  .offscreen{
+    display:grid;grid-template-columns:1fr 1fr;gap:64px;
+    padding-top:24px;border-top:1px solid var(--ink);
+  }
+  @media(max-width:640px){.offscreen{grid-template-columns:1fr;gap:40px}}
+  .off-block{position:relative}
+  .off-block .ob-num{
+    position:absolute;top:-8px;right:0;
+    font-family:var(--display);font-style:italic;font-size:80px;font-weight:500;
+    color:var(--sand);line-height:.8;pointer-events:none;user-select:none;
+  }
+  .off-block .ob-label{
+    font-family:var(--mono);font-size:11px;color:var(--accent);
+    letter-spacing:.24em;text-transform:uppercase;margin-bottom:14px;
+    position:relative;z-index:1;
+  }
+  .off-block h3{
+    font-family:var(--serif);font-size:28px;font-weight:500;
+    margin-bottom:14px;line-height:1.3;
+    position:relative;z-index:1;letter-spacing:-.01em;
+  }
+  .off-block h3 em{color:var(--accent);font-style:italic}
+  .off-block p{color:var(--ink-soft);font-size:15px;line-height:1.75;margin-bottom:20px;max-width:380px}
+  .off-block .pb-row{display:flex;gap:32px;padding-top:18px;border-top:1px dashed var(--line)}
+  .off-block .pb{flex:1}
+  .off-block .pb .num{
+    font-family:var(--display);font-style:italic;font-weight:600;
+    font-size:36px;color:var(--accent);line-height:1;
+  }
+  .off-block .pb .lbl{
+    font-size:10.5px;color:var(--ink-mute);
+    letter-spacing:.14em;font-family:var(--mono);
+    margin-top:8px;text-transform:uppercase;
+  }
+
+  /* ============ Contact ============ */
+  .contact{
+    text-align:center;padding:140px 0 80px;
+    border-top:1px solid var(--ink);margin-top:80px;
+    position:relative;
+  }
+  .contact::before{
+    content:"印";position:absolute;top:60px;left:50%;transform:translateX(-50%) rotate(-6deg);
+    font-family:var(--hanzi);font-size:240px;font-weight:600;
+    color:var(--accent);opacity:.04;line-height:1;pointer-events:none;
+  }
+  .contact .label{
+    font-family:var(--mono);font-size:11px;color:var(--accent);
+    letter-spacing:.32em;text-transform:uppercase;margin-bottom:24px;
+    position:relative;
+  }
+  .contact h2{
+    font-family:var(--display);font-style:italic;font-weight:500;
+    font-size:clamp(56px, 9vw, 96px);line-height:1;margin-bottom:24px;
+    letter-spacing:-.02em;position:relative;
+  }
+  .contact h2 .em{color:var(--accent)}
+  .contact p{
+    color:var(--ink-soft);font-size:17px;line-height:1.7;
+    max-width:560px;margin:0 auto 40px;font-family:var(--serif);
+    position:relative;
+  }
+  .contact .cta-row{justify-content:center;position:relative}
+
+  footer.foot{
+    text-align:center;padding:32px 0 56px;
+    color:var(--ink-mute);font-family:var(--mono);font-size:10.5px;
+    letter-spacing:.16em;text-transform:uppercase;
+    display:flex;justify-content:center;align-items:center;gap:16px;flex-wrap:wrap;
+  }
+  footer.foot .dot{color:var(--accent)}
+  footer.foot a{color:var(--ink-soft);transition:color .25s}
+  footer.foot a:hover{color:var(--accent)}
+
+  .ver-switch{
+    position:fixed;bottom:24px;right:24px;z-index:50;display:flex;gap:6px;
+  }
+  .ver-switch a{
+    background:var(--card);border:1px solid var(--line);
+    padding:7px 13px;border-radius:99px;
+    font-family:var(--mono);font-size:10.5px;font-weight:500;
+    color:var(--ink-soft);letter-spacing:.08em;
+    box-shadow:0 4px 14px rgba(42,37,32,.06);
+    transition:all .25s;
+  }
+  .ver-switch a:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+
+  /* ============ 动画 ============ */
+  @keyframes fadeUp{
+    from{opacity:0;transform:translateY(20px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+
+  /* ============ 鼠标跟随：点 + 圈双层（v1 原版） ============ */
+  @media (hover:hover) and (pointer:fine){
+    body, a, button, .btn{cursor:none}
+  }
+  .cursor-dot, .cursor-ring{
+    position:fixed; top:0; left:0;
+    pointer-events:none; z-index:9999;
+    will-change:transform;
+    mix-blend-mode:difference;
+  }
+  .cursor-dot{
+    width:6px; height:6px; border-radius:50%;
+    background:#fff;
+    margin:-3px 0 0 -3px;
+  }
+  .cursor-ring{
+    width:36px; height:36px; border-radius:50%;
+    border:1px solid #fff;
+    background:transparent;
+    margin:-18px 0 0 -18px;
+    transition:width .3s cubic-bezier(.4,0,.2,1),
+               height .3s cubic-bezier(.4,0,.2,1),
+               margin .3s cubic-bezier(.4,0,.2,1),
+               background .25s ease,
+               border-color .25s ease;
+  }
+  .cursor-ring.hover{
+    width:64px; height:64px;
+    margin:-32px 0 0 -32px;
+    background:rgba(255,255,255,.06);
+  }
+  .cursor-ring.text{
+    width:92px; height:92px;
+    margin:-46px 0 0 -46px;
+    background:#fff;
+    border-color:transparent;
+  }
+  .cursor-ring .cr-label{
+    position:absolute; top:50%; left:50%;
+    transform:translate(-50%,-50%) scale(.6);
+    font-family:"Noto Serif SC",serif;
+    font-size:18px; font-weight:500;
+    color:#000; letter-spacing:.08em;
+    white-space:nowrap; opacity:0;
+    transition:opacity .25s .1s, transform .35s cubic-bezier(.34,1.4,.64,1) .05s;
+    mix-blend-mode:normal;
+  }
+  .cursor-ring.text .cr-label{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(1);
+  }
+  .cursor-ring.text .cr-label.en{
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px; letter-spacing:.24em; font-weight:600;
+  }
+
+  /* hl-text wrapper 保留为透明 inline-block，不再添加视觉效果 */
+  .hl-text{display:inline-block}
+
+  @media (hover:none), (pointer:coarse){
+    .cursor-dot, .cursor-ring{display:none}
+    body{cursor:default}
+  }
+
+  /* ============ 视差 / 磁吸 transition ============ */
+  .btn[data-magnet]{
+    transition:transform .4s cubic-bezier(.34,1.5,.6,1), background .25s, box-shadow .25s, color .25s, border-color .25s;
+  }
+  .p-arrow[data-magnet]{
+    transition:transform .4s cubic-bezier(.34,1.5,.6,1), background .25s, color .25s, border-color .25s;
+  }
+  .hero-bgchar{
+    transition:transform 1.2s cubic-bezier(.2,0,.2,1);
+    will-change:transform;
+  }
+  .chapter-num{
+    transition:transform 1.2s cubic-bezier(.2,0,.2,1);
+    will-change:transform;
+  }
+  .project-row{
+    transform-style:preserve-3d;
+  }
+  .project-row.tilt{
+    transition:transform .15s ease-out, padding .35s cubic-bezier(.4,0,.2,1), background .3s;
+  }
+  .project-row.tilt-reset{
+    transition:transform .6s cubic-bezier(.2,0,.2,1), padding .35s cubic-bezier(.4,0,.2,1), background .3s;
+  }
+  .project-row .p-body, .project-row .p-num, .project-row .p-right{
+    transform:translateZ(0);
+  }
+
+</style>
+</head>
+<body>
+
+<svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+  <defs>
+    <symbol id="i-github" viewBox="0 0 24 24"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.37 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.33 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 7-8 12-8 12s-8-5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></symbol>
+    <symbol id="i-run" viewBox="0 0 24 24"><path d="M4 16v-2.38C4 11.5 2.97 10.5 3 8c.03-2.72 1.49-6 4.5-6C9.37 2 10 3.8 10 5.5c0 3.11-2 5.66-2 8.68V16a2 2 0 1 1-4 0Z"/><path d="M20 20v-2.38c0-2.12 1.03-3.12 1-5.62-.03-2.72-1.49-6-4.5-6C14.63 6 14 7.8 14 9.5c0 3.11 2 5.66 2 8.68V20a2 2 0 1 0 4 0Z"/><path d="M16 17h4"/><path d="M4 13h4"/></symbol>
+    <symbol id="i-pen" viewBox="0 0 24 24"><path d="m12 19 7-7 3 3-7 7-3-3z"/><path d="m18 13-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="m2 2 7.586 7.586"/><circle cx="11" cy="11" r="2"/></symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+    <symbol id="i-star-fill" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="currentColor" stroke="none"/></symbol>
+  </defs>
+</svg>
+
+<div class="container">
+
+  <header class="top">
+    <a href="#" class="logo">
+      <span class="seal">滕</span>
+      Teng &nbsp;Meiming
+    </a>
+    <nav class="top">
+      <a href="#projects">WORK</a><span class="sep"></span>
+      <a href="#timeline">TIMELINE</a><span class="sep"></span>
+      <a href="#toolkit">STACK</a><span class="sep"></span>
+      <a href="#contact">CONTACT</a>
+    </nav>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="hero-bgchar">滕</div>
+
+    <div class="hero-grid">
+      <div class="hero-main">
+        <div class="hero-eyebrow">Hello · 你好 · <span style="color:var(--ink-mute);letter-spacing:.16em">A PERSONAL INDEX, 2026</span></div>
+
+        <h1 class="name">
+          <span class="row1">I make</span>
+          <span class="row2">AI things <span class="amp">&</span> tools.</span>
+        </h1>
+
+        <p class="tagline">
+          <span class="hanzi">滕美名</span>，22 岁，上海。上海对外经贸大学应届，<em>退役军人</em>。
+          从 2026 年 3 月动手做 AI Skill，两个被字节飞书官方选入「<em>十佳</em>」。
+        </p>
+
+        <div class="hero-meta">
+          <span class="accent-pill"><svg class="icon"><use href="#i-star-fill"/></svg> 飞书 CLI 十佳 · 2/3</span>
+          <span class="sage-pill"><svg class="icon"><use href="#i-shield"/></svg> 武警 · 2022—2024</span>
+          <span class="sage-pill"><svg class="icon"><use href="#i-run"/></svg> 全马 PB 3:35</span>
+          <span><svg class="icon"><use href="#i-pen"/></svg> 18 篇随笔</span>
+        </div>
+
+        <div class="cta-row">
+          <a href="#projects" class="btn primary" data-magnet>看看我做的东西 <svg class="icon"><use href="#i-arrow-right"/></svg></a>
+          <a href="mailto:Tengmeiming@163.com" class="btn ghost" data-magnet><svg class="icon"><use href="#i-mail"/></svg> 发个邮件</a>
+        </div>
+      </div>
+
+      <aside class="hero-aside">
+        <div class="stamp-deco">
+          <div class="sd-cn">滕</div>
+          <div class="sd-en">EVAN · 2026</div>
+        </div>
+        <div class="vertical-text">SHANGHAI · CHINA · MMXXVI</div>
+      </aside>
+    </div>
+  </section>
+</div>
+
+<!-- ============ MARQUEE ============ -->
+<div class="marquee">
+  <div class="marquee-track">
+    <span>FEISHU CLI TOP 10</span>
+    <span>knowledge-healer</span>
+    <span>lark-survey-scoreboard</span>
+    <span>Multi-Agent Research</span>
+    <span>13 DAYS · 77 COMMITS</span>
+    <span>47 实验轮次</span>
+    <span>FEISHU CLI TOP 10</span>
+    <span>knowledge-healer</span>
+    <span>lark-survey-scoreboard</span>
+    <span>Multi-Agent Research</span>
+    <span>13 DAYS · 77 COMMITS</span>
+    <span>47 实验轮次</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ============ 飞书十佳 award ============ -->
+  <section style="padding-top:80px">
+    <div class="award-banner">
+      <div class="ab-num">
+        <div class="big">2<span style="font-size:.5em">/</span>3</div>
+        <div class="small">HIT</div>
+      </div>
+      <div class="ab-body">
+        <div class="ab-label">入选 · 2026 . 05 . 13</div>
+        <h3>飞书 CLI 创作者大赛 <em>「十佳优秀 Skill」</em></h3>
+        <p>字节跳动 larksuite 官方主办的 GitHub 赛道。<strong>knowledge-healer</strong> 与 <strong>lark-survey-scoreboard</strong> 入选，将收录至官方开源库附作者署名。<a href="https://bytedance.larkoffice.com/wiki/K6wZw4IYQiJGvmkSrZ8cD5ZznHd" target="_blank" class="line-hover" style="color:var(--accent);font-weight:500">官方公示 →</a></p>
+      </div>
+      <div class="ab-stamp">
+        <div class="stamp-circle">
+          <div class="num">10</div>
+          <div class="txt">十佳</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Find me ============ -->
+  <section>
+    <div class="chapter-num">01</div>
+    <div class="section-head">
+      <div class="sh-left">
+        <div class="eyebrow">§ Find me around</div>
+        <h2>这些地方<br/>都能<em>找到我</em></h2>
+      </div>
+      <div class="sh-right">
+        不做硬销售型自媒体，账号克制几个。<br/>
+        作品先说话——其余在邮件里聊。
+      </div>
+    </div>
+    <div class="socials-list">
+      <a href="https://github.com/Evan-miwillbe" class="social-row" target="_blank" data-cursor="OPEN" data-hl-trigger>
+        <svg class="icon"><use href="#i-github"/></svg>
+        <div class="info"><span class="nm"><span class="hl-text">GitHub</span></span><span class="hd">Evan-miwillbe</span></div>
+        <svg class="icon arrow"><use href="#i-arrow-right"/></svg>
+      </a>
+      <a href="mailto:Tengmeiming@163.com" class="social-row" data-cursor="SEND" data-hl-trigger>
+        <svg class="icon"><use href="#i-mail"/></svg>
+        <div class="info"><span class="nm"><span class="hl-text">Email</span></span><span class="hd">Tengmeiming@163.com</span></div>
+        <svg class="icon arrow"><use href="#i-arrow-right"/></svg>
+      </a>
+      <a href="tel:+8618516773139" class="social-row" data-cursor="CALL" data-hl-trigger>
+        <svg class="icon"><use href="#i-phone"/></svg>
+        <div class="info"><span class="nm"><span class="hl-text">Phone</span></span><span class="hd">+86 185-1677-3139</span></div>
+        <svg class="icon arrow"><use href="#i-arrow-right"/></svg>
+      </a>
+      <a href="#" class="social-row" data-hl-trigger>
+        <svg class="icon"><use href="#i-pin"/></svg>
+        <div class="info"><span class="nm"><span class="hl-text">Location</span></span><span class="hd">Shanghai, China</span></div>
+        <svg class="icon arrow"><use href="#i-arrow-right"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============ Projects ============ -->
+  <section id="projects">
+    <div class="chapter-num">02</div>
+    <div class="section-head">
+      <div class="sh-left">
+        <div class="eyebrow">§ Selected work · 2026</div>
+        <h2>最近做的<br/><em>几个东西</em></h2>
+      </div>
+      <div class="sh-right">
+        从 2026 年 3 月开始，全部独立完成。<br/>
+        方法论→工程→第三方认证形成完整闭环。
+      </div>
+    </div>
+
+    <div class="projects-list">
+      <a class="project-row" href="projects/multi-agent-research.html" data-cursor="阅读" data-hl-trigger>
+        <div class="p-num">01</div>
+        <div class="p-body">
+          <div class="p-tags-mini"><span>RESEARCH</span><span class="sep">/</span><span>CLAUDE CODE</span><span class="sep">/</span><span>MULTI-AGENT</span></div>
+          <h3><span class="hl-text">Multi-Agent Research</span></h3>
+          <div class="p-meta"><span>2026.04 — 05</span><span>13 天 · v1 → v9.0</span><span>77 commits · 47 轮实验</span></div>
+          <p>独立设计的多 Agent 研究框架。17 个钩子全部通过消融实验验证。实证 <em>Lost in Middle</em> 效应——关键约束放 prompt 中间合规率 0%，放首尾 100%。</p>
+        </div>
+        <div class="p-right">
+          <div class="p-arrow" data-magnet><svg class="icon"><use href="#i-arrow-right"/></svg></div>
+          <div class="p-stamp-mini">研</div>
+        </div>
+      </a>
+
+      <a class="project-row" href="projects/knowledge-healer.html" data-cursor="阅读" data-hl-trigger>
+        <div class="p-num">02</div>
+        <div class="p-body">
+          <div class="p-tags-mini"><span>★ 飞书十佳</span><span class="sep">/</span><span>FEISHU CLI</span><span class="sep">/</span><span>MIT</span></div>
+          <h3><span class="hl-text">knowledge-healer</span><span class="star">★</span></h3>
+          <div class="p-meta"><span>2026.05</span><span>飞书知识库自愈巡检</span></div>
+          <p>3+2 多 Agent 并行架构，7 维健康诊断。关键创新：<em>跨源交叉验证</em>（文档 vs 群聊）检测知识漂移——文档没改，但群里有人说"现在不这么做了"。</p>
+        </div>
+        <div class="p-right">
+          <div class="p-arrow" data-magnet><svg class="icon"><use href="#i-arrow-right"/></svg></div>
+          <div class="p-stamp-mini">★</div>
+        </div>
+      </a>
+
+      <a class="project-row" href="projects/lark-survey-scoreboard.html" data-cursor="阅读" data-hl-trigger>
+        <div class="p-num">03</div>
+        <div class="p-body">
+          <div class="p-tags-mini"><span>★ 飞书十佳</span><span class="sep">/</span><span>ECHARTS</span><span class="sep">/</span><span>FROM INTERNSHIP</span></div>
+          <h3><span class="hl-text">lark-survey-scoreboard</span><span class="star">★</span></h3>
+          <div class="p-meta"><span>2026.04</span><span>飞书实时评分大屏</span></div>
+          <p>培训结束，对着飞书妙记说一句话，AI 替你想题目。手机评分，大屏 1 秒刷新，数据存自己的飞书 Base。<em>总成本 ¥0</em>。来自美动医疗实习的真实需求。</p>
+        </div>
+        <div class="p-right">
+          <div class="p-arrow" data-magnet><svg class="icon"><use href="#i-arrow-right"/></svg></div>
+          <div class="p-stamp-mini">★</div>
+        </div>
+      </a>
+
+      <a class="project-row" href="projects/obsidian-lifeos.html" data-cursor="阅读" data-hl-trigger>
+        <div class="p-num">04</div>
+        <div class="p-body">
+          <div class="p-tags-mini"><span>OBSIDIAN</span><span class="sep">/</span><span>PERSONAL</span><span class="sep">/</span><span>DATAVIEW</span></div>
+          <h3><span class="hl-text">Obsidian LifeOS</span></h3>
+          <div class="p-meta"><span>2026.03 — 至今</span><span>个人知识管理系统</span><span>近 2 万字沉淀</span></div>
+          <p>日 / 周 / 月三层任务视图 + 知识库面板。基于 Claude Code Superpowers。配套韩国开发者开源终端插件二次开发——Tab 多页 + 上下分屏 + 一键复制路径。</p>
+        </div>
+        <div class="p-right">
+          <div class="p-arrow" data-magnet><svg class="icon"><use href="#i-arrow-right"/></svg></div>
+          <div class="p-stamp-mini">私</div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============ Timeline ============ -->
+  <section id="timeline">
+    <div class="chapter-num">03</div>
+    <div class="section-head">
+      <div class="sh-left">
+        <div class="eyebrow">§ A timeline</div>
+        <h2>这些年<br/><em>待过的地方</em></h2>
+      </div>
+      <div class="sh-right">
+        一条隐线：识别重复模式 → 工具化 → 沉淀复用。<br/>
+        从部队 SOP 到 AI Skill 一脉相承。
+      </div>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-row">
+        <div class="tl-date">2026 · 01—04</div>
+        <div>
+          <h4>上海美动医疗器材贸易有限公司</h4>
+          <div class="tl-role">HR Intern · Training</div>
+          <p>识别跨表汇总痛点 → AI 协作生成 VBA 多表自动化；操作北森 HR 系统；培训痛点直接孵化出 lark-survey-scoreboard。</p>
+        </div>
+        <div class="tl-side">医疗</div>
+      </div>
+      <div class="timeline-row">
+        <div class="tl-date">2025 · 07—09</div>
+        <div>
+          <h4>天风证券行业研究所</h4>
+          <div class="tl-role">Strategy Research Intern</div>
+          <p>半导体材料行业深度研究，独立产出 40 页+ 行业报告；产出 8 篇 REITs 周报；将周报流程 SOP 化为飞书模板供团队复用。</p>
+        </div>
+        <div class="tl-side">证券</div>
+      </div>
+      <div class="timeline-row">
+        <div class="tl-date">2022 · 09 — 2024 · 09</div>
+        <div>
+          <h4>武警湖南总队长沙支队</h4>
+          <div class="tl-role">Service · Clerk</div>
+          <p>个人嘉奖一次。三公里考核连队第一，支队级比武三公里第二。代理文书期间处理基层表格 90+ 份——最早的 SOP 思维训练。</p>
+        </div>
+        <div class="tl-side">武警</div>
+      </div>
+      <div class="timeline-row">
+        <div class="tl-date">2024 · 09 — 2025 · 09</div>
+        <div>
+          <h4>国防军事协会</h4>
+          <div class="tl-role">Publicity Lead</div>
+          <p>参与两次线下大型活动方案；牵头"樱花节个人形象照"拍摄活动，协调 50+ 社员。</p>
+        </div>
+        <div class="tl-side">学社</div>
+      </div>
+      <div class="timeline-row">
+        <div class="tl-date">2021 · 10 — 至今</div>
+        <div>
+          <h4>校党委宣传部 · 海鸥通讯社</h4>
+          <div class="tl-role">Editor · Writer</div>
+          <p>采访校园大师剧《汪尧田》成稿获上海市校报好新闻通讯类一等奖；署名稿件 14 篇，总阅读量 6w+。</p>
+        </div>
+        <div class="tl-side">校报</div>
+      </div>
+      <div class="timeline-row">
+        <div class="tl-date">2022 · 07—08</div>
+        <div>
+          <h4>北京大学田野经济学暑期实践</h4>
+          <div class="tl-role">Core Member · Fieldwork</div>
+          <p>电访上海青浦区 30+ 中小微企业，完成 26 份有效问卷，报告被上海市发改委采纳。</p>
+        </div>
+        <div class="tl-side">田野</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Toolkit ============ -->
+  <section id="toolkit">
+    <div class="chapter-num">04</div>
+    <div class="section-head">
+      <div class="sh-left">
+        <div class="eyebrow">§ Stack</div>
+        <h2>常用的<br/><em>工具</em></h2>
+      </div>
+    </div>
+    <div class="toolkit">
+      <div class="tool-group">
+        <div class="tg-num">i.</div>
+        <h4>AI 协作</h4>
+        <div class="chips">
+          <span>Claude Code</span><span>Codex</span><span>Cursor</span>
+          <span>Skill 编排</span><span>Multi-Agent</span><span>Prompt 工程</span>
+          <span>MCP</span><span>Vibe Coding</span>
+        </div>
+      </div>
+      <div class="tool-group">
+        <div class="tg-num">ii.</div>
+        <h4>数据 / 自动化</h4>
+        <div class="chips">
+          <span>Excel (XLOOKUP / FILTER)</span><span>VBA</span>
+          <span>SQL 基础</span><span>Python 基础</span><span>iFind</span>
+        </div>
+      </div>
+      <div class="tool-group">
+        <div class="tg-num">iii.</div>
+        <h4>写作 / 知识</h4>
+        <div class="chips">
+          <span>Obsidian</span><span>飞书 Docs / Base / Wiki</span>
+          <span>Markdown</span><span>Notion</span>
+        </div>
+      </div>
+      <div class="tool-group">
+        <div class="tg-num">iv.</div>
+        <h4>建站 / 视觉</h4>
+        <div class="chips">
+          <span>HTML / CSS</span><span>Three.js（学习中）</span>
+          <span>PowerPoint</span><span>秀米</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Off-screen ============ -->
+  <section>
+    <div class="chapter-num">05</div>
+    <div class="section-head">
+      <div class="sh-left">
+        <div class="eyebrow">§ Off-screen</div>
+        <h2>屏幕<br/><em>之外的</em></h2>
+      </div>
+    </div>
+    <div class="offscreen">
+      <div class="off-block">
+        <div class="ob-num">α</div>
+        <div class="ob-label">RUN · 跑步</div>
+        <h3><em>有氧</em>是脑子转得最快的时刻</h3>
+        <p>退伍以后保持的习惯——和 AI 项目的"慢工"节奏其实是一样的，都得日复一日地累积。</p>
+        <div class="pb-row">
+          <div class="pb"><div class="num">3:35</div><div class="lbl">Full Marathon PB</div></div>
+          <div class="pb"><div class="num">1:42</div><div class="lbl">Half Marathon PB</div></div>
+        </div>
+      </div>
+      <div class="off-block">
+        <div class="ob-num">β</div>
+        <div class="ob-label">WRITE · 写作</div>
+        <h3>反复推敲，<br/>常用"<em>其实</em>"和"<em>我想</em>"</h3>
+        <p>18 篇随笔。校报市级一等奖。AI 让我更能写了——不是替我写，是帮我把模糊的想法摊开看。</p>
+        <div class="pb-row">
+          <div class="pb"><div class="num">18</div><div class="lbl">Personal Essays</div></div>
+          <div class="pb"><div class="num">6w+</div><div class="lbl">Campus Reads</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Contact ============ -->
+  <section id="contact" class="contact">
+    <div class="label">§ Contact · 联系</div>
+    <h2>Let's <span class="em">talk</span>.</h2>
+    <p>
+      我在找能让我和前沿待在一起、能动手做 AI 工具的位置——<br/>
+      腾讯研究院 / 字节研究院类研究岗 · AI Agent / DevEx PM ·<br/>
+      AI 创业团队早期员工 · AI 行业研究。
+    </p>
+    <div class="cta-row">
+      <a href="mailto:Tengmeiming@163.com" class="btn primary" data-magnet><svg class="icon"><use href="#i-mail"/></svg> Tengmeiming@163.com</a>
+      <a href="https://github.com/Evan-miwillbe" target="_blank" class="btn ghost" data-magnet><svg class="icon"><use href="#i-github"/></svg> GitHub</a>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <span>MADE BY</span><span class="dot">·</span><span style="font-family:var(--hanzi);font-size:14px">滕美名</span><span class="dot">·</span><span>2026</span><span class="dot">·</span><span>SHANGHAI</span><span class="dot">·</span>
+    <a href="index.html" class="line-hover">编辑版</a><span class="dot">·</span>
+    <a href="play.html" class="line-hover">3D 探索版</a>
+  </footer>
+
+</div>
+
+<div class="ver-switch">
+  <a href="index.html">编辑版</a>
+  <a href="play.html">3D 探索</a>
+</div>
+
+<!-- ============ Custom Cursor ============ -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"><span class="cr-label" id="cursorLabel">VIEW</span></div>
+
+<script>
+(function(){
+  // 移动端 / 触屏跳过
+  if(!window.matchMedia('(hover:hover) and (pointer:fine)').matches) return;
+
+  const dot = document.getElementById('cursorDot');
+  const ring = document.getElementById('cursorRing');
+  const label = document.getElementById('cursorLabel');
+
+  let mx = window.innerWidth/2, my = window.innerHeight/2;
+  let rx = mx, ry = my;
+  let raf = null;
+
+  dot.style.transform = 'translate3d(-100px,-100px,0)';
+  ring.style.transform = 'translate3d(-100px,-100px,0)';
+
+  document.addEventListener('mousemove', e=>{
+    mx = e.clientX; my = e.clientY;
+    dot.style.transform = `translate3d(${mx}px, ${my}px, 0)`;  // 小点 0 延迟
+    if(!raf) raf = requestAnimationFrame(tick);
+  });
+
+  // 圈 lerp 0.18 弹性滞后 — v1 原版
+  function tick(){
+    rx += (mx - rx) * 0.18;
+    ry += (my - ry) * 0.18;
+    ring.style.transform = `translate3d(${rx}px, ${ry}px, 0)`;
+    if(Math.abs(mx - rx) > 0.1 || Math.abs(my - ry) > 0.1){
+      raf = requestAnimationFrame(tick);
+    } else {
+      raf = null;
+    }
+  }
+
+  // 一般交互元素 → ring 放大
+  document.querySelectorAll('a, button, .btn').forEach(el=>{
+    el.addEventListener('mouseenter', ()=>{
+      if(el.hasAttribute('data-cursor')) return;
+      ring.classList.add('hover');
+    });
+    el.addEventListener('mouseleave', ()=>{
+      ring.classList.remove('hover');
+    });
+  });
+
+  // 项目卡 / 社交卡 → ring 变 92px 实心圆 + 显示中/英文 label
+  document.querySelectorAll('[data-cursor]').forEach(el=>{
+    const text = el.dataset.cursor;
+    const isEnglish = /^[A-Z]+$/.test(text);
+    el.addEventListener('mouseenter', ()=>{
+      label.textContent = text;
+      label.classList.toggle('en', isEnglish);
+      ring.classList.add('text');
+      ring.classList.remove('hover');
+    });
+    el.addEventListener('mouseleave', ()=>{
+      ring.classList.remove('text');
+    });
+  });
+
+  // 离开页面隐藏
+  document.addEventListener('mouseleave', ()=>{
+    dot.style.opacity = ring.style.opacity = '0';
+  });
+  document.addEventListener('mouseenter', ()=>{
+    dot.style.opacity = ring.style.opacity = '1';
+  });
+
+  // ============ 视差：大字 + 章节数字反向跟随 ============
+  const bgChar = document.querySelector('.hero-bgchar');
+  const chapterNums = document.querySelectorAll('.chapter-num');
+  let parX = 0, parY = 0;
+  let ticking = false;
+
+  document.addEventListener('mousemove', e=>{
+    parX = (e.clientX / window.innerWidth - 0.5);
+    parY = (e.clientY / window.innerHeight - 0.5);
+    if(!ticking){
+      requestAnimationFrame(applyParallax);
+      ticking = true;
+    }
+  });
+
+  function applyParallax(){
+    if(bgChar){
+      bgChar.style.transform = `rotate(-4deg) translate(${parX * 30}px, ${parY * 30}px)`;
+    }
+    chapterNums.forEach((el, i)=>{
+      const depth = 18 + (i % 2) * 6;
+      el.style.transform = `translate(${parX * depth}px, ${parY * depth * 0.7}px)`;
+    });
+    ticking = false;
+  }
+
+  // ============ 磁吸按钮 / 箭头 ============
+  document.querySelectorAll('[data-magnet]').forEach(el=>{
+    let magRaf = null;
+    let tx = 0, ty = 0, ctx = 0, cty = 0;
+
+    el.addEventListener('mousemove', e=>{
+      const rect = el.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      const strength = el.classList.contains('p-arrow') ? 0.45 : 0.28;
+      tx = x * strength;
+      ty = y * strength;
+      if(!magRaf) magRaf = requestAnimationFrame(magTick);
+    });
+
+    el.addEventListener('mouseleave', ()=>{
+      tx = 0; ty = 0;
+      if(!magRaf) magRaf = requestAnimationFrame(magTick);
+    });
+
+    function magTick(){
+      ctx += (tx - ctx) * 0.2;
+      cty += (ty - cty) * 0.2;
+      el.style.transform = `translate(${ctx}px, ${cty}px)`;
+      if(Math.abs(tx - ctx) > 0.1 || Math.abs(ty - cty) > 0.1){
+        magRaf = requestAnimationFrame(magTick);
+      } else {
+        el.style.transform = tx === 0 && ty === 0 ? '' : `translate(${tx}px, ${ty}px)`;
+        magRaf = null;
+      }
+    }
+  });
+
+  // ============ 项目卡 3D 倾斜 ============
+  document.querySelectorAll('.project-row').forEach(el=>{
+    let tiltRaf = null;
+    let rx = 0, ry = 0;
+
+    el.addEventListener('mousemove', e=>{
+      const rect = el.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      rx = -y * 4;
+      ry = x * 4;
+      el.classList.add('tilt');
+      el.classList.remove('tilt-reset');
+      if(!tiltRaf) tiltRaf = requestAnimationFrame(tiltTick);
+    });
+
+    el.addEventListener('mouseleave', ()=>{
+      el.classList.remove('tilt');
+      el.classList.add('tilt-reset');
+      el.style.transform = '';
+      tiltRaf = null;
+    });
+
+    function tiltTick(){
+      el.style.transform = `perspective(1200px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+      tiltRaf = null;
+    }
+  });
+})();
+</script>
+
+
+<!-- ============ 烟花点击效果（参考 eduardbodak.com） ============ -->
+<style>
+.spark{
+  position:fixed; pointer-events:none; z-index:9998;
+  width:6px; height:6px; border-radius:50%;
+  will-change:transform, opacity;
+}
+@media (hover:none), (pointer:coarse){
+  /* 移动端禁用，避免在滚动时误触 */
+  .spark{display:none}
+}
+</style>
+<script>
+(function(){
+  // 8 方向 + 中式书院 5 色
+  var COLORS = ['#7F2020','#a02828','#869B7E','#C9CAAC','#c9a35a'];
+  function spark(x, y, angle, color){
+    var s = document.createElement('div');
+    s.className = 'spark';
+    s.style.left = x + 'px';
+    s.style.top = y + 'px';
+    s.style.background = color;
+    document.body.appendChild(s);
+    var anim = s.animate([
+      {transform:'translate(-50%,-50%) rotate('+angle+'deg) translate(8px,0) scale(1)', opacity:1},
+      {transform:'translate(-50%,-50%) rotate('+angle+'deg) translate(28px,0) scale(.6,.85)', opacity:.9, offset:.65},
+      {transform:'translate(-50%,-50%) rotate('+angle+'deg) translate(38px,0) scale(0,0)', opacity:0}
+    ], {duration:480, easing:'cubic-bezier(.22,.6,.4,1)', fill:'forwards'});
+    anim.onfinish = function(){ s.remove(); };
+  }
+  document.addEventListener('click', function(e){
+    // 触屏 / pointer 设备跳过
+    if(!window.matchMedia('(hover:hover) and (pointer:fine)').matches) return;
+    // 主鼠标左键
+    if(e.button !== 0) return;
+    for(var i = 0; i < 8; i++){
+      var ang = i * 45;
+      var col = COLORS[(i + Math.floor(Math.random()*COLORS.length)) % COLORS.length];
+      spark(e.clientX, e.clientY, ang, col);
+    }
+  }, {passive:true});
+})();
+</script>
+
+</body>
+</html>
