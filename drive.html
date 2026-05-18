@@ -696,19 +696,24 @@ function buildSkyDome() {
   const canvas = document.createElement('canvas');
   canvas.width = 512; canvas.height = 1024;
   const ctx = canvas.getContext('2d');
+  // 渐变强化：顶部明显蓝灰，地平线接 fog 米色，让玩家肉眼能看到天空
   const grad = ctx.createLinearGradient(0, 0, 0, 1024);
-  grad.addColorStop(0, '#A8B5BA');
-  grad.addColorStop(0.5, '#D2D8D4');
-  grad.addColorStop(1, hexColor(C.bg));
+  grad.addColorStop(0, '#6B8090');     // 顶部 深蓝灰 (调深)
+  grad.addColorStop(0.35, '#A8BFC8');  // 中上 蓝灰
+  grad.addColorStop(0.7, '#D8DCD2');   // 中下 雾色过渡
+  grad.addColorStop(1, hexColor(C.bg));// 地平线 米黄 (= C.bg)
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, 512, 1024);
   const tex = new THREE.CanvasTexture(canvas);
   tex.colorSpace = THREE.SRGBColorSpace;
   const sky = new THREE.Mesh(
-    new THREE.SphereGeometry(150, 32, 16),
-    new THREE.MeshBasicMaterial({ map: tex, side: THREE.BackSide, fog: false })
+    new THREE.SphereGeometry(140, 48, 24),
+    new THREE.MeshBasicMaterial({ map: tex, side: THREE.BackSide, fog: false, depthWrite: false })
   );
+  sky.renderOrder = -100;
   scene.add(sky);
+  // 移除 scene.background, 让 sky dome 完全接管天空显示
+  scene.background = null;
 }
 
 function buildDistantHall() {
@@ -786,12 +791,8 @@ function buildDistantHall() {
   gate.position.set(0, 0, -42);
   scene.add(gate);
 
-  const fogPlane = new THREE.Mesh(
-    new THREE.PlaneGeometry(80, 25),
-    new THREE.MeshBasicMaterial({ color: C.bg, transparent: true, opacity: 0.32, depthWrite: false, side: THREE.DoubleSide })
-  );
-  fogPlane.position.set(0, 7, -45);
-  scene.add(fogPlane);
+  // 雾化层已删除：scene.fog (50-130) 已自然雾化远景书院 (z=-52, ~60-100m 距离)，
+  // 原 fogPlane 矩形硬边反而成视觉污染。
 }
 
 buildSkyDome();
@@ -1562,16 +1563,26 @@ buildContactDecals();
 const trophies = [];
 function buildTrophies() {
   const list = (D.awards || []).slice(0, 3);
-  const platform = new THREE.Mesh(
-    new THREE.BoxGeometry(15, 3, 20),
-    new THREE.MeshStandardMaterial({ color: C.sandPath, roughness: 0.94 })
-  );
-  platform.position.set(30, 1.5, -2);
-  platform.receiveShadow = true;
-  scene.add(platform);
+  // 奖项坡 - 3 层错位 Box 形成自然"小山丘"，替换 v2.0 的单个长方体
+  const hillGroup = new THREE.Group();
+  const hillMat = new THREE.MeshStandardMaterial({ color: C.sandPath, roughness: 0.94, flatShading: true });
+  const hillMat2 = new THREE.MeshStandardMaterial({ color: 0xB8A77E, roughness: 0.92, flatShading: true }); // 略深沙土
+  const hill1 = new THREE.Mesh(new THREE.BoxGeometry(14, 2.2, 18), hillMat);
+  hill1.position.set(0, 1.1, 0);
+  hillGroup.add(hill1);
+  const hill2 = new THREE.Mesh(new THREE.BoxGeometry(9, 1.6, 12), hillMat2);
+  hill2.position.set(-1.2, 2.5, 1.5);
+  hillGroup.add(hill2);
+  const hill3 = new THREE.Mesh(new THREE.BoxGeometry(5.5, 1.0, 7), hillMat);
+  hill3.position.set(1.5, 3.2, -1.8);
+  hillGroup.add(hill3);
+  hillGroup.position.set(30, 0, -2);
+  hillGroup.traverse(c => { if (c.isMesh) c.receiveShadow = true; });
+  scene.add(hillGroup);
+  // 物理: 主层 Box 近似 (车可以开上去)
   const platformBody = new CANNON.Body({ mass: 0, material: groundMat });
-  platformBody.addShape(new CANNON.Box(new CANNON.Vec3(7.5, 1.5, 10)));
-  platformBody.position.set(30, 1.5, -2);
+  platformBody.addShape(new CANNON.Box(new CANNON.Vec3(7, 1.1, 9)));
+  platformBody.position.set(30, 1.1, -2);
   world.addBody(platformBody);
 
   const positions = [[30, 3, 5], [33, 3, -2], [28, 3, -9]];
