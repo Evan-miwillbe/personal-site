@@ -276,7 +276,7 @@
     </p>
     <p>
       v5.4 第一次大规模精简到 893 行，砍掉了 PM 层。
-      v6.0 继续重构到 221 行——<strong>行数下降约 80%</strong>，
+      v6.0 继续重构到 221 行——<strong>v5.4 → v6.0 行数下降约 80%</strong>（893 → 221），
       但同样的研究题目，输出质量反而上升。这逼我承认一件事：
     </p>
     <div class="quote">
@@ -361,9 +361,10 @@
       解决企业知识库自愈这个真实痛点。
     </p>
     <div class="stat-row">
-      <div class="stat-item"><div class="num">17<small>个机制</small></div><div class="lbl">全部通过消融验证</div></div>
-      <div class="stat-item"><div class="num">2<small>KEEP</small></div><div class="lbl">14 NOISE</div></div>
-      <div class="stat-item"><div class="num">★</div><div class="lbl">落地工具入选飞书十佳</div></div>
+      <div class="stat-item"><div class="num">17<small>个机制</small></div><div class="lbl">全部接受消融测试</div></div>
+      <div class="stat-item"><div class="num">2<small>KEEP</small></div><div class="lbl">仅 2 个被证明<br/>有可测因果影响</div></div>
+      <div class="stat-item"><div class="num">14<small>NOISE</small></div><div class="lbl">已被模型内化<br/>或仅特定场景触发</div></div>
+      <div class="stat-item"><div class="num">★</div><div class="lbl">落地工具<br/>入选飞书十佳</div></div>
     </div>
     <div class="cta-row">
       <a href="https://github.com/Evan-miwillbe" target="_blank" class="btn primary" data-magnet>→ GitHub（仓库整理中）</a>
@@ -391,6 +392,30 @@
       非 CS 科班，没什么"工程师光环"。我做这件事的底气是<strong>把模糊的协作直觉变成可验证的实验</strong>——
       这是过去几年 SOP 训练给我的真正能力。
     </p>
+  </section>
+
+  <section class="chapter" style="border-top:1px solid var(--line);margin-top:60px;padding-top:60px">
+    <div class="chapter-label">附 · 后续 · multi-coder</div>
+    <h2>方法论<em style="color:var(--accent);font-style:italic">跨领域</em>迁移：研究 → 编程</h2>
+    <p>
+      v9.0 收敛后，我做了一个实验——把 Multi-Agent Research 里被验证有效的机制，
+      迁移到完全不同的领域：<strong>编程</strong>。结果是 <code>multi-coder</code>（v1.2，664 行 SKILL.md）。
+    </p>
+    <p>
+      17 个机制里有 12 个被直接复用（三问筛选、Spawn 首尾约束、停滞恢复梯度、Cross-pollination 等），
+      5 个是编程场景新增的（Phase 0.5 写前检测、安全 Gate、EII 现有实现目录、arch_fingerprint 架构指纹、Architecture Gate）。
+    </p>
+    <p>
+      为了做这件事，我用 multi-agent-research 本身又跑了一次<strong>3 Agent 并行研究</strong>——
+      44 个来源 + 8 位开发者反馈，回答的问题是"AI 不知道什么时候<em>不该</em>写代码"。
+      这是我目前为止最满意的"用工具改进工具"的循环。
+    </p>
+    <div class="quote">
+      继承不是复制——是<em>知道哪些规律跨领域成立</em>。<br/>
+      三问筛选、Spawn 协议、Lost in Middle，这些检测的是"任务本身的结构属性"，<br/>
+      不依赖领域知识。所以它们从研究跨到编程的时候，能直接活下来。
+      <span class="src">— multi-coder README · 设计决策叙事</span>
+    </div>
   </section>
 </div>
 
