@@ -16,7 +16,7 @@
   --accent:#7F2020;
   --sage:#869B7E;
   --sage-deep:#5D7B5D;
-  --tile:#3A3530;
+  --tile:#524940;
   --slate:#4A6B7C;
   --cinnabar:#C0392B;
   --hud-bg:rgba(246,243,235,0.35);
@@ -28,10 +28,16 @@
 html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:'Inter','Noto Serif SC',-apple-system,BlinkMacSystemFont,sans-serif;cursor:none}
 #scene{position:fixed;inset:0;width:100%;height:100%;display:block}
 
-/* === cursor-ring === */
-.cursor-ring{position:fixed;top:0;left:0;width:28px;height:28px;border:1.5px solid rgba(127,32,32,0.55);border-radius:50%;background:rgba(246,243,235,0.18);backdrop-filter:blur(4px) saturate(1.1);pointer-events:none;z-index:10000;transform:translate(-50%,-50%);transition:width 0.18s cubic-bezier(0.4,0,0.2,1),height 0.18s cubic-bezier(0.4,0,0.2,1),background 0.18s,border-color 0.18s}
-.cursor-ring.hover{width:44px;height:44px;background:rgba(127,32,32,0.12);border-color:rgba(127,32,32,0.85)}
-.cursor-ring.text{width:80px;height:30px;border-radius:14px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);display:flex;align-items:center;justify-content:center;letter-spacing:0.08em;text-transform:uppercase;background:rgba(246,243,235,0.5)}
+/* === cursor-ring (sourced from hello.html, scaled for drive scene) === */
+.cursor-ring{position:fixed;top:0;left:0;width:42px;height:42px;margin:-21px 0 0 -21px;pointer-events:none;z-index:10000;will-change:transform;display:flex;align-items:center;justify-content:center;background:transparent;border:0;transform:translate3d(-100px,-100px,0)}
+.cursor-ring .circle{width:100%;height:100%;border-radius:50%;background:rgba(127,32,32,0.18);border:1.5px solid rgba(127,32,32,0.6);backdrop-filter:blur(4px) saturate(1.1);-webkit-backdrop-filter:blur(4px);transform:scale(.22);transition:transform .35s cubic-bezier(.55,.085,0,.99),background-color .25s,border-color .25s,backdrop-filter .25s}
+.cursor-ring.hover .circle{transform:scale(.95);background:rgba(127,32,32,0.22);border-color:rgba(127,32,32,0.8);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.cursor-ring.text .circle{transform:scale(1.2);background:rgba(127,32,32,0.32);border-color:rgba(127,32,32,0);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.cursor-ring .cr-label{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(.3);font-family:'Noto Serif SC',serif;font-size:11px;font-weight:500;color:#F6F3EB;letter-spacing:.04em;white-space:nowrap;opacity:0;transition:opacity .22s .12s,transform .35s cubic-bezier(.55,.085,0,.99) .06s;pointer-events:none}
+.cursor-ring.text .cr-label{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.cursor-ring.text .cr-label.en{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.28em;font-weight:600}
+.cursor-ring.click .circle{transform:scale(.6)}
+@media (hover:none),(pointer:coarse){.cursor-ring{display:none}}
 
 /* === HUD frames === */
 .hud{position:fixed;background:var(--hud-bg);backdrop-filter:var(--hud-blur);-webkit-backdrop-filter:var(--hud-blur);border-left:var(--cinnabar-line);padding:10px 14px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink);z-index:50;letter-spacing:0.04em;line-height:1.5}
@@ -109,19 +115,23 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
 .prompt{position:fixed;left:50%;bottom:18%;transform:translateX(-50%);background:rgba(246,243,235,0.55);backdrop-filter:var(--hud-blur);border-left:var(--cinnabar-line);padding:8px 14px;font-family:'Noto Serif SC',serif;font-size:13px;color:var(--ink);letter-spacing:0.1em;z-index:80;opacity:0;transition:opacity 0.35s}
 .prompt.show{opacity:1}
 .prompt .k{font-family:'JetBrains Mono',monospace;color:var(--accent);padding:1px 6px;border:1px solid rgba(127,32,32,0.3);margin-right:6px;font-size:11px}
+
+/* === flip notice (翻车自动复位提示) === */
+.flipNotice{position:fixed;left:50%;top:30%;transform:translateX(-50%);background:rgba(246,243,235,0.75);backdrop-filter:var(--hud-blur);border:1px solid rgba(127,32,32,0.5);border-left:3px solid var(--accent);padding:10px 18px;font-family:'Noto Serif SC',serif;font-size:14px;color:var(--accent);letter-spacing:0.12em;z-index:90;opacity:0;transition:opacity 0.3s}
+.flipNotice.show{opacity:1}
 </style>
 </head>
 <body>
 
 <canvas id="scene"></canvas>
 
-<a class="brand" href="hello.html">滕美名<span class="sep">·</span>书院驾乘</a>
+<a class="brand" href="hello.html" data-cursor="返回">滕美名<span class="sep">·</span>书院驾乘</a>
 
 <nav class="toplinks">
-  <a href="hello.html">home</a><span class="dot">·</span>
-  <a href="index.html">editorial</a><span class="dot">·</span>
-  <a href="play.html">walk</a><span class="dot">·</span>
-  <a href="drive.html" class="active">drive</a>
+  <a href="hello.html" data-cursor="切换">home</a><span class="dot">·</span>
+  <a href="index.html" data-cursor="切换">editorial</a><span class="dot">·</span>
+  <a href="play.html" data-cursor="切换">walk</a><span class="dot">·</span>
+  <a href="drive.html" class="active" data-cursor="当前">drive</a>
 </nav>
 
 <div class="hud status">
@@ -131,8 +141,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
 </div>
 
 <div class="helper">
-  <div class="ic breath" id="muteIc" title="解锁声音">🔇</div>
-  <div class="ic" id="helpIc" title="帮助">?</div>
+  <div class="ic breath" id="muteIc" title="解锁声音" data-cursor="声音">🔇</div>
+  <div class="ic" id="helpIc" title="帮助" data-cursor="帮助">?</div>
 </div>
 
 <div class="scrollHint" id="hint">
@@ -145,6 +155,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
 
 <div class="prompt" id="prompt"><span class="k">E</span><span id="promptText">阅卷</span></div>
 
+<div class="flipNotice" id="flipNotice">翻车 · 即将自动复位</div>
+
 <div class="drawer" id="drawer">
   <button class="close" id="closeDrawer">×</button>
   <div id="drawerBody"></div>
@@ -153,14 +165,17 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
 <div class="intro" id="intro">
   <h1>书 · 院 · 驾 · 乘</h1>
   <div class="sub">DRIVE THROUGH THE COURTYARD</div>
-  <button class="start" id="startBtn">入&nbsp;场</button>
+  <button class="start" id="startBtn" data-cursor="入场">入&nbsp;场</button>
   <div class="controls">
     <span class="k">W A S D</span> 行车 &nbsp;·&nbsp; <span class="k">SHIFT</span> 疾驰 &nbsp;·&nbsp; <span class="k">SPACE</span> 跃 &nbsp;·&nbsp; <span class="k">R</span> 复位<br/>
     <span class="k">鼠标拖拽</span> 观四方 &nbsp;·&nbsp; <span class="k">E</span> 阅卷 &nbsp;·&nbsp; <span class="k">ESC</span> 关闭
   </div>
 </div>
 
-<div class="cursor-ring" id="cursor"></div>
+<div class="cursor-ring" id="cursor">
+  <div class="circle"></div>
+  <span class="cr-label" id="cursorLabel">阅卷</span>
+</div>
 
 <script type="importmap">
 {
@@ -187,7 +202,13 @@ const C = {
   cinnabar: 0xC0392B,
   sage: 0x869B7E,
   sageDeep: 0x5D7B5D,
-  tile: 0x3A3530,
+  tile: 0x524940,
+  moss: 0x5D7B5D,
+  peachPink: 0xE8A8A8,
+  peachBranch: 0x6d4a26,
+  copperBrown: 0xA88B5E,
+  earthBrown: 0x4A3525,
+  chairCushionRed: 0x4A6B7C,
   slate: 0x4A6B7C,
   gold: 0xd4a55a,
   ivory: 0xefe6d2,
@@ -345,7 +366,7 @@ function makeWallTex() {
   return t;
 }
 
-function makeScrollTex(title, sub, year) {
+function makeScrollTex(title, sub, year, mirror = false) {
   const w = 512, h = 1024;
   const c = document.createElement('canvas');
   c.width = w; c.height = h;
@@ -364,6 +385,10 @@ function makeScrollTex(title, sub, year) {
   ctx.strokeRect(28, 28, w-56, h-56);
   ctx.lineWidth = 1;
   ctx.strokeRect(40, 40, w-80, h-80);
+  if (mirror) {
+    ctx.translate(w, 0);
+    ctx.scale(-1, 1);
+  }
   // 顶部印章
   ctx.fillStyle = '#7F2020';
   ctx.fillRect(w/2 - 22, 60, 44, 44);
@@ -433,7 +458,7 @@ function makeContactDecal(label, sub) {
   return t;
 }
 
-function makeAwardTex(title) {
+function makeAwardTex(title, mirror = false) {
   const w = 256, h = 512;
   const c = document.createElement('canvas');
   c.width = w; c.height = h;
@@ -445,6 +470,10 @@ function makeAwardTex(title) {
   ctx.strokeRect(8, 8, w-16, h-16);
   ctx.lineWidth = 1;
   ctx.strokeRect(18, 18, w-36, h-36);
+  if (mirror) {
+    ctx.translate(w, 0);
+    ctx.scale(-1, 1);
+  }
   ctx.fillStyle = '#f4ead0';
   ctx.font = 'bold 32px "Noto Serif SC",serif';
   ctx.textAlign = 'center';
@@ -457,7 +486,7 @@ function makeAwardTex(title) {
   return t;
 }
 
-function makeBigChar(char) {
+function makeBigChar(char, mirror = false) {
   const s = 256;
   const c = document.createElement('canvas');
   c.width = c.height = s;
@@ -474,6 +503,11 @@ function makeBigChar(char) {
   ctx.strokeStyle = '#7F2020';
   ctx.lineWidth = 6;
   ctx.strokeRect(8, 8, s-16, s-16);
+  // 镜像处理：让此 canvas 用于 -z / -x 等 BoxGeometry 反面时也能正向显示
+  if (mirror) {
+    ctx.translate(s, 0);
+    ctx.scale(-1, 1);
+  }
   // 大字
   ctx.fillStyle = '#f4ead0';
   ctx.font = 'bold 180px "Noto Serif SC","Songti SC",serif';
@@ -581,8 +615,15 @@ function buildPailou() {
   roof2.position.set(0, 4.7, 0);
   roof2.rotation.y = Math.PI / 4;
   roof2.castShadow = true; g.add(roof2);
-  // 匾额
-  const plaque = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.7, 0.12), new THREE.MeshStandardMaterial({ map: makeBigChar('院'), roughness: 0.6 }));
+  // 匾额（BoxGeometry：+z 面贴字（朝南，正对入园方向），其余面木质素板）
+  const plaqueFront = new THREE.MeshStandardMaterial({ map: makeBigChar('院'), roughness: 0.6 });
+  const plaqueSide  = new THREE.MeshStandardMaterial({ color: 0x3a2a20, roughness: 0.8 });
+  const plaqueBack  = new THREE.MeshStandardMaterial({ map: makeBigChar('院', true), roughness: 0.6 });  // 北面用镜像 canvas 让从院内看也正向
+  const plaque = new THREE.Mesh(
+    new THREE.BoxGeometry(2.6, 0.7, 0.12),
+    // 顺序: [+x, -x, +y, -y, +z, -z]
+    [plaqueSide, plaqueSide, plaqueSide, plaqueSide, plaqueFront, plaqueBack]
+  );
   plaque.position.set(0, 3.4, 0.3);
   g.add(plaque);
   g.position.set(0, 0, 14);
@@ -606,9 +647,16 @@ function buildHall() {
   // 朱门
   const door = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 2.4), new THREE.MeshStandardMaterial({ color: C.accent, roughness: 0.5, side: THREE.DoubleSide }));
   door.position.set(0, 1.2, 2.26); g.add(door);
-  // 牌匾
-  const plaque = new THREE.Mesh(new THREE.PlaneGeometry(2.2, 0.6), new THREE.MeshStandardMaterial({ map: makeAwardTex('明伦堂'), roughness: 0.6 }));
-  plaque.position.set(0, 2.8, 2.27); g.add(plaque);
+  // 牌匾（薄 Box，正反面分别贴正/镜像贴图）
+  const hallFront = new THREE.MeshStandardMaterial({ map: makeAwardTex('明伦堂', false), roughness: 0.6 });
+  const hallBack  = new THREE.MeshStandardMaterial({ map: makeAwardTex('明伦堂', true),  roughness: 0.6 });
+  const hallSide  = new THREE.MeshStandardMaterial({ color: 0x6d5640, roughness: 0.8 });
+  const plaque = new THREE.Mesh(
+    new THREE.BoxGeometry(2.2, 0.6, 0.08),
+    [hallSide, hallSide, hallSide, hallSide, hallFront, hallBack]
+  );
+  plaque.position.set(0, 2.8, 2.27);
+  g.add(plaque);
   g.position.set(0, 0, -10);
   scene.add(g);
   // physics
@@ -732,14 +780,86 @@ function makePlum(x, z) {
   g.position.set(x, 0, z); scene.add(g);
 }
 
-makeBamboo(-12, 8, 8);
-makeBamboo(12, 8, 8);
-makeBamboo(13, -5, 6);
+// ===== 桃花树 PEACH (新增) =====
+function makePeach(x, z) {
+  const g = new THREE.Group();
+  // 弯曲的浅褐枝干
+  let prev = new THREE.Vector3(0, 0, 0);
+  const trunkMat = new THREE.MeshStandardMaterial({ color: C.peachBranch, roughness: 0.85 });
+  for (let i = 0; i < 4; i++) {
+    const next = new THREE.Vector3(prev.x + (Math.random()-0.5)*0.3, prev.y + 0.55, prev.z + (Math.random()-0.5)*0.3);
+    const mid  = new THREE.Vector3().addVectors(prev, next).multiplyScalar(0.5);
+    const len  = prev.distanceTo(next);
+    const cyl  = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.10, len, 8), trunkMat);
+    cyl.position.copy(mid);
+    cyl.lookAt(next);
+    cyl.rotateX(Math.PI / 2);
+    cyl.castShadow = true;
+    g.add(cyl);
+    prev = next;
+  }
+  // 粉红花苞簇
+  const flowerMat = new THREE.MeshStandardMaterial({ color: C.peachPink, emissive: 0x442020, emissiveIntensity: 0.08, roughness: 0.7 });
+  for (let i = 0; i < 18; i++) {
+    const flower = new THREE.Mesh(new THREE.SphereGeometry(0.10, 8, 6), flowerMat);
+    flower.position.set((Math.random()-0.5)*1.4, 1.4 + Math.random()*1.0, (Math.random()-0.5)*1.4);
+    g.add(flower);
+  }
+  g.position.set(x, 0, z);
+  scene.add(g);
+}
+
+// ===== 苔藓 MOSS (扁球地面装饰) =====
+function makeMoss(x, z, scale = 1) {
+  const moss = new THREE.Mesh(
+    new THREE.SphereGeometry(0.18 * scale, 8, 6),
+    new THREE.MeshStandardMaterial({ color: C.moss, roughness: 0.95 })
+  );
+  moss.scale.y = 0.2;
+  moss.position.set(x, 0.02, z);
+  moss.receiveShadow = true;
+  scene.add(moss);
+}
+
+// ===== 竹林（6 簇 60 株）=====
+makeBamboo(-12, 8, 10);
+makeBamboo(12, 8, 10);
+makeBamboo(13, -5, 10);
+makeBamboo(-13, 5, 10);
+makeBamboo(-12, -10, 10);
+makeBamboo(12, -10, 10);
+
+// ===== 松树（6 棵）=====
 makePine(-13, -3);
 makePine(-13, -8);
 makePine(13, -8);
+makePine(-13, 11);
+makePine(13, 11);
+makePine(13, 3);
+
+// ===== 梅花树（4 棵）=====
 makePlum(-11, 0);
 makePlum(11, 0);
+makePlum(-11, -12);
+makePlum(11, -12);
+
+// ===== 桃花树（3 棵，中区）=====
+makePeach(-9, 3);
+makePeach(9, 3);
+makePeach(0, -5);
+
+// ===== 苔藓 30+ 个（地面边缘）=====
+for (let i = 0; i < 32; i++) {
+  // 沿场景外缘洒（远离中心路径）
+  let mx, mz;
+  const ring = Math.random() < 0.5 ? 10 : 12.5;
+  const angle = Math.random() * Math.PI * 2;
+  mx = Math.cos(angle) * ring + (Math.random() - 0.5) * 1.5;
+  mz = Math.sin(angle) * ring + (Math.random() - 0.5) * 1.5;
+  // 避免在主路径中央
+  if (Math.abs(mx) < 2.5 && Math.abs(mz) < 6) continue;
+  makeMoss(mx, mz, 0.6 + Math.random() * 0.8);
+}
 
 // ============ (9) 荷塘 LOTUS POND ============
 function buildPond() {
@@ -778,9 +898,20 @@ const stereoChars = [];
 function buildStereoWord() {
   const startX = -4.5;
   for (let i = 0; i < 4; i++) {
-    const tex = makeBigChar(wordChars[i]);
-    const mat = new THREE.MeshStandardMaterial({ map: tex, roughness: 0.5, metalness: 0.05 });
-    const mesh = new THREE.Mesh(new THREE.BoxGeometry(1.2, 1.2, 0.4), mat);
+    const tex     = makeBigChar(wordChars[i]);
+    const texMirr = makeBigChar(wordChars[i], true);  // 预镜像版本，用于 -z 面
+    // 用 6 个独立材质（BoxGeometry 6 面），正反面分别贴正/镜像贴图以保证从两侧都正向可读
+    const matFront = new THREE.MeshStandardMaterial({ map: tex,     roughness: 0.5, metalness: 0.05 });
+    const matBack  = new THREE.MeshStandardMaterial({ map: texMirr, roughness: 0.5, metalness: 0.05 });
+    const matSide  = new THREE.MeshStandardMaterial({ color: 0x3a2a20, roughness: 0.8 });
+    // BoxGeometry 材质 index 顺序: [+x, -x, +y, -y, +z, -z]
+    // +z 是默认贴图正向面，-z 默认是镜像。我们给前后两面都指定 map，
+    // 然后通过 mesh.rotation.y = Math.PI 让 -z 面朝向玩家（玩家从 +z 接近）。
+    // 但因为正反面都有贴图，无论哪面朝向玩家文字都不镜像。
+    const mesh = new THREE.Mesh(
+      new THREE.BoxGeometry(1.2, 1.2, 0.4),
+      [matSide, matSide, matSide, matSide, matFront, matBack]
+    );
     mesh.position.set(startX + i * 2.6, 0.6, 6);
     mesh.castShadow = true;
     scene.add(mesh);
@@ -908,8 +1039,8 @@ function buildLanterns() {
     const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.06, 1.8, 8), new THREE.MeshStandardMaterial({ color: 0x4a3424, roughness: 0.8 }));
     pole.position.y = 0.9;
     g.add(pole);
-    // 灯笼体
-    const body = new THREE.Mesh(new THREE.SphereGeometry(0.32, 16, 12), new THREE.MeshStandardMaterial({ color: C.accent, emissive: 0x441010, emissiveIntensity: 0.6, roughness: 0.5 }));
+    // 灯笼体（朱砂柔化版：emissiveIntensity 0.6 → 0.2 不发热感）
+    const body = new THREE.Mesh(new THREE.SphereGeometry(0.32, 16, 12), new THREE.MeshStandardMaterial({ color: C.cinnabar, emissive: 0x661a1a, emissiveIntensity: 0.2, roughness: 0.55 }));
     body.scale.y = 1.2;
     body.position.y = 2.1; body.castShadow = true;
     g.add(body);
@@ -948,34 +1079,84 @@ const scrollPositions = [
 const scrolls = [];
 function buildScrolls() {
   const list = (D.projects || []).slice(0, 5);
+  const axleMat = new THREE.MeshStandardMaterial({ color: 0x7F2020, roughness: 0.55, metalness: 0.05 });  // 朱红木轴
+  const capMat  = new THREE.MeshStandardMaterial({ color: 0x7F2020, roughness: 0.5, metalness: 0.1 });   // 轴帽
   for (let i = 0; i < list.length; i++) {
     const p = list[i];
     const [x, y, z] = scrollPositions[i] || [0, 0, 0];
     const g = new THREE.Group();
-    // 卷轴上下两根金属轴
-    const axleMat = new THREE.MeshStandardMaterial({ color: C.gold, metalness: 0.7, roughness: 0.35 });
-    const topAxle = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 1.4, 16), axleMat);
+
+    // ===== 上下两根横向朱红木轴（横放圆柱）=====
+    const topAxle = new THREE.Mesh(new THREE.CylinderGeometry(0.10, 0.10, 1.5, 16), axleMat);
     topAxle.rotation.z = Math.PI / 2;
-    topAxle.position.y = 2.2;
+    topAxle.position.y = 2.05;
     topAxle.castShadow = true;
     g.add(topAxle);
-    const botAxle = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 1.4, 16), axleMat);
+
+    const botAxle = new THREE.Mesh(new THREE.CylinderGeometry(0.10, 0.10, 1.5, 16), axleMat);
     botAxle.rotation.z = Math.PI / 2;
-    botAxle.position.y = 0.4;
+    botAxle.position.y = 0.65;
     botAxle.castShadow = true;
     g.add(botAxle);
-    // 卷轴纸
-    const tex = makeScrollTex(p.name_cn || p.name_en, p.tagline || p.description_short?.slice(0, 24) || '', p.year || '');
+
+    // ===== 两端的"轴帽"（朱红粗圆柱）=====
+    for (let side of [-1, 1]) {
+      for (let yLevel of [2.05, 0.65]) {
+        const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.14, 0.08, 16), capMat);
+        cap.rotation.z = Math.PI / 2;
+        cap.position.set(side * 0.79, yLevel, 0);
+        cap.castShadow = true;
+        g.add(cap);
+        // 末端小球（朱红宝石珠头）
+        const knob = new THREE.Mesh(
+          new THREE.SphereGeometry(0.07, 10, 8),
+          new THREE.MeshStandardMaterial({ color: 0xC0392B, roughness: 0.4 })
+        );
+        knob.position.set(side * 0.86, yLevel, 0);
+        g.add(knob);
+      }
+    }
+
+    // ===== 中间展开的米黄卷纸（薄 Box，正/反面分别用正/镜像 canvas，两侧都正向）=====
+    const texFront = makeScrollTex(p.name_cn || p.name_en, p.tagline || p.description_short?.slice(0, 24) || '', p.year || '', false);
+    const texBack  = makeScrollTex(p.name_cn || p.name_en, p.tagline || p.description_short?.slice(0, 24) || '', p.year || '', true);
+    const paperFront = new THREE.MeshStandardMaterial({ map: texFront, color: 0xF6F3EB, roughness: 0.95 });
+    const paperBack  = new THREE.MeshStandardMaterial({ map: texBack,  color: 0xF6F3EB, roughness: 0.95 });
+    const paperSide  = new THREE.MeshStandardMaterial({ color: 0xE5DAB8, roughness: 0.95 });
     const paper = new THREE.Mesh(
-      new THREE.PlaneGeometry(1.25, 1.7),
-      new THREE.MeshStandardMaterial({ map: tex, side: THREE.DoubleSide, roughness: 0.85 })
+      new THREE.BoxGeometry(1.3, 1.4, 0.04),
+      [paperSide, paperSide, paperSide, paperSide, paperFront, paperBack]
     );
-    paper.position.y = 1.3;
+    paper.position.y = 1.35;
     paper.castShadow = true;
     g.add(paper);
-    // 朱砂底座
-    const base = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.55, 0.35, 12), new THREE.MeshStandardMaterial({ color: C.accent, roughness: 0.6 }));
-    base.position.y = 0.175; g.add(base);
+
+    // ===== 卷起的两端纸卷（小圆柱）=====
+    for (let side of [-1, 1]) {
+      const roll = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.08, 0.08, 1.4, 12),
+        new THREE.MeshStandardMaterial({ color: 0xE5DAB8, roughness: 0.9 })
+      );
+      roll.position.set(side * 0.66, 1.35, 0);
+      g.add(roll);
+    }
+
+    // ===== 石质底座（不再用大块朱砂柱，改用矮石台）=====
+    const base = new THREE.Mesh(
+      new THREE.BoxGeometry(1.5, 0.3, 0.5),
+      new THREE.MeshStandardMaterial({ color: 0x8d7a60, roughness: 0.9 })
+    );
+    base.position.y = 0.15;
+    base.castShadow = true; base.receiveShadow = true;
+    g.add(base);
+
+    // 底座顶面（薄朱红装饰条）
+    const baseTop = new THREE.Mesh(
+      new THREE.BoxGeometry(1.5, 0.04, 0.5),
+      new THREE.MeshStandardMaterial({ color: 0x7F2020, roughness: 0.6 })
+    );
+    baseTop.position.y = 0.32;
+    g.add(baseTop);
 
     g.position.set(x, y, z);
     g.userData.project = p;
@@ -984,7 +1165,7 @@ function buildScrolls() {
 
     // 物理底座（不可撞倒）
     const cbody = new CANNON.Body({ mass: 0, material: groundMat });
-    cbody.addShape(new CANNON.Box(new CANNON.Vec3(0.7, 0.18, 0.3)));
+    cbody.addShape(new CANNON.Box(new CANNON.Vec3(0.8, 0.18, 0.3)));
     cbody.position.set(x, 0.18, z);
     world.addBody(cbody);
   }
@@ -1043,8 +1224,14 @@ function buildTrophies() {
     // 顶部
     const top = new THREE.Mesh(new THREE.SphereGeometry(0.22, 12, 10), new THREE.MeshStandardMaterial({ color: C.cinnabar, emissive: 0x661616, emissiveIntensity: 0.4 }));
     top.position.y = 1.92; g.add(top);
-    // 牌匾
-    const plaque = new THREE.Mesh(new THREE.PlaneGeometry(1.2, 1.6), new THREE.MeshStandardMaterial({ map: makeAwardTex(a.name || ''), roughness: 0.6 }));
+    // 牌匾（薄 Box，正反面分别贴正/镜像贴图，让两面都正向可读）
+    const plaqueFront = new THREE.MeshStandardMaterial({ map: makeAwardTex(a.name || '', false), roughness: 0.6 });
+    const plaqueBack2 = new THREE.MeshStandardMaterial({ map: makeAwardTex(a.name || '', true),  roughness: 0.6 });
+    const plaqueSide2 = new THREE.MeshStandardMaterial({ color: 0x6d5640, roughness: 0.8 });
+    const plaque = new THREE.Mesh(
+      new THREE.BoxGeometry(1.2, 1.6, 0.06),
+      [plaqueSide2, plaqueSide2, plaqueSide2, plaqueSide2, plaqueFront, plaqueBack2]
+    );
     plaque.position.set(0, 1.2, 0.51);
     g.add(plaque);
     g.position.set(x, 0, z);
@@ -1137,10 +1324,10 @@ function buildVehicle() {
   roofMesh.position.set(0, 0.42, -0.1);
   roofMesh.castShadow = true;
   carGroup.add(roofMesh);
-  // 酒红条
+  // 鸦青腰带（原朱红→鸦青：与米黄车顶对比更柔和）
   const stripe = new THREE.Mesh(
     new THREE.BoxGeometry(1.02, 0.08, 2.0),
-    new THREE.MeshStandardMaterial({ color: C.accent, emissive: 0x331010, emissiveIntensity: 0.2, roughness: 0.5 })
+    new THREE.MeshStandardMaterial({ color: C.slate, emissive: 0x1a2530, emissiveIntensity: 0.1, roughness: 0.55 })
   );
   stripe.position.y = 0.08;
   carGroup.add(stripe);
@@ -1244,11 +1431,16 @@ window.addEventListener('keyup', e => {
   if (m) keys[m] = false;
 });
 
-// ============ MOUSE for camera yaw + cursor ring ============
+// ============ MOUSE for camera yaw + cursor ring (sourced from hello.html) ============
 const cursor = document.getElementById('cursor');
+const cursorLabel = document.getElementById('cursorLabel');
+const isHoverPointer = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
 let mouseX = 0, mouseY = 0, cursorTX = 0, cursorTY = 0;
+let cursorRX = window.innerWidth / 2, cursorRY = window.innerHeight / 2;
 let dragging = false, dragStartX = 0, dragYawStart = 0;
 let camYaw = 0;
+// 防 DOM hover 和 3D scene 互相打架的旗标
+let sceneOwnsText = false;
 
 window.addEventListener('mousemove', e => {
   mouseX = e.clientX; mouseY = e.clientY;
@@ -1266,19 +1458,60 @@ window.addEventListener('mousedown', e => {
     dragging = true;
     dragStartX = e.clientX;
     dragYawStart = camYaw;
-    cursor.classList.add('hover');
   }
+  cursor.classList.add('click');
 });
 window.addEventListener('mouseup', () => {
   dragging = false;
-  cursor.classList.remove('hover');
+  cursor.classList.remove('click');
 });
 
-// hover detection for UI links
-document.querySelectorAll('a, .ic, .start, .close').forEach(el => {
-  el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-  el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+// 一般 UI 交互元素：ring 放大
+document.querySelectorAll('a, button, .ic, .start, .close').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    if (el.hasAttribute('data-cursor')) return;  // data-cursor 元素走 text 模式
+    if (sceneOwnsText) return;
+    cursor.classList.add('hover');
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.classList.remove('hover');
+  });
 });
+
+// data-cursor 元素：ring 变 text 模式 + 显示 label
+document.querySelectorAll('[data-cursor]').forEach(el => {
+  const text = el.dataset.cursor;
+  const isEnglish = /^[A-Z\s]+$/.test(text);
+  el.addEventListener('mouseenter', () => {
+    if (sceneOwnsText) return;
+    cursorLabel.textContent = text;
+    cursorLabel.classList.toggle('en', isEnglish);
+    cursor.classList.add('text');
+    cursor.classList.remove('hover');
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.classList.remove('text');
+  });
+});
+
+// 鼠标离开/进入页面
+document.addEventListener('mouseleave', () => { cursor.style.opacity = '0'; });
+document.addEventListener('mouseenter', () => { cursor.style.opacity = '1'; });
+
+// 提供给 3D scene 调用的接口：靠近卷轴/联系/奖项时显示
+function setSceneCursor(text) {
+  if (!isHoverPointer) return;
+  if (text) {
+    sceneOwnsText = true;
+    cursorLabel.textContent = text;
+    cursorLabel.classList.toggle('en', /^[A-Z\s]+$/.test(text));
+    cursor.classList.add('text');
+    cursor.classList.remove('hover');
+  } else {
+    sceneOwnsText = false;
+    cursor.classList.remove('text');
+  }
+}
 
 // ============ INTRO / START FLOW ============
 const introEl = document.getElementById('intro');
@@ -1575,6 +1808,7 @@ function animate() {
   nearestContact = null;
   nearestTrophy = null;
   let promptShown = false;
+  let cursorText = null;
   const cp = chassisBody.position;
   for (const s of scrolls) {
     const dx = cp.x - s.x, dz = cp.z - s.z;
@@ -1583,6 +1817,7 @@ function animate() {
       promptText.textContent = ' 阅卷 · ' + (s.project.name_cn || '').slice(0, 12);
       promptEl.classList.add('show');
       promptShown = true;
+      cursorText = '阅卷';
       // 卷轴随距离微微浮动
       s.group.rotation.y = clock.elapsedTime * 0.3;
       break;
@@ -1598,6 +1833,7 @@ function animate() {
         promptText.textContent = ' 联系 · ' + (c.contact.display || '').slice(0, 18);
         promptEl.classList.add('show');
         promptShown = true;
+        cursorText = '联系';
         break;
       }
     }
@@ -1610,11 +1846,14 @@ function animate() {
         promptText.textContent = ' 荣誉 · ' + (tr.award.name || '').slice(0, 16);
         promptEl.classList.add('show');
         promptShown = true;
+        cursorText = '观赏';
         break;
       }
     }
   }
   if (!promptShown) promptEl.classList.remove('show');
+  // 3D 场景接管 cursor-ring 显示状态
+  setSceneCursor(cursorText);
 
   // === camera follow ===
   if (chassisBody) {
@@ -1683,15 +1922,48 @@ function animate() {
     if (chassisBody.position.y < -5) resetCar();
   }
 
+  // === 翻车自动复位检测 ===
+  // 车的 local-up 经 quaternion 旋转后取 world-Y 分量；< 0.3 视为侧翻/倒翻
+  if (chassisBody) {
+    const localUp = new CANNON.Vec3(0, 1, 0);
+    const worldUp = new CANNON.Vec3();
+    chassisBody.quaternion.vmult(localUp, worldUp);
+    const upDot = worldUp.y;
+    if (upDot < 0.3) {
+      if (!window._flipTime) {
+        window._flipTime = performance.now();
+        // 显示提示
+        const fn = document.getElementById('flipNotice');
+        if (fn) fn.classList.add('show');
+      }
+      if (performance.now() - window._flipTime > 1500) {
+        // 自动复位：保留 x/z 位置 + y 抬高 + quaternion 清零
+        const px = chassisBody.position.x;
+        const pz = chassisBody.position.z;
+        chassisBody.position.set(px, 2, pz);
+        chassisBody.velocity.set(0, 0, 0);
+        chassisBody.angularVelocity.set(0, 0, 0);
+        chassisBody.quaternion.set(0, 0, 0, 1);
+        window._flipTime = null;
+        const fn = document.getElementById('flipNotice');
+        if (fn) fn.classList.remove('show');
+      }
+    } else if (window._flipTime) {
+      window._flipTime = null;
+      const fn = document.getElementById('flipNotice');
+      if (fn) fn.classList.remove('show');
+    }
+  }
+
   updateCursor(dt);
   renderer.render(scene, camera);
 }
 
 function updateCursor(dt) {
-  mouseX += (cursorTX - mouseX) * 0.22;
-  mouseY += (cursorTY - mouseY) * 0.22;
-  cursor.style.left = cursorTX + 'px';
-  cursor.style.top = cursorTY + 'px';
+  // lerp 0.22 跟随
+  cursorRX += (cursorTX - cursorRX) * 0.22;
+  cursorRY += (cursorTY - cursorRY) * 0.22;
+  cursor.style.transform = `translate3d(${cursorRX}px, ${cursorRY}px, 0)`;
 }
 
 animate();
