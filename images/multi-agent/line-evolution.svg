@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" font-family="'EB Garamond', 'Cormorant Garamond', 'Songti SC', serif">
+  <defs>
+    <linearGradient id="paper" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F6F3EB"/>
+      <stop offset="100%" stop-color="#EFEBE0"/>
+    </linearGradient>
+    <pattern id="noise" patternUnits="userSpaceOnUse" width="120" height="120">
+      <rect width="120" height="120" fill="url(#paper)"/>
+      <circle cx="20" cy="30" r=".5" fill="#1c1916" opacity=".06"/>
+      <circle cx="60" cy="80" r=".4" fill="#1c1916" opacity=".05"/>
+      <circle cx="90" cy="20" r=".3" fill="#1c1916" opacity=".04"/>
+      <circle cx="40" cy="100" r=".5" fill="#1c1916" opacity=".05"/>
+      <circle cx="105" cy="60" r=".3" fill="#1c1916" opacity=".04"/>
+    </pattern>
+  </defs>
+
+  <!-- 背景 -->
+  <rect width="1280" height="720" fill="url(#noise)"/>
+
+  <!-- 印章框 -->
+  <rect x="40" y="40" width="1200" height="640" fill="none" stroke="#1c1916" stroke-width="1" opacity=".25"/>
+
+  <!-- 标题区 -->
+  <g transform="translate(80,90)">
+    <text font-family="'JetBrains Mono', monospace" font-size="11" fill="#7F2020" letter-spacing="3">FIG. 1 · LINE COUNT EVOLUTION</text>
+    <text y="36" font-size="36" font-weight="500" fill="#1c1916">SKILL.md 行数演化 — <tspan font-style="italic" fill="#7F2020">v1 → v9.0</tspan></text>
+    <text y="68" font-size="15" fill="#1c1916" opacity=".7" font-family="'Songti SC', 'EB Garamond', serif">膨胀 → 顶峰 → 砍 PM → 大重构 → 收敛 · 13 天 · 77 commits</text>
+  </g>
+
+  <!-- 坐标系 -->
+  <g transform="translate(120,200)">
+    <!-- Y 轴刻度 1500 / 1000 / 500 / 0 -->
+    <g font-family="'JetBrains Mono', monospace" font-size="11" fill="#1c1916" opacity=".6">
+      <line x1="0" y1="0" x2="0" y2="400" stroke="#1c1916" stroke-width="1" opacity=".3"/>
+      <text x="-12" y="4" text-anchor="end">1500</text>
+      <line x1="0" y1="0" x2="1040" y2="0" stroke="#1c1916" stroke-dasharray="1 4" opacity=".15"/>
+      <text x="-12" y="108" text-anchor="end">1000</text>
+      <line x1="0" y1="105" x2="1040" y2="105" stroke="#1c1916" stroke-dasharray="1 4" opacity=".15"/>
+      <text x="-12" y="216" text-anchor="end">500</text>
+      <line x1="0" y1="212" x2="1040" y2="212" stroke="#1c1916" stroke-dasharray="1 4" opacity=".15"/>
+      <text x="-12" y="404" text-anchor="end">0</text>
+      <line x1="0" y1="400" x2="1040" y2="400" stroke="#1c1916" stroke-width="1" opacity=".3"/>
+    </g>
+
+    <!-- X 轴标签 -->
+    <g font-family="'JetBrains Mono', monospace" font-size="11" fill="#1c1916" opacity=".7" text-anchor="middle">
+      <text x="0" y="425">v1</text>
+      <text x="280" y="425">v4.3</text>
+      <text x="490" y="425">v5.4</text>
+      <text x="700" y="425">v6.0</text>
+      <text x="1040" y="425">v9.0</text>
+    </g>
+
+    <!-- 时间标签 -->
+    <g font-family="'JetBrains Mono', monospace" font-size="9" fill="#869B7E" text-anchor="middle" letter-spacing="1">
+      <text x="0" y="445">04.23</text>
+      <text x="280" y="445">04.27</text>
+      <text x="490" y="445">04.30</text>
+      <text x="700" y="445">05.02</text>
+      <text x="1040" y="445">05.05</text>
+    </g>
+
+    <!-- 曲线（用 cubic bezier 平滑）数据：
+         v1 200 → y=(1500-200)/1500*400 = 346.67
+         v4.3 1382 → y=(1500-1382)/1500*400 = 31.47
+         v5.4 893 → y=(1500-893)/1500*400 = 161.87
+         v6.0 221 → y=(1500-221)/1500*400 = 341.07
+         v9.0 453 → y=(1500-453)/1500*400 = 279.20
+    -->
+    <path d="M 0 346.67 C 100 200, 200 80, 280 31.47 C 360 80, 430 130, 490 161.87 C 560 200, 640 280, 700 341.07 C 800 320, 940 290, 1040 279.20"
+          fill="none" stroke="#7F2020" stroke-width="2.5" stroke-linecap="round"/>
+
+    <!-- 填充浅色区域 -->
+    <path d="M 0 346.67 C 100 200, 200 80, 280 31.47 C 360 80, 430 130, 490 161.87 C 560 200, 640 280, 700 341.07 C 800 320, 940 290, 1040 279.20 L 1040 400 L 0 400 Z"
+          fill="#7F2020" opacity=".06"/>
+
+    <!-- 数据点 + 标签 -->
+    <g>
+      <!-- v1 200 -->
+      <circle cx="0" cy="346.67" r="5" fill="#F6F3EB" stroke="#7F2020" stroke-width="2"/>
+      <g transform="translate(0,346.67)">
+        <line x1="0" y1="0" x2="0" y2="40" stroke="#869B7E" stroke-width=".8" opacity=".5"/>
+        <text x="0" y="-14" text-anchor="middle" font-size="18" font-weight="500" fill="#1c1916">200</text>
+        <text x="0" y="58" text-anchor="middle" font-size="10" font-family="'JetBrains Mono', monospace" fill="#869B7E" letter-spacing="1">START</text>
+      </g>
+
+      <!-- v4.3 1382 峰值 -->
+      <circle cx="280" cy="31.47" r="7" fill="#7F2020" stroke="#F6F3EB" stroke-width="2.5"/>
+      <g transform="translate(280,31.47)">
+        <rect x="-46" y="-46" width="92" height="32" rx="3" fill="#F6F3EB" stroke="#7F2020" stroke-width="1"/>
+        <text x="0" y="-30" text-anchor="middle" font-size="22" font-weight="600" font-style="italic" fill="#7F2020">1382</text>
+        <text x="0" y="-19" text-anchor="middle" font-size="9" font-family="'JetBrains Mono', monospace" fill="#7F2020" letter-spacing="2">PEAK</text>
+      </g>
+
+      <!-- v5.4 893 -->
+      <circle cx="490" cy="161.87" r="5" fill="#F6F3EB" stroke="#7F2020" stroke-width="2"/>
+      <g transform="translate(490,161.87)">
+        <text x="0" y="-12" text-anchor="middle" font-size="18" font-weight="500" fill="#1c1916">893</text>
+        <text x="0" y="32" text-anchor="middle" font-size="10" font-family="'JetBrains Mono', monospace" fill="#869B7E" letter-spacing="1">砍 PM</text>
+      </g>
+
+      <!-- v6.0 221 大重构低点 -->
+      <circle cx="700" cy="341.07" r="6" fill="#869B7E" stroke="#F6F3EB" stroke-width="2.5"/>
+      <g transform="translate(700,341.07)">
+        <rect x="-60" y="14" width="120" height="40" rx="3" fill="#869B7E" opacity=".9"/>
+        <text x="0" y="32" text-anchor="middle" font-size="20" font-weight="600" font-style="italic" fill="#F6F3EB">221</text>
+        <text x="0" y="46" text-anchor="middle" font-size="9" font-family="'JetBrains Mono', monospace" fill="#F6F3EB" letter-spacing="2">−80% 大重构</text>
+      </g>
+
+      <!-- v9.0 453 收敛 -->
+      <circle cx="1040" cy="279.20" r="6" fill="#7F2020" stroke="#F6F3EB" stroke-width="2.5"/>
+      <g transform="translate(1040,279.20)">
+        <text x="0" y="-14" text-anchor="middle" font-size="20" font-weight="500" fill="#1c1916">453</text>
+        <text x="0" y="32" text-anchor="middle" font-size="10" font-family="'JetBrains Mono', monospace" fill="#7F2020" letter-spacing="1">FINAL</text>
+      </g>
+    </g>
+
+    <!-- 注释 -->
+    <g font-family="'Songti SC', serif" fill="#1c1916" opacity=".6" font-size="12">
+      <text x="140" y="100" font-style="italic">膨胀</text>
+      <text x="380" y="80" font-style="italic">峰值</text>
+      <text x="580" y="200" font-style="italic">砍 PM 层</text>
+      <text x="790" y="370" font-style="italic">大重构</text>
+      <text x="940" y="240" font-style="italic">收敛</text>
+    </g>
+  </g>
+
+  <!-- 印章 -->
+  <g transform="translate(1140,640) rotate(-8)">
+    <rect x="-32" y="-32" width="64" height="64" fill="none" stroke="#7F2020" stroke-width="1.5"/>
+    <text text-anchor="middle" y="-2" font-family="'Songti SC', serif" font-size="14" fill="#7F2020" font-weight="600">v9.0</text>
+    <text text-anchor="middle" y="14" font-family="'JetBrains Mono', monospace" font-size="7" fill="#7F2020" letter-spacing="2">SHIPPED</text>
+  </g>
+
+  <!-- 底部小字 -->
+  <text x="80" y="690" font-family="'JetBrains Mono', monospace" font-size="9" fill="#1c1916" opacity=".4" letter-spacing="1">
+    SOURCE: GIT LOG · 2026-05 · MULTI-AGENT-RESEARCH · TENG MEIMING
+  </text>
+</svg>

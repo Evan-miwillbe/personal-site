@@ -418,19 +418,10 @@
 
 <!-- ============ Hero 大图 ============ -->
 <div class="container wide">
-  <div class="hero-image">
-    <!-- 替换：把 img-placeholder 删掉，换成 <img src="../images/knowledge-healer/hero.png" class="case-image" alt="..."/> -->
-    <div class="img-placeholder wide">
-      <div class="ph-icon">🖼️</div>
-      <div class="ph-title">Hero 封面图</div>
-      <div class="ph-desc">
-        建议：一张能 30 秒说清这是什么的图。例如：
-        架构图（3+2 多 Agent 并行）的高清版，或一张代表性的执行结果截图。
-        参考 Bruno Simon / Adham Dannaway 那种"一图入魂"的封面。
-      </div>
-      <div class="ph-spec">放至：images/knowledge-healer/hero.png · 推荐 21:9 · 2400×1029px</div>
-    </div>
-  </div>
+  <figure class="hero-image">
+    <img src="../images/knowledge-healer/architecture.svg" class="case-image" alt="knowledge-healer 3+2 多 Agent 并行架构" style="padding:32px 24px;border:1px solid #1c1916;background:#F6F3EB"/>
+    <figcaption>FIG. 0 · System Architecture — 3+2 Parallel Agent Diagnosis</figcaption>
+  </figure>
 </div>
 
 <!-- ============ 章节 1：背景 / Why ============ -->
@@ -457,17 +448,12 @@
   </section>
 </div>
 
-<!-- 痛点示意图 -->
+<!-- 痛点引用墙 -->
 <div class="container">
-  <div class="img-placeholder">
-    <div class="ph-icon">📸</div>
-    <div class="ph-title">痛点示意图（或调研截图）</div>
-    <div class="ph-desc">
-      建议：Reddit / 知乎 / V2EX 上"文档过期"相关的真实用户吐槽截图拼贴，
-      或是你做用户调研时的笔记/思维导图，让面试官 5 秒感受到"这个问题真实存在"。
-    </div>
-    <div class="ph-spec">放至：images/knowledge-healer/pain-point.png · 16:9 · 1920×1080</div>
-  </div>
+  <figure>
+    <img src="../images/knowledge-healer/pain-points.png" class="case-image" alt="知识库过期文档的真实用户吐槽 — Reddit / 知乎 / r/sysadmin / EKB 调研"/>
+    <figcaption>FIG. 1 · Pain Points — 来自 Reddit / 知乎 / r/sysadmin 的真实用户吐槽</figcaption>
+  </figure>
 </div>
 
 <!-- ============ 章节 2：方案 / What ============ -->
@@ -555,28 +541,26 @@
   </section>
 </div>
 
-<!-- 多图：实际运行截图 -->
+<!-- 运行截图 二联：CLI + 飞书报告卡片 -->
 <div class="container">
   <div class="case-image-row">
-    <div class="img-placeholder tall">
-      <div class="ph-icon">📱</div>
-      <div class="ph-title">运行截图 · CLI 端</div>
-      <div class="ph-desc">
-        终端里 skill 执行的过程截图——
-        Agent spawn / 进度条 / 最终诊断报告输出。
-      </div>
-      <div class="ph-spec">images/knowledge-healer/cli-run.png · 4:3</div>
-    </div>
-    <div class="img-placeholder tall">
-      <div class="ph-icon">📋</div>
-      <div class="ph-title">运行截图 · 飞书端</div>
-      <div class="ph-desc">
-        诊断报告最终在飞书文档里呈现的样子——
-        7 维评分卡片 + 具体修复 checklist。
-      </div>
-      <div class="ph-spec">images/knowledge-healer/feishu-report.png · 4:3</div>
-    </div>
+    <figure>
+      <img src="../images/knowledge-healer/cli-execution.png" class="case-image" alt="knowledge-healer CLI 端运行 — Agent spawn + 进度条 + 7 维诊断"/>
+      <figcaption>FIG. 2 · CLI 运行 — 4 Agent 并行 · 进度条 · 47 秒完成</figcaption>
+    </figure>
+    <figure>
+      <img src="../images/knowledge-healer/feishu-report-mock.png" class="case-image" alt="knowledge-healer 飞书端诊断报告 — 健康评分卡 + 7 维体检"/>
+      <figcaption>FIG. 3 · 飞书报告 — 评分卡 / 7 维体检 / P0 紧急标记</figcaption>
+    </figure>
   </div>
+</div>
+
+<!-- 详细报告样例 -->
+<div class="container">
+  <figure>
+    <img src="../images/knowledge-healer/health-report.svg" class="case-image" alt="knowledge-healer 健康诊断报告详细样例 — 完整 7 维矩阵 + P0 修复 callout" style="background:#F6F3EB"/>
+    <figcaption>FIG. 4 · 完整报告 — 7 维明细 · 代表性发现 · 责任人 @ 修复</figcaption>
+  </figure>
 </div>
 
 <!-- ============ 章节 4：结果 / Result ============ -->
@@ -612,15 +596,15 @@
 
 <!-- 大屏截图：公示页 / GitHub README -->
 <div class="container">
-  <div class="img-placeholder wide">
-    <div class="ph-icon">🏆</div>
-    <div class="ph-title">官方公示截图 / GitHub README 顶部截图</div>
-    <div class="ph-desc">
-      建议放 2 张拼接：左边是飞书官方公示页面（你的项目出现在十佳名单的部分），
-      右边是 GitHub 仓库主页的截图（README + Stars + License badge）。
-      这是整个 case study 最有"权威背书"的视觉锚点。
-    </div>
-    <div class="ph-spec">放至：images/knowledge-healer/recognition.png · 21:9 · 2400×1029</div>
+  <div class="case-image-row" style="grid-template-columns:1fr 1fr;gap:24px">
+    <figure>
+      <img src="../images/github/feishu-cli-top10.png" class="case-image" alt="飞书 CLI 创作者大赛十佳公示页 — 含 knowledge-healer"/>
+      <figcaption>FIG. A · 飞书 CLI 创作者大赛官方公示</figcaption>
+    </figure>
+    <figure>
+      <img src="../images/github/knowledge-healer-repo.png" class="case-image" alt="GitHub Evan-miwillbe/knowledge-healer 仓库主页"/>
+      <figcaption>FIG. B · GitHub 仓库主页 + README</figcaption>
+    </figure>
   </div>
 </div>
 

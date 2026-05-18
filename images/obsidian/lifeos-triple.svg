@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 720" font-family="'EB Garamond', 'Songti SC', sans-serif">
+  <defs>
+    <linearGradient id="bg5" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F6F3EB"/>
+      <stop offset="100%" stop-color="#EFEBE0"/>
+    </linearGradient>
+    <filter id="card-shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="4"/>
+      <feOffset dx="0" dy="6" result="offsetblur"/>
+      <feFlood flood-color="#1c1916" flood-opacity="0.15"/>
+      <feComposite in2="offsetblur" operator="in"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="1440" height="720" fill="url(#bg5)"/>
+
+  <!-- 顶部标题 -->
+  <g transform="translate(60,60)">
+    <text font-family="'JetBrains Mono', monospace" font-size="11" fill="#7F2020" letter-spacing="3">LIFEOS · 三层任务视图</text>
+    <text y="32" font-size="26" font-weight="500" fill="#1c1916" font-family="'Songti SC', serif">日 · 周 · 月 — <tspan font-style="italic" fill="#7F2020">三种时间尺度的协奏</tspan></text>
+  </g>
+
+  <!-- 三个面板，每个 420 宽 × 500 高 -->
+
+  <!-- 1. 日计划 -->
+  <g transform="translate(60,140)" filter="url(#card-shadow)">
+    <rect width="420" height="500" fill="#F6F3EB" stroke="#1c1916" stroke-width=".8" opacity=".95"/>
+    <rect width="420" height="36" fill="#1c1916"/>
+    <text x="20" y="22" font-family="'JetBrains Mono', monospace" font-size="11" fill="#F6F3EB" letter-spacing="2">DAILY · 2026-05-18</text>
+    <text x="400" y="22" text-anchor="end" font-family="'Songti SC', serif" font-size="11" fill="#F6F3EB" opacity=".7">星期一</text>
+
+    <!-- 早起冥想 -->
+    <g transform="translate(20,56)">
+      <rect width="380" height="46" fill="#C9CAAC" opacity=".3"/>
+      <rect width="3" height="46" fill="#7F2020"/>
+      <text x="14" y="22" font-family="'JetBrains Mono', monospace" font-size="10" fill="#7F2020" letter-spacing="2">06:30 · 早起</text>
+      <text x="14" y="38" font-family="'Songti SC', serif" font-size="13" fill="#1c1916">冥想 15 分钟 · 跑步 5 km</text>
+      <text x="370" y="30" text-anchor="end" font-family="'EB Garamond', serif" font-size="16" font-weight="600" fill="#7F2020">✓</text>
+    </g>
+
+    <!-- 上午 -->
+    <g transform="translate(20,108)">
+      <text font-family="'JetBrains Mono', monospace" font-size="10" fill="#869B7E" letter-spacing="2">09:00 — 12:00 · MORNING</text>
+      <g transform="translate(0,12)">
+        <rect width="380" height="32" fill="none" stroke="#1c1916" stroke-width=".5" opacity=".3"/>
+        <text x="14" y="20" font-family="'Songti SC', serif" font-size="12" fill="#1c1916">投递腾讯研究院实习简历</text>
+        <text x="370" y="20" text-anchor="end" font-family="'EB Garamond', serif" font-size="14" fill="#7F2020">▢</text>
+      </g>
+      <g transform="translate(0,46)">
+        <rect width="380" height="32" fill="none" stroke="#1c1916" stroke-width=".5" opacity=".3"/>
+        <text x="14" y="20" font-family="'Songti SC', serif" font-size="12" fill="#1c1916">multi-agent README 英文摘要</text>
+        <text x="370" y="20" text-anchor="end" font-family="'EB Garamond', serif" font-size="14" fill="#869B7E">✓</text>
+      </g>
+    </g>
+
+    <!-- 下午 -->
+    <g transform="translate(20,224)">
+      <text font-family="'JetBrains Mono', monospace" font-size="10" fill="#869B7E" letter-spacing="2">14:00 — 18:00 · AFTERNOON</text>
+      <g transform="translate(0,12)">
+        <rect width="380" height="32" fill="none" stroke="#1c1916" stroke-width=".5" opacity=".3"/>
+        <text x="14" y="20" font-family="'Songti SC', serif" font-size="12" fill="#1c1916">个人网站 detail 页配图</text>
+        <text x="370" y="20" text-anchor="end" font-family="'EB Garamond', serif" font-size="14" fill="#869B7E">✓</text>
+      </g>
+      <g transform="translate(0,46)">
+        <rect width="380" height="32" fill="none" stroke="#1c1916" stroke-width=".5" opacity=".3"/>
+        <text x="14" y="20" font-family="'Songti SC', serif" font-size="12" fill="#1c1916">出差培训准备资料</text>
+        <text x="370" y="20" text-anchor="end" font-family="'EB Garamond', serif" font-size="14" fill="#7F2020">▢</text>
+      </g>
+    </g>
+
+    <!-- 各维度平衡 -->
+    <g transform="translate(20,344)">
+      <text font-family="'JetBrains Mono', monospace" font-size="10" fill="#7F2020" letter-spacing="2">各维度平衡 · ENERGY MAP</text>
+      <g transform="translate(0,14)">
+        <text x="0" y="12" font-family="'Songti SC', serif" font-size="11" fill="#1c1916">学习</text>
+        <rect x="50" y="2" width="260" height="10" fill="#1c1916" opacity=".08"/>
+        <rect x="50" y="2" width="220" height="10" fill="#7F2020"/>
+        <text x="320" y="12" font-family="'EB Garamond', serif" font-size="11" fill="#7F2020">85</text>
+      </g>
+      <g transform="translate(0,32)">
+        <text x="0" y="12" font-family="'Songti SC', serif" font-size="11" fill="#1c1916">健康</text>
+        <rect x="50" y="2" width="260" height="10" fill="#1c1916" opacity=".08"/>
+        <rect x="50" y="2" width="195" height="10" fill="#869B7E"/>
+        <text x="320" y="12" font-family="'EB Garamond', serif" font-size="11" fill="#869B7E">75</text>
+      </g>
+      <g transform="translate(0,50)">
+        <text x="0" y="12" font-family="'Songti SC', serif" font-size="11" fill="#1c1916">社交</text>
+        <rect x="50" y="2" width="260" height="10" fill="#1c1916" opacity=".08"/>
+        <rect x="50" y="2" width="104" height="10" fill="#C9CAAC"/>
+        <text x="320" y="12" font-family="'EB Garamond', serif" font-size="11" fill="#1c1916" opacity=".5">40</text>
+      </g>
+      <g transform="translate(0,68)">
+        <text x="0" y="12" font-family="'Songti SC', serif" font-size="11" fill="#1c1916">创作</text>
+        <rect x="50" y="2" width="260" height="10" fill="#1c1916" opacity=".08"/>
+        <rect x="50" y="2" width="234" height="10" fill="#7F2020"/>
+        <text x="320" y="12" font-family="'EB Garamond', serif" font-size="11" fill="#7F2020">90</text>
+      </g>
+    </g>
+
+    <!-- 晚间复盘 -->
+    <g transform="translate(20,442)">
+      <rect width="380" height="42" fill="#869B7E" opacity=".18"/>
+      <rect width="3" height="42" fill="#869B7E"/>
+      <text x="14" y="20" font-family="'JetBrains Mono', monospace" font-size="10" fill="#869B7E" letter-spacing="2">22:00 · 晚间复盘</text>
+      <text x="14" y="36" font-family="'Songti SC', serif" font-size="12" fill="#1c1916" font-style="italic">今天最重要的一件事是...</text>
+    </g>
+  </g>
+
+  <!-- 2. 周计划 -->
+  <g transform="translate(508,140)" filter="url(#card-shadow)">
+    <rect width="420" height="500" fill="#F6F3EB" stroke="#1c1916" stroke-width=".8" opacity=".95"/>
+    <rect width="420" height="36" fill="#1c1916"/>
+    <text x="20" y="22" font-family="'JetBrains Mono', monospace" font-size="11" fill="#F6F3EB" letter-spacing="2">WEEKLY · W20 2026</text>
+    <text x="400" y="22" text-anchor="end" font-family="'Songti SC', serif" font-size="11" fill="#F6F3EB" opacity=".7">05.18 — 05.24</text>
+
+    <!-- 7 天日历 -->
+    <g transform="translate(20,56)" font-family="'Songti SC', serif" font-size="11">
+      <!-- 周一 -->
+      <g transform="translate(0,0)">
+        <rect width="50" height="60" fill="#7F2020" opacity=".15"/>
+        <rect width="50" height="60" fill="none" stroke="#7F2020" stroke-width="1"/>
+        <text x="6" y="14" font-family="'JetBrains Mono', monospace" font-size="9" fill="#7F2020">MON</text>
+        <text x="6" y="30" font-family="'EB Garamond', serif" font-size="18" font-style="italic" fill="#7F2020" font-weight="600">18</text>
+        <circle cx="40" cy="48" r="3" fill="#7F2020"/>
+        <text x="6" y="55" font-size="9" fill="#1c1916">today</text>
+      </g>
+      <!-- 周二到周日 -->
+      <g transform="translate(54,0)">
+        <rect width="50" height="60" fill="none" stroke="#1c1916" stroke-width=".5" opacity=".3"/>
+        <text x="6" y="14" font-family="'JetBrains Mono', monospace" font-size="9" fill="#1c1916" opacity=".6">TUE</text>
+        <text x="6" y="30" font-family="'EB Garamond', serif" font-size="18" font-style="italic" fill="#1c1916" font-weight="600">19</text>
+        <circle cx="40" cy="48" r="3" fill="#869B7E"/>
+      </g>
+      <g transform="translate(108,0)">
+        <rect width="50" height="60" fill="none" stroke="#1c1916" stroke-width=".5" opacity=".3"/>
+        <text x="6" y="14" font-family="'JetBrains Mono', monospace" font-size="9" fill="#1c1916" opacity=".6">WED</text>
+        <text x="6" y="30" font-family="'EB Garamond', serif" font-size="18" font-style="italic" fill="#1c1916" font-weight="600">20</text>
+        <circle cx="40" cy="48" r="3" fill="#7F2020" opacity=".6"/>
+      </g>
+      <g transform="translate(162,0)">
+        <rect width="50" height="60" fill="none" stroke="#1c1916" stroke-width=".5" opacity=".3"/>
+        <text x="6" y="14" font-family="'JetBrains Mono', monospace" font-size="9" fill="#1c1916" opacity=".6">THU</text>
+        <text x="6" y="30" font-family="'EB Garamond', serif" font-size="18" font-style="italic" fill="#1c1916" font-weight="600">21</text>
+      </g>
+      <g transform="translate(216,0)">
+        <rect width="50" height="60" fill="#C9CAAC" opacity=".25"/>
+        <rect width="50" height="60" fill="none" stroke="#1c1916" stroke-width=".5" opacity=".3"/>
+        <text x="6" y="14" font-family="'JetBrains Mono', monospace" font-size="9" fill="#1c1916" opacity=".6">FRI</text>
+        <text x="6" y="30" font-family="'EB Garamond', serif" font-size="18" font-style="italic" fill="#1c1916" font-weight="600">22</text>
+        <text x="6" y="48" font-size="8" fill="#7F2020">出差</text>
+      </g>
+      <g transform="translate(270,0)">
+        <rect width="50" height="60" fill="#C9CAAC" opacity=".25"/>
+        <text x="6" y="14" font-family="'JetBrains Mono', monospace" font-size="9" fill="#1c1916" opacity=".6">SAT</text>
+        <text x="6" y="30" font-family="'EB Garamond', serif" font-size="18" font-style="italic" fill="#1c1916" font-weight="600">23</text>
+        <text x="6" y="48" font-size="8" fill="#7F2020">出差</text>
+      </g>
+      <g transform="translate(324,0)">
+        <rect width="50" height="60" fill="#C9CAAC" opacity=".25"/>
+        <text x="6" y="14" font-family="'JetBrains Mono', monospace" font-size="9" fill="#1c1916" opacity=".6">SUN</text>
+        <text x="6" y="30" font-family="'EB Garamond', serif" font-size="18" font-style="italic" fill="#1c1916" font-weight="600">24</text>
+        <text x="6" y="48" font-size="8" fill="#7F2020">出差</text>
+      </g>
+    </g>
+
+    <!-- 本周三大目标 -->
+    <g transform="translate(20,142)">
+      <text font-family="'JetBrains Mono', monospace" font-size="10" fill="#7F2020" letter-spacing="2">三大目标 · WEEKLY GOALS</text>
+      <g transform="translate(0,18)">
+        <text x="0" y="12" font-family="'EB Garamond', serif" font-size="18" font-weight="500" font-style="italic" fill="#7F2020">i</text>
+        <text x="22" y="12" font-family="'Songti SC', serif" font-size="13" fill="#1c1916">完成个人网站作品集</text>
+        <rect x="0" y="20" width="380" height="5" fill="#1c1916" opacity=".08"/>
+        <rect x="0" y="20" width="304" height="5" fill="#7F2020"/>
+      </g>
+      <g transform="translate(0,52)">
+        <text x="0" y="12" font-family="'EB Garamond', serif" font-size="18" font-weight="500" font-style="italic" fill="#7F2020">ii</text>
+        <text x="22" y="12" font-family="'Songti SC', serif" font-size="13" fill="#1c1916">投递 5 家 AI 公司实习</text>
+        <rect x="0" y="20" width="380" height="5" fill="#1c1916" opacity=".08"/>
+        <rect x="0" y="20" width="76" height="5" fill="#869B7E"/>
+      </g>
+      <g transform="translate(0,86)">
+        <text x="0" y="12" font-family="'EB Garamond', serif" font-size="18" font-weight="500" font-style="italic" fill="#7F2020">iii</text>
+        <text x="22" y="12" font-family="'Songti SC', serif" font-size="13" fill="#1c1916">出差培训 + 现场笔记</text>
+        <rect x="0" y="20" width="380" height="5" fill="#1c1916" opacity=".08"/>
+        <rect x="0" y="20" width="0" height="5" fill="#7F2020"/>
+        <text x="380" y="22" text-anchor="end" font-family="'JetBrains Mono', monospace" font-size="9" fill="#869B7E">待开始</text>
+      </g>
+    </g>
+
+    <!-- 周精力曲线 -->
+    <g transform="translate(20,290)">
+      <text font-family="'JetBrains Mono', monospace" font-size="10" fill="#7F2020" letter-spacing="2">精力曲线 · ENERGY CURVE</text>
+      <g transform="translate(0,12)">
+        <line x1="0" y1="48" x2="380" y2="48" stroke="#1c1916" stroke-width=".5" opacity=".25"/>
+        <path d="M 0 25 L 54 18 L 108 12 L 162 22 L 216 30 L 270 42 L 324 48 L 378 36"
+              fill="none" stroke="#7F2020" stroke-width="2"/>
+        <g fill="#7F2020">
+          <circle cx="0" cy="25" r="3"/>
+          <circle cx="54" cy="18" r="3"/>
+          <circle cx="108" cy="12" r="4"/>
+          <circle cx="162" cy="22" r="3"/>
+          <circle cx="216" cy="30" r="3"/>
+          <circle cx="270" cy="42" r="3"/>
+          <circle cx="324" cy="48" r="3"/>
+          <circle cx="378" cy="36" r="3"/>
+        </g>
+      </g>
+    </g>
+
+    <!-- 本周复盘 -->
+    <g transform="translate(20,400)">
+      <rect width="380" height="80" fill="#869B7E" opacity=".15"/>
+      <rect width="3" height="80" fill="#869B7E"/>
+      <text x="14" y="18" font-family="'JetBrains Mono', monospace" font-size="10" fill="#869B7E" letter-spacing="2">SUN · 周日复盘</text>
+      <text x="14" y="36" font-family="'Songti SC', serif" font-size="11" fill="#1c1916" opacity=".7">- 这周做得好的：</text>
+      <text x="14" y="52" font-family="'Songti SC', serif" font-size="11" fill="#1c1916" opacity=".7">- 这周做得不够的：</text>
+      <text x="14" y="68" font-family="'Songti SC', serif" font-size="11" fill="#1c1916" opacity=".7">- 下周想试试：</text>
+    </g>
+  </g>
+
+  <!-- 3. 月计划 -->
+  <g transform="translate(956,140)" filter="url(#card-shadow)">
+    <rect width="420" height="500" fill="#F6F3EB" stroke="#1c1916" stroke-width=".8" opacity=".95"/>
+    <rect width="420" height="36" fill="#1c1916"/>
+    <text x="20" y="22" font-family="'JetBrains Mono', monospace" font-size="11" fill="#F6F3EB" letter-spacing="2">MONTHLY · 2026.05</text>
+    <text x="400" y="22" text-anchor="end" font-family="'Songti SC', serif" font-size="11" fill="#F6F3EB" opacity=".7">五月</text>
+
+    <!-- 月历网格 5 周 × 7 天 -->
+    <g transform="translate(20,52)">
+      <!-- 周标题 -->
+      <g font-family="'JetBrains Mono', monospace" font-size="8" fill="#7F2020" letter-spacing="1">
+        <text x="14" y="0" text-anchor="middle">M</text>
+        <text x="68" y="0" text-anchor="middle">T</text>
+        <text x="122" y="0" text-anchor="middle">W</text>
+        <text x="176" y="0" text-anchor="middle">T</text>
+        <text x="230" y="0" text-anchor="middle">F</text>
+        <text x="284" y="0" text-anchor="middle">S</text>
+        <text x="338" y="0" text-anchor="middle">S</text>
+      </g>
+
+      <!-- 第一周  4.28-5.4 (last week of April + first 4 of May) -->
+      <g transform="translate(0,10)" font-family="'EB Garamond', serif" font-size="11" fill="#1c1916">
+        <rect x="0" y="0" width="32" height="24" fill="#869B7E" opacity=".15"/>
+        <text x="14" y="16" text-anchor="middle">28</text>
+        <rect x="54" y="0" width="32" height="24" fill="#869B7E" opacity=".15"/>
+        <text x="68" y="16" text-anchor="middle">29</text>
+        <rect x="108" y="0" width="32" height="24" fill="#869B7E" opacity=".15"/>
+        <text x="122" y="16" text-anchor="middle">30</text>
+        <rect x="162" y="0" width="32" height="24" fill="#7F2020" opacity=".2"/>
+        <text x="176" y="16" text-anchor="middle" fill="#7F2020" font-weight="600">1</text>
+        <rect x="216" y="0" width="32" height="24" fill="#7F2020" opacity=".2"/>
+        <text x="230" y="16" text-anchor="middle" fill="#7F2020">2</text>
+        <rect x="270" y="0" width="32" height="24" fill="#7F2020" opacity=".2"/>
+        <text x="284" y="16" text-anchor="middle" fill="#7F2020">3</text>
+        <rect x="324" y="0" width="32" height="24" fill="#7F2020" opacity=".2"/>
+        <text x="338" y="16" text-anchor="middle" fill="#7F2020">4</text>
+      </g>
+
+      <!-- 第二周 5.5-5.11 -->
+      <g transform="translate(0,40)" font-family="'EB Garamond', serif" font-size="11" fill="#1c1916">
+        <rect x="0" y="0" width="32" height="24" fill="#7F2020" opacity=".35"/>
+        <text x="14" y="16" text-anchor="middle" fill="#F6F3EB" font-weight="600">5</text>
+        <rect x="54" y="0" width="32" height="24" fill="#7F2020" opacity=".2"/>
+        <text x="68" y="16" text-anchor="middle">6</text>
+        <text x="122" y="16" text-anchor="middle">7</text>
+        <text x="176" y="16" text-anchor="middle">8</text>
+        <text x="230" y="16" text-anchor="middle">9</text>
+        <text x="284" y="16" text-anchor="middle">10</text>
+        <text x="338" y="16" text-anchor="middle">11</text>
+      </g>
+
+      <!-- 第三周 5.12-5.18 -->
+      <g transform="translate(0,70)" font-family="'EB Garamond', serif" font-size="11" fill="#1c1916">
+        <text x="14" y="16" text-anchor="middle">12</text>
+        <rect x="54" y="0" width="32" height="24" fill="#7F2020" opacity=".35"/>
+        <text x="68" y="16" text-anchor="middle" fill="#F6F3EB" font-weight="600">13</text>
+        <text x="122" y="16" text-anchor="middle">14</text>
+        <text x="176" y="16" text-anchor="middle">15</text>
+        <text x="230" y="16" text-anchor="middle">16</text>
+        <text x="284" y="16" text-anchor="middle">17</text>
+        <rect x="324" y="0" width="32" height="24" fill="none" stroke="#7F2020" stroke-width="2"/>
+        <text x="338" y="16" text-anchor="middle" fill="#7F2020" font-weight="600">18</text>
+      </g>
+
+      <!-- 第四周 5.19-5.25 -->
+      <g transform="translate(0,100)" font-family="'EB Garamond', serif" font-size="11" fill="#1c1916">
+        <text x="14" y="16" text-anchor="middle">19</text>
+        <text x="68" y="16" text-anchor="middle">20</text>
+        <text x="122" y="16" text-anchor="middle">21</text>
+        <rect x="162" y="0" width="194" height="24" fill="#C9CAAC" opacity=".4"/>
+        <text x="176" y="16" text-anchor="middle">22</text>
+        <text x="230" y="16" text-anchor="middle">23</text>
+        <text x="284" y="16" text-anchor="middle">24</text>
+        <text x="338" y="16" text-anchor="middle">25</text>
+      </g>
+
+      <!-- 第五周 5.26-5.31 -->
+      <g transform="translate(0,130)" font-family="'EB Garamond', serif" font-size="11" fill="#1c1916">
+        <text x="14" y="16" text-anchor="middle">26</text>
+        <text x="68" y="16" text-anchor="middle">27</text>
+        <text x="122" y="16" text-anchor="middle">28</text>
+        <text x="176" y="16" text-anchor="middle">29</text>
+        <text x="230" y="16" text-anchor="middle">30</text>
+        <text x="284" y="16" text-anchor="middle">31</text>
+      </g>
+
+      <!-- 注释 -->
+      <g font-family="'JetBrains Mono', monospace" font-size="8" fill="#869B7E" letter-spacing="1">
+        <text x="0" y="180" >■ 5.1-5.5 multi-agent v9.0 收尾</text>
+        <text x="0" y="194">■ 5.13 飞书十佳公布 · 2/3 命中</text>
+        <text x="0" y="208">■ 5.22-5.24 异地培训出差</text>
+      </g>
+    </g>
+
+    <!-- 月度三大主题 -->
+    <g transform="translate(20,328)">
+      <text font-family="'JetBrains Mono', monospace" font-size="10" fill="#7F2020" letter-spacing="2">月度主题 · MONTHLY THEMES</text>
+
+      <g transform="translate(0,18)">
+        <rect width="380" height="34" fill="#7F2020" opacity=".12"/>
+        <rect width="3" height="34" fill="#7F2020"/>
+        <text x="14" y="14" font-family="'JetBrains Mono', monospace" font-size="9" fill="#7F2020" letter-spacing="2">FOCUS</text>
+        <text x="14" y="28" font-family="'Songti SC', serif" font-size="12" fill="#1c1916">作品集变现 · 投递实习 · 飞书十佳变现简历</text>
+      </g>
+
+      <g transform="translate(0,60)">
+        <rect width="380" height="34" fill="#869B7E" opacity=".15"/>
+        <rect width="3" height="34" fill="#869B7E"/>
+        <text x="14" y="14" font-family="'JetBrains Mono', monospace" font-size="9" fill="#869B7E" letter-spacing="2">SHIP</text>
+        <text x="14" y="28" font-family="'Songti SC', serif" font-size="12" fill="#1c1916">multi-coder v1.2 · 个人作品集网站上线</text>
+      </g>
+
+      <g transform="translate(0,102)">
+        <rect width="380" height="34" fill="#C9CAAC" opacity=".5"/>
+        <rect width="3" height="34" fill="#C9CAAC"/>
+        <text x="14" y="14" font-family="'JetBrains Mono', monospace" font-size="9" fill="#1c1916" opacity=".7" letter-spacing="2">EXPLORE</text>
+        <text x="14" y="28" font-family="'Songti SC', serif" font-size="12" fill="#1c1916">出海业务现场观察 · 自媒体试水</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- 底部说明 -->
+  <g transform="translate(60,680)">
+    <line x1="0" y1="0" x2="1320" y2="0" stroke="#1c1916" stroke-width=".5" opacity=".3"/>
+    <text y="20" font-family="'Songti SC', serif" font-size="13" fill="#1c1916" opacity=".7">
+      <tspan font-style="italic" fill="#7F2020" font-weight="600">日 · 周 · 月 ·</tspan>
+      三层任务自动流转 · 基于 Claude Code Superpowers 自建 · 持续使用沉淀近 2 万字个人知识库
+    </text>
+  </g>
+</svg>

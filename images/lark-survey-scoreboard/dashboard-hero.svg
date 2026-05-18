@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 720" font-family="'EB Garamond', 'Songti SC', sans-serif">
+  <defs>
+    <linearGradient id="bg4" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F6F3EB"/>
+      <stop offset="100%" stop-color="#EBE6D8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1920" height="720" fill="url(#bg4)"/>
+
+  <!-- 大屏外框（投影屏） -->
+  <rect x="40" y="40" width="1840" height="640" fill="#1c1916" rx="8"/>
+  <rect x="56" y="56" width="1808" height="608" fill="#F6F3EB" rx="4"/>
+
+  <!-- 顶部标题栏 -->
+  <g transform="translate(96,96)">
+    <text font-family="'JetBrains Mono', monospace" font-size="11" fill="#7F2020" letter-spacing="4">LIVE · 实时更新中</text>
+    <circle cx="170" cy="-3" r="4" fill="#7F2020">
+      <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
+    </circle>
+    <text y="42" font-size="42" font-weight="500" fill="#1c1916" font-family="'Songti SC', serif">滕老师 · <tspan font-style="italic" fill="#7F2020">领航计划培训反馈大屏</tspan></text>
+    <text y="70" font-size="14" fill="#1c1916" opacity=".6" font-family="'JetBrains Mono', monospace" letter-spacing="2">2026.04.18 · 18:42 · 美动医疗培训中心</text>
+  </g>
+
+  <!-- 右上角时间 -->
+  <g transform="translate(1740,120)" font-family="'EB Garamond', serif" text-anchor="end">
+    <text font-size="48" font-weight="500" fill="#7F2020" font-style="italic">18:42</text>
+    <text y="22" font-size="11" fill="#1c1916" opacity=".5" font-family="'JetBrains Mono', monospace" letter-spacing="2">LIVE TIME</text>
+  </g>
+
+  <!-- 左侧雷达图 -->
+  <g transform="translate(360,400)">
+    <!-- 雷达底网（5 边） -->
+    <g stroke="#1c1916" stroke-width=".5" opacity=".25" fill="none">
+      <polygon points="0,-180 171,-56 106,146 -106,146 -171,-56"/>
+      <polygon points="0,-135 128,-42 80,110 -80,110 -128,-42"/>
+      <polygon points="0,-90 86,-28 53,73 -53,73 -86,-28"/>
+      <polygon points="0,-45 43,-14 27,37 -27,37 -43,-14"/>
+    </g>
+    <!-- 轴线 -->
+    <g stroke="#1c1916" stroke-width=".5" opacity=".2">
+      <line x1="0" y1="0" x2="0" y2="-180"/>
+      <line x1="0" y1="0" x2="171" y2="-56"/>
+      <line x1="0" y1="0" x2="106" y2="146"/>
+      <line x1="0" y1="0" x2="-106" y2="146"/>
+      <line x1="0" y1="0" x2="-171" y2="-56"/>
+    </g>
+    <!-- 数据多边形（5 维度评分：4.6/4.8/4.5/4.7/4.4 → 缩放到雷达半径） -->
+    <polygon points="0,-166 152,-50 89,123 -97,134 -154,-50"
+             fill="#7F2020" fill-opacity=".18"
+             stroke="#7F2020" stroke-width="2.5"/>
+    <!-- 数据点 -->
+    <circle cx="0" cy="-166" r="5" fill="#7F2020"/>
+    <circle cx="152" cy="-50" r="5" fill="#7F2020"/>
+    <circle cx="89" cy="123" r="5" fill="#7F2020"/>
+    <circle cx="-97" cy="134" r="5" fill="#7F2020"/>
+    <circle cx="-154" cy="-50" r="5" fill="#7F2020"/>
+    <!-- 标签 -->
+    <g font-family="'Songti SC', serif" font-size="13" fill="#1c1916">
+      <text x="0" y="-200" text-anchor="middle">专业度</text>
+      <text x="0" y="-188" text-anchor="middle" font-family="'EB Garamond', serif" font-size="11" fill="#7F2020">4.6</text>
+      <text x="195" y="-50" text-anchor="start">实用性</text>
+      <text x="195" y="-38" text-anchor="start" font-family="'EB Garamond', serif" font-size="11" fill="#7F2020">4.8</text>
+      <text x="120" y="170" text-anchor="start">案例丰富</text>
+      <text x="120" y="186" text-anchor="start" font-family="'EB Garamond', serif" font-size="11" fill="#7F2020">4.5</text>
+      <text x="-120" y="170" text-anchor="end">讲解清晰</text>
+      <text x="-120" y="186" text-anchor="end" font-family="'EB Garamond', serif" font-size="11" fill="#7F2020">4.7</text>
+      <text x="-195" y="-50" text-anchor="end">互动性</text>
+      <text x="-195" y="-38" text-anchor="end" font-family="'EB Garamond', serif" font-size="11" fill="#7F2020">4.4</text>
+    </g>
+    <!-- 中心总分 -->
+    <text x="0" y="0" text-anchor="middle" font-family="'EB Garamond', serif" font-size="42" font-style="italic" font-weight="600" fill="#7F2020">4.6</text>
+    <text x="0" y="20" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="9" fill="#869B7E" letter-spacing="2">AVG</text>
+
+    <text x="0" y="-260" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="11" fill="#7F2020" letter-spacing="3">FIVE-DIM RADAR · 五维评分</text>
+  </g>
+
+  <!-- 中间柱状图 -->
+  <g transform="translate(820,200)">
+    <text font-family="'JetBrains Mono', monospace" font-size="11" fill="#7F2020" letter-spacing="3">QUESTION DISTRIBUTION · 单题分布</text>
+
+    <!-- 5 个题目的横向柱 -->
+    <g transform="translate(0,30)">
+      <g transform="translate(0,0)">
+        <text x="0" y="14" font-family="'Songti SC', serif" font-size="13" fill="#1c1916">Q1 专业度</text>
+        <rect x="100" y="2" width="280" height="14" fill="#1c1916" opacity=".08"/>
+        <rect x="100" y="2" width="258" height="14" fill="#7F2020"/>
+        <text x="390" y="14" font-family="'EB Garamond', serif" font-size="14" font-style="italic" fill="#7F2020" font-weight="600">4.6</text>
+      </g>
+      <g transform="translate(0,32)">
+        <text x="0" y="14" font-family="'Songti SC', serif" font-size="13" fill="#1c1916">Q2 实用性</text>
+        <rect x="100" y="2" width="280" height="14" fill="#1c1916" opacity=".08"/>
+        <rect x="100" y="2" width="269" height="14" fill="#7F2020"/>
+        <text x="390" y="14" font-family="'EB Garamond', serif" font-size="14" font-style="italic" fill="#7F2020" font-weight="600">4.8</text>
+      </g>
+      <g transform="translate(0,64)">
+        <text x="0" y="14" font-family="'Songti SC', serif" font-size="13" fill="#1c1916">Q3 讲解清晰度</text>
+        <rect x="100" y="2" width="280" height="14" fill="#1c1916" opacity=".08"/>
+        <rect x="100" y="2" width="263" height="14" fill="#7F2020"/>
+        <text x="390" y="14" font-family="'EB Garamond', serif" font-size="14" font-style="italic" fill="#7F2020" font-weight="600">4.7</text>
+      </g>
+      <g transform="translate(0,96)">
+        <text x="0" y="14" font-family="'Songti SC', serif" font-size="13" fill="#1c1916">Q4 案例丰富</text>
+        <rect x="100" y="2" width="280" height="14" fill="#1c1916" opacity=".08"/>
+        <rect x="100" y="2" width="252" height="14" fill="#7F2020"/>
+        <text x="390" y="14" font-family="'EB Garamond', serif" font-size="14" font-style="italic" fill="#7F2020" font-weight="600">4.5</text>
+      </g>
+      <g transform="translate(0,128)">
+        <text x="0" y="14" font-family="'Songti SC', serif" font-size="13" fill="#1c1916">Q5 互动性</text>
+        <rect x="100" y="2" width="280" height="14" fill="#1c1916" opacity=".08"/>
+        <rect x="100" y="2" width="246" height="14" fill="#869B7E"/>
+        <text x="390" y="14" font-family="'EB Garamond', serif" font-size="14" font-style="italic" fill="#869B7E" font-weight="600">4.4</text>
+      </g>
+    </g>
+
+    <!-- 趋势曲线 -->
+    <text x="0" y="200" font-family="'JetBrains Mono', monospace" font-size="11" fill="#7F2020" letter-spacing="3">REAL-TIME TREND · 参与人数</text>
+    <g transform="translate(0,210)">
+      <line x1="0" y1="80" x2="440" y2="80" stroke="#1c1916" stroke-width=".5" opacity=".25"/>
+      <path d="M 0 80 L 60 70 L 110 56 L 160 40 L 210 32 L 280 24 L 340 18 L 440 12"
+            fill="none" stroke="#7F2020" stroke-width="2"/>
+      <path d="M 0 80 L 60 70 L 110 56 L 160 40 L 210 32 L 280 24 L 340 18 L 440 12 L 440 80 Z"
+            fill="#7F2020" opacity=".1"/>
+      <g font-family="'JetBrains Mono', monospace" font-size="9" fill="#869B7E" letter-spacing="1">
+        <text x="0" y="98">18:30</text>
+        <text x="440" y="98" text-anchor="end">18:42</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- 右侧大数字 -->
+  <g transform="translate(1400,300)">
+    <text font-family="'JetBrains Mono', monospace" font-size="11" fill="#7F2020" letter-spacing="3">SUMMARY</text>
+
+    <g transform="translate(0,30)">
+      <text font-family="'EB Garamond', serif" font-size="98" font-weight="500" font-style="italic" fill="#7F2020">42</text>
+      <text x="0" y="22" font-family="'Songti SC', serif" font-size="13" fill="#1c1916" opacity=".7">参与人数</text>
+    </g>
+    <g transform="translate(0,150)">
+      <text font-family="'EB Garamond', serif" font-size="98" font-weight="500" font-style="italic" fill="#1c1916">93<tspan font-size="48" font-style="normal">%</tspan></text>
+      <text x="0" y="22" font-family="'Songti SC', serif" font-size="13" fill="#1c1916" opacity=".7">参与率</text>
+    </g>
+  </g>
+
+  <!-- 底部 footer -->
+  <g transform="translate(96,608)">
+    <line x1="0" y1="0" x2="1730" y2="0" stroke="#1c1916" stroke-width=".3" opacity=".3"/>
+    <text y="20" font-family="'JetBrains Mono', monospace" font-size="10" fill="#1c1916" opacity=".5" letter-spacing="2">
+      LARK-SURVEY-SCOREBOARD · LARK BASE 数据存储 · ECHARTS 渲染 · GITHUB PAGES 部署
+    </text>
+    <text x="1730" y="20" text-anchor="end" font-family="'JetBrains Mono', monospace" font-size="10" fill="#7F2020" opacity=".7" letter-spacing="2">
+      总成本 ¥0
+    </text>
+  </g>
+</svg>

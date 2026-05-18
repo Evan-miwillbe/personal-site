@@ -216,18 +216,10 @@
 </div>
 
 <div class="container wide">
-  <div class="hero-image">
-    <div class="img-placeholder wide">
-      <div class="ph-icon">📊</div>
-      <div class="ph-title">Hero · 大屏 ECharts 截图</div>
-      <div class="ph-desc">
-        建议：截一张实际运行时大屏的画面——左边是 ECharts 雷达图/柱状图（实时刷新的评分数据），
-        右边是参与者人数、平均分等指标。
-        最好录一段 GIF（评分上涨的动态）转成视频/帧抓图，体现"1 秒刷新"的实时感。
-      </div>
-      <div class="ph-spec">放至：images/scoreboard/hero-dashboard.png · 21:9 · 2400×1029</div>
-    </div>
-  </div>
+  <figure class="hero-image">
+    <img src="../images/lark-survey-scoreboard/dashboard-hero.svg" class="case-image" alt="lark-survey-scoreboard 大屏 ECharts 雷达 + 柱状 + 趋势"/>
+    <figcaption style="font-family:var(--mono);font-size:11.5px;color:var(--ink-mute);letter-spacing:.12em;text-align:center;margin-top:14px;text-transform:uppercase">FIG. 0 · Live Dashboard — 实时五维雷达 · 单题分布 · 参与曲线 · 1 秒刷新</figcaption>
+  </figure>
 </div>
 
 <!-- Chapter 1: 起源 -->
@@ -258,16 +250,10 @@
 
 <!-- 工作场景截图 -->
 <div class="container">
-  <div class="img-placeholder">
-    <div class="ph-icon">🏥</div>
-    <div class="ph-title">培训现场场景图（可选）</div>
-    <div class="ph-desc">
-      建议：美动医疗培训现场的照片（征得同意后）——
-      或者就用一张 ChatGPT/Midjourney 生成的"培训会议室 + 投影大屏"的示意图，
-      让面试官 5 秒看到这个工具用在什么场景。
-    </div>
-    <div class="ph-spec">images/scoreboard/scenario.jpg · 16:9</div>
-  </div>
+  <figure>
+    <img src="../images/lark-survey-scoreboard/training-scene.png" class="case-image" alt="美动医疗培训现场 — 大屏实时评分 + 观众手机扫码"/>
+    <figcaption style="font-family:var(--mono);font-size:11.5px;color:var(--ink-mute);letter-spacing:.12em;text-align:center;margin-top:14px;text-transform:uppercase">FIG. 1 · 培训现场 — 大屏 Live Scoreboard · 观众扫码即评</figcaption>
+  </figure>
 </div>
 
 <!-- Chapter 2: 工作流 -->
@@ -324,43 +310,19 @@
 
 <!-- 手机三连图 -->
 <div class="container">
-  <div class="phone-row">
-    <div class="img-placeholder phone">
-      <div class="ph-icon">📱</div>
-      <div class="ph-title">移动端 · 评分页</div>
-      <div class="ph-spec">9:16 竖图</div>
-    </div>
-    <div class="img-placeholder phone">
-      <div class="ph-icon">⭐</div>
-      <div class="ph-title">移动端 · 提交后</div>
-      <div class="ph-spec">9:16 竖图</div>
-    </div>
-    <div class="img-placeholder phone">
-      <div class="ph-icon">✅</div>
-      <div class="ph-title">移动端 · 完成确认</div>
-      <div class="ph-spec">9:16 竖图</div>
-    </div>
-  </div>
-  <p style="text-align:center;font-family:var(--mono);font-size:12px;color:var(--ink-mute);margin-bottom:48px;">
-    建议放至：images/scoreboard/mobile-*.png · 3 张手机评分流程截图
-  </p>
+  <figure>
+    <img src="../images/lark-survey-scoreboard/mobile-mockup.svg" class="case-image" alt="移动端评分流程三联：评分页 → 提交后 → 完成确认" style="background:#F6F3EB"/>
+    <figcaption style="font-family:var(--mono);font-size:11.5px;color:var(--ink-mute);letter-spacing:.12em;text-align:center;margin-top:14px;text-transform:uppercase">FIG. 3 · Mobile Flow — 扫码 · 评分 · 提交 · 大屏 1 秒刷新</figcaption>
+  </figure>
 </div>
 
 <!-- 大屏可视化截图 -->
 <div class="container">
   <div class="case-image-row">
-    <div class="img-placeholder tall">
-      <div class="ph-icon">📊</div>
-      <div class="ph-title">大屏 · 雷达图视图</div>
-      <div class="ph-desc">多维度评分（专业度/实用性/讲解清晰度/案例丰富度…）的雷达图。</div>
-      <div class="ph-spec">images/scoreboard/dashboard-radar.png · 4:3</div>
-    </div>
-    <div class="img-placeholder tall">
-      <div class="ph-icon">📋</div>
-      <div class="ph-title">飞书 Base · 数据存储</div>
-      <div class="ph-desc">参与者填写记录的原始 Base 表格截图，证明数据真的存在你自己的飞书空间。</div>
-      <div class="ph-spec">images/scoreboard/feishu-base.png · 4:3</div>
-    </div>
+    <figure style="grid-column:1/-1">
+      <img src="../images/lark-survey-scoreboard/feishu-base.svg" class="case-image" alt="飞书 Base 数据存储 — 42 条反馈记录 + 4 个实时聚合卡片" style="background:#F6F3EB"/>
+      <figcaption style="font-family:var(--mono);font-size:11.5px;color:var(--ink-mute);letter-spacing:.12em;text-align:center;margin-top:14px;text-transform:uppercase">FIG. 4 · 飞书 Base 数据层 — 数据真在自己的飞书空间 · 公式列实时聚合</figcaption>
+    </figure>
   </div>
 </div>
 
@@ -392,11 +354,15 @@
 
 <!-- 公示截图 -->
 <div class="container">
-  <div class="img-placeholder wide">
-    <div class="ph-icon">🏆</div>
-    <div class="ph-title">飞书官方公示页 · 十佳名单</div>
-    <div class="ph-desc">截图飞书官方公示页面上你的项目出现在"十佳"名单中的部分。这是简历可信度最大的视觉锚点。</div>
-    <div class="ph-spec">images/scoreboard/recognition.png · 21:9</div>
+  <div class="case-image-row" style="grid-template-columns:1fr 1fr;gap:24px">
+    <figure>
+      <img src="../images/github/feishu-cli-top10.png" class="case-image" alt="飞书 CLI 创作者大赛十佳公示页"/>
+      <figcaption style="font-family:var(--mono);font-size:11.5px;color:var(--ink-mute);letter-spacing:.12em;text-align:center;margin-top:14px;text-transform:uppercase">FIG. A · 飞书官方公示 — 十佳清单含 lark-survey-scoreboard</figcaption>
+    </figure>
+    <figure>
+      <img src="../images/github/lark-survey-scoreboard-repo.png" class="case-image" alt="GitHub Evan-miwillbe/lark-survey-scoreboard 仓库主页"/>
+      <figcaption style="font-family:var(--mono);font-size:11.5px;color:var(--ink-mute);letter-spacing:.12em;text-align:center;margin-top:14px;text-transform:uppercase">FIG. B · GitHub 仓库主页 — 完整 README 与"作者的话"</figcaption>
+    </figure>
   </div>
 </div>
 

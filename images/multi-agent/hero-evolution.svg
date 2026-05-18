@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2100 900" font-family="'EB Garamond', 'Cormorant Garamond', 'Songti SC', serif">
+  <defs>
+    <linearGradient id="paperHero" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F6F3EB"/>
+      <stop offset="100%" stop-color="#EBE6D8"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="2100" height="900" fill="url(#paperHero)"/>
+
+  <!-- 外框 -->
+  <rect x="50" y="50" width="2000" height="800" fill="none" stroke="#1c1916" stroke-width="1.5" opacity=".3"/>
+  <rect x="60" y="60" width="1980" height="780" fill="none" stroke="#7F2020" stroke-width=".5" opacity=".4"/>
+
+  <!-- 顶部刊头 -->
+  <g transform="translate(120,130)">
+    <text font-family="'JetBrains Mono', monospace" font-size="13" fill="#7F2020" letter-spacing="6">MULTI-AGENT RESEARCH · EVOLUTION CHRONICLE</text>
+    <line x1="0" y1="20" x2="1860" y2="20" stroke="#7F2020" stroke-width=".8" opacity=".5"/>
+    <text y="80" font-size="64" font-weight="500" font-style="italic" fill="#1c1916" font-family="'Cormorant Garamond', 'EB Garamond', serif">
+      v1 → v9.0
+    </text>
+    <text x="380" y="80" font-size="38" font-weight="400" fill="#1c1916" font-family="'Songti SC', serif">
+      ——一个研究框架的<tspan font-style="italic" fill="#7F2020">膨胀、坍缩与收敛</tspan>
+    </text>
+    <text y="118" font-size="16" fill="#1c1916" opacity=".6" font-family="'Songti SC', serif">
+      13 天 · 77 commits · 47 轮控制实验 · 12 篇相关论文支撑 · 2026.04.23 — 05.05
+    </text>
+  </g>
+
+  <!-- 中间区：5 个里程碑印章 + 中央折线 -->
+  <g transform="translate(120,330)">
+    <!-- 横轴底线 -->
+    <line x1="0" y1="280" x2="1860" y2="280" stroke="#1c1916" stroke-width="1" opacity=".25"/>
+
+    <!-- 5 个节点垂直锚线 -->
+    <g stroke="#1c1916" stroke-width=".5" stroke-dasharray="2 3" opacity=".15">
+      <line x1="60" y1="0" x2="60" y2="280"/>
+      <line x1="510" y1="0" x2="510" y2="280"/>
+      <line x1="890" y1="0" x2="890" y2="280"/>
+      <line x1="1270" y1="0" x2="1270" y2="280"/>
+      <line x1="1800" y1="0" x2="1800" y2="280"/>
+    </g>
+
+    <!-- 数据点（行数高度映射，max=1382, 顶部到底 200，data为：200/1382/893/221/453 → 高度 28/200/130/32/66） -->
+    <!-- 折线 -->
+    <path d="M 60 252 C 200 200, 360 100, 510 80
+             C 660 100, 800 130, 890 150
+             C 990 180, 1180 230, 1270 248
+             C 1430 230, 1640 220, 1800 214"
+          fill="none" stroke="#7F2020" stroke-width="3" stroke-linecap="round"/>
+    <!-- 填充 -->
+    <path d="M 60 252 C 200 200, 360 100, 510 80
+             C 660 100, 800 130, 890 150
+             C 990 180, 1180 230, 1270 248
+             C 1430 230, 1640 220, 1800 214
+             L 1800 280 L 60 280 Z"
+          fill="#7F2020" opacity=".08"/>
+
+    <!-- 节点 1: v1 / 200 -->
+    <g transform="translate(60,252)">
+      <circle r="9" fill="#F6F3EB" stroke="#7F2020" stroke-width="2.5"/>
+      <g transform="translate(0,40)">
+        <rect x="-90" y="0" width="180" height="80" fill="#F6F3EB" stroke="#7F2020" stroke-width="1"/>
+        <text x="0" y="22" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="11" fill="#7F2020" letter-spacing="3">I · ORIGIN</text>
+        <text x="0" y="50" text-anchor="middle" font-size="36" font-weight="500" font-style="italic" fill="#1c1916">v1</text>
+        <text x="0" y="72" text-anchor="middle" font-size="13" font-family="'JetBrains Mono', monospace" fill="#1c1916" opacity=".7">200 lines</text>
+      </g>
+    </g>
+
+    <!-- 节点 2: v4.3 / 1382 峰值 -->
+    <g transform="translate(510,80)">
+      <circle r="14" fill="#7F2020" stroke="#F6F3EB" stroke-width="3"/>
+      <g transform="translate(0,-80)">
+        <rect x="-90" y="0" width="180" height="68" fill="#7F2020"/>
+        <text x="0" y="22" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="11" fill="#F6F3EB" letter-spacing="3">II · PEAK</text>
+        <text x="0" y="52" text-anchor="middle" font-size="34" font-weight="600" font-style="italic" fill="#F6F3EB">1382</text>
+      </g>
+      <text x="0" y="38" text-anchor="middle" font-family="'Songti SC', serif" font-size="13" fill="#7F2020" font-style="italic">膨胀至峰值</text>
+    </g>
+
+    <!-- 节点 3: v5.4 / 893 -->
+    <g transform="translate(890,150)">
+      <circle r="11" fill="#F6F3EB" stroke="#7F2020" stroke-width="2.5"/>
+      <g transform="translate(0,40)">
+        <rect x="-90" y="0" width="180" height="80" fill="#F6F3EB" stroke="#1c1916" stroke-width="1" opacity=".5"/>
+        <rect x="-90" y="0" width="180" height="80" fill="none" stroke="#7F2020" stroke-width="1"/>
+        <text x="0" y="22" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="11" fill="#7F2020" letter-spacing="3">III · TRIM</text>
+        <text x="0" y="50" text-anchor="middle" font-size="32" font-weight="500" fill="#1c1916">893</text>
+        <text x="0" y="70" text-anchor="middle" font-size="12" font-family="'Songti SC', serif" fill="#869B7E" font-style="italic">砍 PM 层</text>
+      </g>
+    </g>
+
+    <!-- 节点 4: v6.0 / 221 大重构 -->
+    <g transform="translate(1270,248)">
+      <circle r="13" fill="#869B7E" stroke="#F6F3EB" stroke-width="3"/>
+      <g transform="translate(0,-110)">
+        <rect x="-100" y="0" width="200" height="96" fill="#869B7E"/>
+        <text x="0" y="22" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="11" fill="#F6F3EB" letter-spacing="3">IV · REWRITE</text>
+        <text x="0" y="56" text-anchor="middle" font-size="38" font-weight="600" font-style="italic" fill="#F6F3EB">221</text>
+        <text x="0" y="80" text-anchor="middle" font-size="13" font-family="'JetBrains Mono', monospace" fill="#F6F3EB" letter-spacing="2">−75% vs v5.4</text>
+      </g>
+    </g>
+
+    <!-- 节点 5: v9.0 / 453 -->
+    <g transform="translate(1800,214)">
+      <circle r="14" fill="#7F2020" stroke="#F6F3EB" stroke-width="3"/>
+      <g transform="translate(0,-80)">
+        <rect x="-110" y="0" width="220" height="68" fill="#F6F3EB" stroke="#7F2020" stroke-width="2"/>
+        <text x="0" y="22" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="11" fill="#7F2020" letter-spacing="3">V · SHIPPED</text>
+        <text x="0" y="52" text-anchor="middle" font-size="34" font-weight="600" font-style="italic" fill="#7F2020">v9.0 · 453</text>
+      </g>
+      <text x="0" y="42" text-anchor="middle" font-family="'Songti SC', serif" font-size="13" fill="#7F2020" font-style="italic">最终收敛</text>
+    </g>
+  </g>
+
+  <!-- 底部三段叙事 -->
+  <g transform="translate(120,750)" font-family="'Songti SC', serif" fill="#1c1916">
+    <text font-size="14" opacity=".7">
+      <tspan font-style="italic" fill="#7F2020" font-weight="600">阶段叙事 · </tspan>
+      <tspan>v1-v4 顺着 PM 中心制不断加机制 →</tspan>
+      <tspan dx="20">v5 第一次砍 PM →</tspan>
+      <tspan dx="20">v6 大重构到 221 行（结构清空）→</tspan>
+      <tspan dx="20">v7-v9 把消融验证有效的 6 个机制重新加回来</tspan>
+    </text>
+    <text y="34" font-size="14" opacity=".7">
+      <tspan font-style="italic" fill="#7F2020" font-weight="600">学到的事 · </tspan>
+      <tspan>这不是线性增长——是一次"</tspan>
+      <tspan font-style="italic" fill="#7F2020">用消融实验区分'机制有效'与'机制必要'</tspan>
+      <tspan>"的收敛过程。</tspan>
+    </text>
+  </g>
+
+  <!-- 右下角印章 -->
+  <g transform="translate(1920,800) rotate(-8)">
+    <rect x="-50" y="-50" width="100" height="100" fill="none" stroke="#7F2020" stroke-width="2"/>
+    <rect x="-44" y="-44" width="88" height="88" fill="none" stroke="#7F2020" stroke-width=".5"/>
+    <text text-anchor="middle" y="-16" font-family="'Songti SC', serif" font-size="18" fill="#7F2020" font-weight="600">滕</text>
+    <text text-anchor="middle" y="4" font-family="'Songti SC', serif" font-size="12" fill="#7F2020">MMXXVI</text>
+    <text text-anchor="middle" y="22" font-family="'JetBrains Mono', monospace" font-size="8" fill="#7F2020" letter-spacing="2">v9.0</text>
+  </g>
+</svg>

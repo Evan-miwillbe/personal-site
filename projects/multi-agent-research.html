@@ -218,17 +218,10 @@
 </div>
 
 <div class="container wide">
-  <div class="hero-image">
-    <div class="img-placeholder wide">
-      <div class="ph-icon">🖼️</div>
-      <div class="ph-title">Hero · v1→v9 演化全景图</div>
-      <div class="ph-desc">
-        建议放 README 里那张 ASCII 演化图（行数曲线 / v1 200 行 → v4.3 峰值 1382 行 → v9.0 收敛 453 行）的高清 SVG 版本。
-        是整个项目最核心的视觉锚点——把"膨胀→压缩→丢失→恢复"的故事用一张图讲清楚。
-      </div>
-      <div class="ph-spec">放至：images/multi-agent/hero-evolution.svg · 21:9 矢量优先</div>
-    </div>
-  </div>
+  <figure class="hero-image">
+    <img src="../images/multi-agent/hero-evolution.svg" class="case-image" alt="Multi-Agent Research v1→v9 演化全景图" style="background:#F6F3EB"/>
+    <figcaption>FIG. 0 · Evolution Chronicle — 5 milestones across 13 days · 77 commits · 47 ablation rounds</figcaption>
+  </figure>
 </div>
 
 <!-- Chapter 1: 起点 -->
@@ -250,18 +243,6 @@
       所以这不是"做个工具"——这是<strong>把 47 轮实验里发现的协作规律凝固成可复现的 Skill</strong>。
     </p>
   </section>
-</div>
-
-<!-- 仓库 README 截图 -->
-<div class="container">
-  <div class="img-placeholder">
-    <div class="ph-icon">📜</div>
-    <div class="ph-title">仓库 README 截图</div>
-    <div class="ph-desc">
-      建议放仓库主 README 顶部的截图——能看到"v9.0 / 453 行 / 77 commits / 47 轮实验"的元信息标语，以及术语小词典的开头几行。
-    </div>
-    <div class="ph-spec">images/multi-agent/readme-hero.png · 16:9</div>
-  </div>
 </div>
 
 <!-- Chapter 2: 演化 -->
@@ -291,16 +272,10 @@
 
 <!-- 演化曲线占位 -->
 <div class="container">
-  <div class="img-placeholder">
-    <div class="ph-icon">📈</div>
-    <div class="ph-title">行数演化曲线图</div>
-    <div class="ph-desc">
-      建议用 D3 / Observable / 任何画图工具做一张折线图：
-      X 轴是 commit 序号 / 日期，Y 轴是 SKILL.md 行数。
-      标注关键节点：v1 (200) / v4.3 峰值 (1382) / v5.4 砍 PM (893) / v6.0 大重构 (221) / v9.0 定稿 (453)。
-    </div>
-    <div class="ph-spec">images/multi-agent/line-evolution.svg · 16:9 矢量</div>
-  </div>
+  <figure>
+    <img src="../images/multi-agent/line-evolution.svg" class="case-image" alt="SKILL.md 行数演化曲线 v1→v9" style="background:#F6F3EB"/>
+    <figcaption>FIG. 1 · Line Count Evolution — 200 → 1382 (peak) → 893 → 221 → 453 lines</figcaption>
+  </figure>
 </div>
 
 <!-- Chapter 3: Lost in Middle -->
@@ -333,15 +308,10 @@
 
 <!-- 实验数据原图 -->
 <div class="container">
-  <div class="img-placeholder">
-    <div class="ph-icon">📊</div>
-    <div class="ph-title">实验对照表 / 消融结果可视化</div>
-    <div class="ph-desc">
-      建议把 47 轮实验记录做成一张可视化总览图——
-      可以是消融实验矩阵（17 个钩子 × 验证结果）或一组并列柱状图（Lost in Middle / Heartbeat / Consensus 等几个机制的有效率对比）。
-    </div>
-    <div class="ph-spec">images/multi-agent/ablation.svg · 16:9</div>
-  </div>
+  <figure>
+    <img src="../images/multi-agent/ablation.svg" class="case-image" alt="17 个机制的消融实验矩阵 · 2 KEEP + 14 NOISE" style="background:#F6F3EB"/>
+    <figcaption>FIG. 2 · Ablation Matrix — Only 2 of 17 mechanisms proved causally necessary</figcaption>
+  </figure>
 </div>
 
 <!-- Chapter 4: 闭环 -->

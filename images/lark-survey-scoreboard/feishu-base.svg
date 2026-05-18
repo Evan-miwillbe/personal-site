@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 720" font-family="'EB Garamond', 'Songti SC', sans-serif">
+  <rect width="960" height="720" fill="#F6F3EB"/>
+
+  <!-- 飞书窗口框 -->
+  <rect x="20" y="20" width="920" height="680" fill="#FFFFFF" stroke="#1c1916" stroke-width="1"/>
+  <rect x="20" y="20" width="920" height="36" fill="#F4F4F4"/>
+  <g transform="translate(38,32)">
+    <circle r="6" fill="#FF5F57"/>
+    <circle cx="20" cy="0" r="6" fill="#FEBC2E"/>
+    <circle cx="40" cy="0" r="6" fill="#28C840"/>
+  </g>
+  <text x="480" y="40" text-anchor="middle" font-family="'Songti SC', serif" font-size="11" fill="#1c1916" opacity=".6">滕老师培训反馈 · Base · feishu.cn</text>
+
+  <!-- 工具栏 -->
+  <g transform="translate(20,56)">
+    <rect width="920" height="44" fill="#FAFAFA" stroke="#1c1916" stroke-width=".5" opacity=".5"/>
+    <text x="18" y="18" font-family="'Songti SC', serif" font-size="13" fill="#1c1916" font-weight="500">📊 反馈记录</text>
+    <text x="18" y="34" font-family="'JetBrains Mono', monospace" font-size="9" fill="#869B7E">42 条记录 · 实时同步中</text>
+    <circle cx="120" cy="29" r="3" fill="#7F2020">
+      <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
+    </circle>
+    <text x="132" y="33" font-family="'JetBrains Mono', monospace" font-size="9" fill="#7F2020">LIVE</text>
+
+    <g transform="translate(680,12)">
+      <rect width="60" height="20" rx="3" fill="#7F2020"/>
+      <text x="30" y="14" text-anchor="middle" font-family="'Songti SC', serif" font-size="11" fill="#F6F3EB">+ 新建</text>
+    </g>
+    <g transform="translate(748,12)">
+      <rect width="60" height="20" rx="3" fill="#FFFFFF" stroke="#1c1916" stroke-width=".5" opacity=".5"/>
+      <text x="30" y="14" text-anchor="middle" font-family="'Songti SC', serif" font-size="11" fill="#1c1916">筛选</text>
+    </g>
+    <g transform="translate(816,12)">
+      <rect width="80" height="20" rx="3" fill="#FFFFFF" stroke="#1c1916" stroke-width=".5" opacity=".5"/>
+      <text x="40" y="14" text-anchor="middle" font-family="'Songti SC', serif" font-size="11" fill="#1c1916">导出 CSV</text>
+    </g>
+  </g>
+
+  <!-- 表头 -->
+  <g transform="translate(20,100)" font-family="'JetBrains Mono', monospace" font-size="10" letter-spacing="1">
+    <rect width="920" height="36" fill="#F0F0F0"/>
+    <line x1="100" y1="0" x2="100" y2="36" stroke="#1c1916" stroke-width=".5" opacity=".3"/>
+    <line x1="220" y1="0" x2="220" y2="36" stroke="#1c1916" stroke-width=".5" opacity=".3"/>
+    <line x1="290" y1="0" x2="290" y2="36" stroke="#1c1916" stroke-width=".5" opacity=".3"/>
+    <line x1="360" y1="0" x2="360" y2="36" stroke="#1c1916" stroke-width=".5" opacity=".3"/>
+    <line x1="430" y1="0" x2="430" y2="36" stroke="#1c1916" stroke-width=".5" opacity=".3"/>
+    <line x1="500" y1="0" x2="500" y2="36" stroke="#1c1916" stroke-width=".5" opacity=".3"/>
+    <line x1="570" y1="0" x2="570" y2="36" stroke="#1c1916" stroke-width=".5" opacity=".3"/>
+    <line x1="690" y1="0" x2="690" y2="36" stroke="#1c1916" stroke-width=".5" opacity=".3"/>
+    <text x="14" y="22" fill="#7F2020">提交时间</text>
+    <text x="114" y="22" fill="#7F2020">参与者</text>
+    <text x="234" y="22" fill="#7F2020">Q1</text>
+    <text x="304" y="22" fill="#7F2020">Q2</text>
+    <text x="374" y="22" fill="#7F2020">Q3</text>
+    <text x="444" y="22" fill="#7F2020">Q4</text>
+    <text x="514" y="22" fill="#7F2020">Q5</text>
+    <text x="584" y="22" fill="#7F2020">总分</text>
+    <text x="704" y="22" fill="#7F2020">反馈文本</text>
+  </g>
+
+  <!-- 数据行（10 行）-->
+  <g transform="translate(20,136)" font-family="'EB Garamond', serif" font-size="12">
+    <!-- 行模板 + 数据 -->
+    <g>
+      <!-- Row 1 - 高亮（最新一条） -->
+      <rect width="920" height="32" fill="#7F2020" opacity=".06"/>
+      <text x="14" y="20" font-family="'JetBrains Mono', monospace" font-size="10" fill="#869B7E">2026.04.18 18:42</text>
+      <text x="114" y="20" font-family="'Songti SC', serif" font-size="12" fill="#1c1916">王*明</text>
+      <text x="234" y="20" font-weight="500">5</text>
+      <text x="304" y="20" font-weight="500">5</text>
+      <text x="374" y="20" font-weight="500">5</text>
+      <text x="444" y="20" font-weight="500">4</text>
+      <text x="514" y="20" font-weight="500">5</text>
+      <text x="584" y="20" font-style="italic" font-weight="600" fill="#7F2020">4.8</text>
+      <text x="704" y="20" font-family="'Songti SC', serif" font-size="11" fill="#1c1916" opacity=".7">案例很扎实，希望多讲 ROI</text>
+      <circle cx="900" cy="16" r="3" fill="#7F2020">
+        <animate attributeName="opacity" values="1;0.2;1" dur="1.5s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+
+    <g transform="translate(0,32)">
+      <text x="14" y="20" font-family="'JetBrains Mono', monospace" font-size="10" fill="#869B7E">2026.04.18 18:40</text>
+      <text x="114" y="20" font-family="'Songti SC', serif" font-size="12" fill="#1c1916">陈*晨</text>
+      <text x="234" y="20">5</text>
+      <text x="304" y="20">5</text>
+      <text x="374" y="20">4</text>
+      <text x="444" y="20">5</text>
+      <text x="514" y="20">5</text>
+      <text x="584" y="20" font-style="italic" font-weight="600" fill="#7F2020">4.8</text>
+      <text x="704" y="20" font-family="'Songti SC', serif" font-size="11" fill="#1c1916" opacity=".7">讲师互动比上次更好</text>
+    </g>
+
+    <g transform="translate(0,64)">
+      <text x="14" y="20" font-family="'JetBrains Mono', monospace" font-size="10" fill="#869B7E">2026.04.18 18:39</text>
+      <text x="114" y="20" font-family="'Songti SC', serif" font-size="12" fill="#1c1916">李*雯</text>
+      <text x="234" y="20">4</text>
+      <text x="304" y="20">5</text>
+      <text x="374" y="20">5</text>
+      <text x="444" y="20">4</text>
+      <text x="514" y="20">4</text>
+      <text x="584" y="20" font-style="italic" font-weight="600" fill="#7F2020">4.4</text>
+      <text x="704" y="20" font-family="'Songti SC', serif" font-size="11" fill="#1c1916" opacity=".7">想再深入听销售带教数据可视化</text>
+    </g>
+
+    <g transform="translate(0,96)">
+      <text x="14" y="20" font-family="'JetBrains Mono', monospace" font-size="10" fill="#869B7E">2026.04.18 18:38</text>
+      <text x="114" y="20" font-family="'Songti SC', serif" font-size="12" fill="#1c1916">张*佳</text>
+      <text x="234" y="20">5</text>
+      <text x="304" y="20">5</text>
+      <text x="374" y="20">5</text>
+      <text x="444" y="20">5</text>
+      <text x="514" y="20">5</text>
+      <text x="584" y="20" font-style="italic" font-weight="600" fill="#7F2020">5.0</text>
+      <text x="704" y="20" font-family="'Songti SC', serif" font-size="11" fill="#1c1916" opacity=".7">非常好，已经分享给团队</text>
+    </g>
+
+    <g transform="translate(0,128)">
+      <text x="14" y="20" font-family="'JetBrains Mono', monospace" font-size="10" fill="#869B7E">2026.04.18 18:37</text>
+      <text x="114" y="20" font-family="'Songti SC', serif" font-size="12" fill="#1c1916">刘*成</text>
+      <text x="234" y="20">4</text>
+      <text x="304" y="20">5</text>
+      <text x="374" y="20">5</text>
+      <text x="444" y="20">5</text>
+      <text x="514" y="20">4</text>
+      <text x="584" y="20" font-style="italic" font-weight="600" fill="#7F2020">4.6</text>
+      <text x="704" y="20" font-family="'Songti SC', serif" font-size="11" fill="#1c1916" opacity=".7">PPT 节奏可以再紧凑一点</text>
+    </g>
+
+    <g transform="translate(0,160)">
+      <text x="14" y="20" font-family="'JetBrains Mono', monospace" font-size="10" fill="#869B7E">2026.04.18 18:36</text>
+      <text x="114" y="20" font-family="'Songti SC', serif" font-size="12" fill="#1c1916">周*平</text>
+      <text x="234" y="20">5</text>
+      <text x="304" y="20">5</text>
+      <text x="374" y="20">5</text>
+      <text x="444" y="20">4</text>
+      <text x="514" y="20">5</text>
+      <text x="584" y="20" font-style="italic" font-weight="600" fill="#7F2020">4.8</text>
+      <text x="704" y="20" font-family="'Songti SC', serif" font-size="11" fill="#1c1916" opacity=".7">期待下一次主题</text>
+    </g>
+
+    <g transform="translate(0,192)">
+      <text x="14" y="20" font-family="'JetBrains Mono', monospace" font-size="10" fill="#869B7E">2026.04.18 18:35</text>
+      <text x="114" y="20" font-family="'Songti SC', serif" font-size="12" fill="#1c1916">吴*怡</text>
+      <text x="234" y="20">5</text>
+      <text x="304" y="20">5</text>
+      <text x="374" y="20">5</text>
+      <text x="444" y="20">5</text>
+      <text x="514" y="20">4</text>
+      <text x="584" y="20" font-style="italic" font-weight="600" fill="#7F2020">4.8</text>
+      <text x="704" y="20" font-family="'Songti SC', serif" font-size="11" fill="#1c1916" opacity=".7">现场互动环节很有启发</text>
+    </g>
+
+    <g transform="translate(0,224)">
+      <text x="14" y="20" font-family="'JetBrains Mono', monospace" font-size="10" fill="#869B7E">2026.04.18 18:34</text>
+      <text x="114" y="20" font-family="'Songti SC', serif" font-size="12" fill="#1c1916">孙*璐</text>
+      <text x="234" y="20">5</text>
+      <text x="304" y="20">5</text>
+      <text x="374" y="20">5</text>
+      <text x="444" y="20">5</text>
+      <text x="514" y="20">5</text>
+      <text x="584" y="20" font-style="italic" font-weight="600" fill="#7F2020">5.0</text>
+      <text x="704" y="20" font-family="'Songti SC', serif" font-size="11" fill="#1c1916" opacity=".7">体系化的讲解很有用</text>
+    </g>
+
+    <g transform="translate(0,256)">
+      <text x="14" y="20" font-family="'JetBrains Mono', monospace" font-size="10" fill="#869B7E">2026.04.18 18:33</text>
+      <text x="114" y="20" font-family="'Songti SC', serif" font-size="12" fill="#1c1916">郑*欣</text>
+      <text x="234" y="20">4</text>
+      <text x="304" y="20">5</text>
+      <text x="374" y="20">5</text>
+      <text x="444" y="20">5</text>
+      <text x="514" y="20">5</text>
+      <text x="584" y="20" font-style="italic" font-weight="600" fill="#7F2020">4.8</text>
+      <text x="704" y="20" font-family="'Songti SC', serif" font-size="11" fill="#1c1916" opacity=".7">希望下次能有线上回看</text>
+    </g>
+
+    <g transform="translate(0,288)">
+      <text x="14" y="20" font-family="'JetBrains Mono', monospace" font-size="10" fill="#869B7E">2026.04.18 18:32</text>
+      <text x="114" y="20" font-family="'Songti SC', serif" font-size="12" fill="#1c1916">钱*俊</text>
+      <text x="234" y="20">5</text>
+      <text x="304" y="20">5</text>
+      <text x="374" y="20">5</text>
+      <text x="444" y="20">5</text>
+      <text x="514" y="20">5</text>
+      <text x="584" y="20" font-style="italic" font-weight="600" fill="#7F2020">5.0</text>
+      <text x="704" y="20" font-family="'Songti SC', serif" font-size="11" fill="#1c1916" opacity=".7">案例分享非常实际</text>
+    </g>
+
+    <g transform="translate(0,320)">
+      <text x="14" y="20" font-family="'JetBrains Mono', monospace" font-size="10" fill="#869B7E">2026.04.18 18:31</text>
+      <text x="114" y="20" font-family="'Songti SC', serif" font-size="12" fill="#1c1916">…</text>
+      <text x="704" y="20" font-family="'JetBrains Mono', monospace" font-size="10" fill="#869B7E" font-style="italic">+ 32 more rows</text>
+    </g>
+  </g>
+
+  <!-- 底部状态栏 -->
+  <g transform="translate(20,510)">
+    <rect width="920" height="180" fill="#F6F3EB"/>
+    <text x="14" y="24" font-family="'JetBrains Mono', monospace" font-size="10" fill="#7F2020" letter-spacing="3">REAL-TIME AGGREGATES · 实时聚合</text>
+
+    <!-- 4 个统计卡片 -->
+    <g transform="translate(14,40)">
+      <rect width="200" height="130" fill="#FFFFFF" stroke="#1c1916" stroke-width=".5" opacity=".5"/>
+      <text x="14" y="20" font-family="'JetBrains Mono', monospace" font-size="9" fill="#869B7E">平均分 AVG</text>
+      <text x="14" y="68" font-family="'EB Garamond', serif" font-size="44" font-style="italic" font-weight="600" fill="#7F2020">4.6</text>
+      <text x="14" y="92" font-family="'JetBrains Mono', monospace" font-size="9" fill="#869B7E" letter-spacing="2">↑ 0.3 VS 上次</text>
+      <text x="14" y="116" font-family="'Songti SC', serif" font-size="11" fill="#1c1916" opacity=".5">实时聚合 = 公式列</text>
+    </g>
+
+    <g transform="translate(232,40)">
+      <rect width="200" height="130" fill="#FFFFFF" stroke="#1c1916" stroke-width=".5" opacity=".5"/>
+      <text x="14" y="20" font-family="'JetBrains Mono', monospace" font-size="9" fill="#869B7E">参与人数 N</text>
+      <text x="14" y="68" font-family="'EB Garamond', serif" font-size="44" font-style="italic" font-weight="600" fill="#1c1916">42</text>
+      <text x="14" y="92" font-family="'JetBrains Mono', monospace" font-size="9" fill="#869B7E" letter-spacing="2">93% 参与率</text>
+      <text x="14" y="116" font-family="'Songti SC', serif" font-size="11" fill="#1c1916" opacity=".5">滚动统计</text>
+    </g>
+
+    <g transform="translate(450,40)">
+      <rect width="200" height="130" fill="#FFFFFF" stroke="#1c1916" stroke-width=".5" opacity=".5"/>
+      <text x="14" y="20" font-family="'JetBrains Mono', monospace" font-size="9" fill="#869B7E">最高分 Q</text>
+      <text x="14" y="60" font-family="'Songti SC', serif" font-size="13" fill="#1c1916">Q2 · 实用性</text>
+      <text x="14" y="98" font-family="'EB Garamond', serif" font-size="32" font-style="italic" font-weight="600" fill="#7F2020">4.8</text>
+      <text x="14" y="116" font-family="'Songti SC', serif" font-size="11" fill="#1c1916" opacity=".5">细分维度排序</text>
+    </g>
+
+    <g transform="translate(668,40)">
+      <rect width="238" height="130" fill="#FFFFFF" stroke="#1c1916" stroke-width=".5" opacity=".5"/>
+      <text x="14" y="20" font-family="'JetBrains Mono', monospace" font-size="9" fill="#869B7E">需关注 LOW</text>
+      <text x="14" y="60" font-family="'Songti SC', serif" font-size="13" fill="#1c1916">Q5 · 互动性 (4.4)</text>
+      <text x="14" y="84" font-family="'Songti SC', serif" font-size="11" fill="#1c1916" opacity=".7">下次课增加现场提问环节</text>
+      <text x="14" y="116" font-family="'Songti SC', serif" font-size="11" fill="#869B7E" font-style="italic">AI 自动建议</text>
+    </g>
+  </g>
+</svg>

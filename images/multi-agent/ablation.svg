@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" font-family="'EB Garamond', 'Songti SC', serif">
+  <defs>
+    <linearGradient id="paper2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F6F3EB"/>
+      <stop offset="100%" stop-color="#EFEBE0"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1280" height="720" fill="url(#paper2)"/>
+  <rect x="40" y="40" width="1200" height="640" fill="none" stroke="#1c1916" stroke-width="1" opacity=".25"/>
+
+  <!-- 标题 -->
+  <g transform="translate(80,90)">
+    <text font-family="'JetBrains Mono', monospace" font-size="11" fill="#7F2020" letter-spacing="3">FIG. 2 · ABLATION MATRIX · 17 MECHANISMS</text>
+    <text y="36" font-size="36" font-weight="500" fill="#1c1916">消融实验结果 — <tspan font-style="italic" fill="#7F2020">2 KEEP · 14 NOISE</tspan></text>
+    <text y="68" font-size="14" fill="#1c1916" opacity=".7" font-family="'Songti SC', serif">
+      逐项剥离后行为是否退化，区分"机制有效"与"机制必要"。
+    </text>
+  </g>
+
+  <!-- 图例 -->
+  <g transform="translate(870,80)" font-family="'JetBrains Mono', monospace" font-size="10" letter-spacing="1">
+    <rect x="0" y="0" width="14" height="14" fill="#7F2020"/>
+    <text x="20" y="11" fill="#1c1916">KEEP · 可测因果影响</text>
+    <rect x="0" y="22" width="14" height="14" fill="#869B7E" opacity=".5"/>
+    <text x="20" y="33" fill="#1c1916">NOISE · 模型已内化</text>
+    <rect x="0" y="44" width="14" height="14" fill="#C9CAAC" opacity=".4"/>
+    <text x="20" y="55" fill="#1c1916">CONDITIONAL · 特定故障触发</text>
+  </g>
+
+  <!-- 矩阵网格：17 cells，行 4 × 列 5 (最后一行 1 个空)
+       每 cell: 200×80
+       起点：x=80, y=200 -->
+  <g transform="translate(80,200)">
+    <!-- Row 1: M1-M5 -->
+    <g>
+      <!-- M1 Lost in Middle - KEEP -->
+      <g transform="translate(0,0)">
+        <rect width="200" height="80" fill="#7F2020"/>
+        <text x="14" y="22" font-family="'JetBrains Mono', monospace" font-size="10" fill="#F6F3EB" opacity=".8" letter-spacing="1">M01</text>
+        <text x="14" y="44" font-size="15" font-weight="500" fill="#F6F3EB">Lost in Middle</text>
+        <text x="14" y="60" font-family="'JetBrains Mono', monospace" font-size="10" fill="#F6F3EB" opacity=".75">0% vs 100% · n=6</text>
+        <text x="186" y="20" text-anchor="end" font-family="'EB Garamond', serif" font-size="14" font-style="italic" font-weight="600" fill="#F6F3EB">KEEP</text>
+      </g>
+      <!-- M2 三问筛选 - KEEP -->
+      <g transform="translate(208,0)">
+        <rect width="200" height="80" fill="#7F2020"/>
+        <text x="14" y="22" font-family="'JetBrains Mono', monospace" font-size="10" fill="#F6F3EB" opacity=".8" letter-spacing="1">M02</text>
+        <text x="14" y="44" font-size="15" font-weight="500" fill="#F6F3EB">三问筛选</text>
+        <text x="14" y="60" font-family="'JetBrains Mono', monospace" font-size="10" fill="#F6F3EB" opacity=".75">SAS/MAS gate</text>
+        <text x="186" y="20" text-anchor="end" font-family="'EB Garamond', serif" font-size="14" font-style="italic" font-weight="600" fill="#F6F3EB">KEEP</text>
+      </g>
+      <!-- M3 Spawn 协议 - NOISE -->
+      <g transform="translate(416,0)">
+        <rect width="200" height="80" fill="#869B7E" opacity=".5"/>
+        <rect width="200" height="80" fill="none" stroke="#869B7E" stroke-width="1"/>
+        <text x="14" y="22" font-family="'JetBrains Mono', monospace" font-size="10" fill="#1c1916" opacity=".6" letter-spacing="1">M03</text>
+        <text x="14" y="44" font-size="15" font-weight="500" fill="#1c1916">Spawn 协议</text>
+        <text x="14" y="60" font-family="'JetBrains Mono', monospace" font-size="10" fill="#1c1916" opacity=".6">4 元素结构</text>
+        <text x="186" y="20" text-anchor="end" font-family="'EB Garamond', serif" font-size="13" font-style="italic" fill="#869B7E" font-weight="600">NOISE</text>
+      </g>
+      <!-- M4 Heartbeat - NOISE -->
+      <g transform="translate(624,0)">
+        <rect width="200" height="80" fill="#869B7E" opacity=".5"/>
+        <rect width="200" height="80" fill="none" stroke="#869B7E" stroke-width="1"/>
+        <text x="14" y="22" font-family="'JetBrains Mono', monospace" font-size="10" fill="#1c1916" opacity=".6" letter-spacing="1">M04</text>
+        <text x="14" y="44" font-size="15" font-weight="500" fill="#1c1916">Heartbeat</text>
+        <text x="14" y="60" font-family="'JetBrains Mono', monospace" font-size="10" fill="#1c1916" opacity=".6">[REFLECT] / [PIVOT]</text>
+        <text x="186" y="20" text-anchor="end" font-family="'EB Garamond', serif" font-size="13" font-style="italic" fill="#869B7E" font-weight="600">NOISE</text>
+      </g>
+      <!-- M5 Cross-pollination - NOISE -->
+      <g transform="translate(832,0)">
+        <rect width="200" height="80" fill="#869B7E" opacity=".5"/>
+        <rect width="200" height="80" fill="none" stroke="#869B7E" stroke-width="1"/>
+        <text x="14" y="22" font-family="'JetBrains Mono', monospace" font-size="10" fill="#1c1916" opacity=".6" letter-spacing="1">M05</text>
+        <text x="14" y="44" font-size="15" font-weight="500" fill="#1c1916">Cross-pollination</text>
+        <text x="14" y="60" font-family="'JetBrains Mono', monospace" font-size="10" fill="#1c1916" opacity=".6">前置→后续注入</text>
+        <text x="186" y="20" text-anchor="end" font-family="'EB Garamond', serif" font-size="13" font-style="italic" fill="#869B7E" font-weight="600">NOISE</text>
+      </g>
+    </g>
+
+    <!-- Row 2: M6-M10 -->
+    <g transform="translate(0,90)">
+      <!-- M6 停滞五级梯度 - CONDITIONAL -->
+      <g transform="translate(0,0)">
+        <rect width="200" height="80" fill="#C9CAAC" opacity=".4"/>
+        <rect width="200" height="80" fill="none" stroke="#C9CAAC" stroke-width="1"/>
+        <text x="14" y="22" font-family="'JetBrains Mono', monospace" font-size="10" fill="#1c1916" opacity=".6" letter-spacing="1">M06</text>
+        <text x="14" y="44" font-size="15" font-weight="500" fill="#1c1916">停滞五级梯度</text>
+        <text x="14" y="60" font-family="'JetBrains Mono', monospace" font-size="10" fill="#1c1916" opacity=".6">触发率 100% / 4 项</text>
+        <text x="186" y="20" text-anchor="end" font-family="'EB Garamond', serif" font-size="11" font-style="italic" fill="#1c1916" opacity=".7">COND.</text>
+      </g>
+      <!-- M7 -->
+      <g transform="translate(208,0)">
+        <rect width="200" height="80" fill="#869B7E" opacity=".5"/>
+        <rect width="200" height="80" fill="none" stroke="#869B7E" stroke-width="1"/>
+        <text x="14" y="22" font-family="'JetBrains Mono', monospace" font-size="10" fill="#1c1916" opacity=".6" letter-spacing="1">M07</text>
+        <text x="14" y="44" font-size="15" font-weight="500" fill="#1c1916">Coverage Audit</text>
+        <text x="14" y="60" font-family="'JetBrains Mono', monospace" font-size="10" fill="#1c1916" opacity=".6">覆盖率审计</text>
+        <text x="186" y="20" text-anchor="end" font-family="'EB Garamond', serif" font-size="13" font-style="italic" fill="#869B7E" font-weight="600">NOISE</text>
+      </g>
+      <!-- M8 -->
+      <g transform="translate(416,0)">
+        <rect width="200" height="80" fill="#869B7E" opacity=".5"/>
+        <rect width="200" height="80" fill="none" stroke="#869B7E" stroke-width="1"/>
+        <text x="14" y="22" font-family="'JetBrains Mono', monospace" font-size="10" fill="#1c1916" opacity=".6" letter-spacing="1">M08</text>
+        <text x="14" y="44" font-size="15" font-weight="500" fill="#1c1916">Shared Memory</text>
+        <text x="14" y="60" font-family="'JetBrains Mono', monospace" font-size="10" fill="#1c1916" opacity=".6">共享上下文</text>
+        <text x="186" y="20" text-anchor="end" font-family="'EB Garamond', serif" font-size="13" font-style="italic" fill="#869B7E" font-weight="600">NOISE</text>
+      </g>
+      <!-- M9 -->
+      <g transform="translate(624,0)">
+        <rect width="200" height="80" fill="#869B7E" opacity=".5"/>
+        <rect width="200" height="80" fill="none" stroke="#869B7E" stroke-width="1"/>
+        <text x="14" y="22" font-family="'JetBrains Mono', monospace" font-size="10" fill="#1c1916" opacity=".6" letter-spacing="1">M09</text>
+        <text x="14" y="44" font-size="15" font-weight="500" fill="#1c1916">Phase Gate</text>
+        <text x="14" y="60" font-family="'JetBrains Mono', monospace" font-size="10" fill="#1c1916" opacity=".6">阶段门控</text>
+        <text x="186" y="20" text-anchor="end" font-family="'EB Garamond', serif" font-size="13" font-style="italic" fill="#869B7E" font-weight="600">NOISE</text>
+      </g>
+      <!-- M10 -->
+      <g transform="translate(832,0)">
+        <rect width="200" height="80" fill="#869B7E" opacity=".5"/>
+        <rect width="200" height="80" fill="none" stroke="#869B7E" stroke-width="1"/>
+        <text x="14" y="22" font-family="'JetBrains Mono', monospace" font-size="10" fill="#1c1916" opacity=".6" letter-spacing="1">M10</text>
+        <text x="14" y="44" font-size="15" font-weight="500" fill="#1c1916">假说板</text>
+        <text x="14" y="60" font-family="'JetBrains Mono', monospace" font-size="10" fill="#1c1916" opacity=".6">驱动讨论</text>
+        <text x="186" y="20" text-anchor="end" font-family="'EB Garamond', serif" font-size="13" font-style="italic" fill="#869B7E" font-weight="600">NOISE</text>
+      </g>
+    </g>
+
+    <!-- Row 3: M11-M15 -->
+    <g transform="translate(0,180)">
+      <!-- M11 -->
+      <g transform="translate(0,0)">
+        <rect width="200" height="80" fill="#869B7E" opacity=".5"/>
+        <rect width="200" height="80" fill="none" stroke="#869B7E" stroke-width="1"/>
+        <text x="14" y="22" font-family="'JetBrains Mono', monospace" font-size="10" fill="#1c1916" opacity=".6" letter-spacing="1">M11</text>
+        <text x="14" y="44" font-size="15" font-weight="500" fill="#1c1916">CLO 调度</text>
+        <text x="14" y="60" font-family="'JetBrains Mono', monospace" font-size="10" fill="#1c1916" opacity=".6">主CC = 学习官</text>
+        <text x="186" y="20" text-anchor="end" font-family="'EB Garamond', serif" font-size="13" font-style="italic" fill="#869B7E" font-weight="600">NOISE</text>
+      </g>
+      <!-- M12 -->
+      <g transform="translate(208,0)">
+        <rect width="200" height="80" fill="#869B7E" opacity=".5"/>
+        <rect width="200" height="80" fill="none" stroke="#869B7E" stroke-width="1"/>
+        <text x="14" y="22" font-family="'JetBrains Mono', monospace" font-size="10" fill="#1c1916" opacity=".6" letter-spacing="1">M12</text>
+        <text x="14" y="44" font-size="15" font-weight="500" fill="#1c1916">Evidence Handoff</text>
+        <text x="14" y="60" font-family="'JetBrains Mono', monospace" font-size="10" fill="#1c1916" opacity=".6">摘要 ≤ 200 字</text>
+        <text x="186" y="20" text-anchor="end" font-family="'EB Garamond', serif" font-size="13" font-style="italic" fill="#869B7E" font-weight="600">NOISE</text>
+      </g>
+      <!-- M13 -->
+      <g transform="translate(416,0)">
+        <rect width="200" height="80" fill="#869B7E" opacity=".5"/>
+        <rect width="200" height="80" fill="none" stroke="#869B7E" stroke-width="1"/>
+        <text x="14" y="22" font-family="'JetBrains Mono', monospace" font-size="10" fill="#1c1916" opacity=".6" letter-spacing="1">M13</text>
+        <text x="14" y="44" font-size="15" font-weight="500" fill="#1c1916">Adversarial</text>
+        <text x="14" y="60" font-family="'JetBrains Mono', monospace" font-size="10" fill="#1c1916" opacity=".6">红队攻击</text>
+        <text x="186" y="20" text-anchor="end" font-family="'EB Garamond', serif" font-size="13" font-style="italic" fill="#869B7E" font-weight="600">NOISE</text>
+      </g>
+      <!-- M14 -->
+      <g transform="translate(624,0)">
+        <rect width="200" height="80" fill="#869B7E" opacity=".5"/>
+        <rect width="200" height="80" fill="none" stroke="#869B7E" stroke-width="1"/>
+        <text x="14" y="22" font-family="'JetBrains Mono', monospace" font-size="10" fill="#1c1916" opacity=".6" letter-spacing="1">M14</text>
+        <text x="14" y="44" font-size="15" font-weight="500" fill="#1c1916">探索者-批判者</text>
+        <text x="14" y="60" font-family="'JetBrains Mono', monospace" font-size="10" fill="#1c1916" opacity=".6">双重职责</text>
+        <text x="186" y="20" text-anchor="end" font-family="'EB Garamond', serif" font-size="13" font-style="italic" fill="#869B7E" font-weight="600">NOISE</text>
+      </g>
+      <!-- M15 -->
+      <g transform="translate(832,0)">
+        <rect width="200" height="80" fill="#869B7E" opacity=".5"/>
+        <rect width="200" height="80" fill="none" stroke="#869B7E" stroke-width="1"/>
+        <text x="14" y="22" font-family="'JetBrains Mono', monospace" font-size="10" fill="#1c1916" opacity=".6" letter-spacing="1">M15</text>
+        <text x="14" y="44" font-size="15" font-weight="500" fill="#1c1916">进化记录者</text>
+        <text x="14" y="60" font-family="'JetBrains Mono', monospace" font-size="10" fill="#1c1916" opacity=".6">learning-log</text>
+        <text x="186" y="20" text-anchor="end" font-family="'EB Garamond', serif" font-size="13" font-style="italic" fill="#869B7E" font-weight="600">NOISE</text>
+      </g>
+    </g>
+
+    <!-- Row 4: M16-M17 + 总结 -->
+    <g transform="translate(0,270)">
+      <g transform="translate(0,0)">
+        <rect width="200" height="80" fill="#869B7E" opacity=".5"/>
+        <rect width="200" height="80" fill="none" stroke="#869B7E" stroke-width="1"/>
+        <text x="14" y="22" font-family="'JetBrains Mono', monospace" font-size="10" fill="#1c1916" opacity=".6" letter-spacing="1">M16</text>
+        <text x="14" y="44" font-size="15" font-weight="500" fill="#1c1916">Token 经济学</text>
+        <text x="14" y="60" font-family="'JetBrains Mono', monospace" font-size="10" fill="#1c1916" opacity=".6">分桶预算</text>
+        <text x="186" y="20" text-anchor="end" font-family="'EB Garamond', serif" font-size="13" font-style="italic" fill="#869B7E" font-weight="600">NOISE</text>
+      </g>
+      <g transform="translate(208,0)">
+        <rect width="200" height="80" fill="#869B7E" opacity=".5"/>
+        <rect width="200" height="80" fill="none" stroke="#869B7E" stroke-width="1"/>
+        <text x="14" y="22" font-family="'JetBrains Mono', monospace" font-size="10" fill="#1c1916" opacity=".6" letter-spacing="1">M17</text>
+        <text x="14" y="44" font-size="15" font-weight="500" fill="#1c1916">质量红线</text>
+        <text x="14" y="60" font-family="'JetBrains Mono', monospace" font-size="10" fill="#1c1916" opacity=".6">字数/来源闸门</text>
+        <text x="186" y="20" text-anchor="end" font-family="'EB Garamond', serif" font-size="13" font-style="italic" fill="#869B7E" font-weight="600">NOISE</text>
+      </g>
+
+      <!-- 大总结块 -->
+      <g transform="translate(416,0)">
+        <rect width="616" height="80" fill="none" stroke="#1c1916" stroke-width="1" opacity=".3"/>
+        <text x="20" y="28" font-family="'Songti SC', serif" font-size="14" fill="#1c1916">
+          <tspan font-style="italic" fill="#7F2020" font-weight="600">收敛后的认识：</tspan>不是机制越多越好。
+        </text>
+        <text x="20" y="50" font-family="'Songti SC', serif" font-size="13" fill="#1c1916" opacity=".75">
+          能被验证有效的机制才值得保留。其余 14 项被模型行为内化，
+        </text>
+        <text x="20" y="68" font-family="'Songti SC', serif" font-size="13" fill="#1c1916" opacity=".75">
+          或仅在特定故障场景触发——保留它们等于增加 prompt 噪声。
+        </text>
+      </g>
+    </g>
+  </g>
+
+  <!-- 印章 -->
+  <g transform="translate(1140,640) rotate(-8)">
+    <rect x="-32" y="-32" width="64" height="64" fill="none" stroke="#7F2020" stroke-width="1.5"/>
+    <text text-anchor="middle" y="-4" font-family="'Songti SC', serif" font-size="13" fill="#7F2020" font-weight="600">消融</text>
+    <text text-anchor="middle" y="12" font-family="'JetBrains Mono', monospace" font-size="7" fill="#7F2020" letter-spacing="2">ABLATION</text>
+  </g>
+
+  <text x="80" y="690" font-family="'JetBrains Mono', monospace" font-size="9" fill="#1c1916" opacity=".4" letter-spacing="1">
+    16 ABLATION ROUNDS · n=6 PER MECHANISM · MULTI-AGENT-RESEARCH v9.0
+  </text>
+</svg>
