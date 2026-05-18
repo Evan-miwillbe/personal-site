@@ -573,11 +573,11 @@ function buildPailou() {
   beam2.position.set(0, 4.2, 0); beam2.castShadow = true; g.add(beam2);
   // 双层飞檐 cones
   const roofMat = new THREE.MeshStandardMaterial({ color: C.tile, roughness: 0.6 });
-  const roof1 = new THREE.Mesh(new THREE.ConeGeometry(4.2, 0.9, 4), roofMat);
+  const roof1 = new THREE.Mesh(new THREE.ConeGeometry(3.2, 0.7, 4), roofMat);
   roof1.position.set(0, 3.85, 0);
   roof1.rotation.y = Math.PI / 4;
   roof1.castShadow = true; g.add(roof1);
-  const roof2 = new THREE.Mesh(new THREE.ConeGeometry(3.4, 0.8, 4), roofMat);
+  const roof2 = new THREE.Mesh(new THREE.ConeGeometry(2.4, 0.6, 4), roofMat);
   roof2.position.set(0, 4.7, 0);
   roof2.rotation.y = Math.PI / 4;
   roof2.castShadow = true; g.add(roof2);
@@ -895,11 +895,11 @@ buildCoins();
 // ============ (14) 灯笼阵 LANTERNS along main path ============
 const lanterns = [];
 function buildLanterns() {
-  // 8 lanterns from south (z=12) to north (z=-10), pairs on both sides x = ±2.4
+  // 4 lanterns (减半) from z=8 to z=-10 sparse, pairs on both sides x = ±3.0
   const positions = [];
-  for (let i = 0; i < 4; i++) {
-    const z = 12 - i * 6;
-    positions.push([-2.4, z], [2.4, z]);
+  for (let i = 0; i < 2; i++) {
+    const z = 8 - i * 12;
+    positions.push([-3.0, z], [3.0, z]);
   }
   for (let i = 0; i < positions.length; i++) {
     const [x, z] = positions[i];
@@ -1069,7 +1069,8 @@ function buildVehicle() {
   const chassisShape = new CANNON.Box(new CANNON.Vec3(0.5, 0.3, 1.0));
   chassisBody = new CANNON.Body({ mass: 40, material: groundMat });
   chassisBody.addShape(chassisShape);
-  chassisBody.position.set(0, 1.5, 12);
+  chassisBody.position.set(0, 1.5, 6);
+  console.log('[debug] chassisBody just set to', chassisBody.position.x, chassisBody.position.y, chassisBody.position.z);
   chassisBody.angularDamping = 0.55;
   chassisBody.allowSleep = false;
   world.addBody(chassisBody);
@@ -1299,6 +1300,7 @@ function startGame() {
   setTimeout(() => { introEl.style.display = 'none'; }, 800);
   gameStarted = true;
   startTime = performance.now();
+  clock.start();
   setTimeout(() => { inputLocked = false; }, 500);
   setTimeout(() => { hintEl.classList.add('show'); }, 500);
   // 3s no input → shake hint
@@ -1418,7 +1420,7 @@ function tryInteract() {
 
 // ============ RESET CAR ============
 function resetCar() {
-  chassisBody.position.set(0, 1.5, 12);
+  chassisBody.position.set(0, 1.5, 6);
   chassisBody.velocity.set(0, 0, 0);
   chassisBody.angularVelocity.set(0, 0, 0);
   chassisBody.quaternion.set(0, 0, 0, 1);
@@ -1620,11 +1622,11 @@ function animate() {
     const q = chassisBody.quaternion;
     const carFwd = new CANNON.Vec3(0, 0, -1);
     q.vmult(carFwd, carFwd);
-    // lookahead
+    // lookahead (升高视线高度 + 看更远，避开飞檐遮挡感)
     camTarget.set(
-      chassisBody.position.x + carFwd.x * 2,
-      chassisBody.position.y + 0.5,
-      chassisBody.position.z + carFwd.z * 2
+      chassisBody.position.x + carFwd.x * 4,
+      chassisBody.position.y + 2.0,
+      chassisBody.position.z + carFwd.z * 4
     );
     // desired = behind car + height
     const dist = 6;
