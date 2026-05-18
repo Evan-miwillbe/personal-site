@@ -11,14 +11,14 @@
 <script src="data.js"></script>
 <style>
   :root{
-    --paper:#fbfaf6;
+    --paper:#F6F3EB;
     --paper-deep:#f4f1e8;
-    --ink:#1b1a17;
+    --ink:#2a2520;
     --ink-soft:#4a4842;
     --ink-mute:#8a877e;
     --rule:#d8d4c5;
-    --accent:#8b2f2f;        /* 墨红——克制，呼应军籍底色 */
-    --accent-soft:rgba(139,47,47,.08);
+    --accent:#7F2020;        /* 墨红——克制，呼应军籍底色 */
+    --accent-soft:rgba(127,32,32,.08);
     --serif:"Noto Serif SC","Source Han Serif SC","Songti SC","STSong",serif;
     --serif-en:"EB Garamond",Georgia,"Times New Roman",serif;
     --sans:"Inter","HarmonyOS Sans SC","PingFang SC","Microsoft YaHei",ui-sans-serif,system-ui,sans-serif;
@@ -43,7 +43,7 @@
     content:"";
     position:fixed;inset:0;
     background-image:
-      radial-gradient(circle at 30% 20%, rgba(139,47,47,.015), transparent 40%),
+      radial-gradient(circle at 30% 20%, rgba(127,32,32,.015), transparent 40%),
       radial-gradient(circle at 80% 80%, rgba(0,0,0,.01), transparent 40%);
     pointer-events:none;z-index:0;
   }
@@ -497,6 +497,10 @@
     <p data-source="contact_intro"></p>
     <div class="contact-list" data-source="contacts"></div>
   </section>
+
+  <div class="drive-link" style="text-align:center;margin-top:48px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;">
+    <a href="drive.html">开车看 →</a>
+  </div>
 
   <footer class="foot">
     Made by · <span class="seal" data-source="meta.surname_cn"></span> · <span data-source="meta.name_en"></span> · MMXXVI · <span data-source="meta.city_en_upper"></span>

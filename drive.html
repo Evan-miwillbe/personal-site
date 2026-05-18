@@ -1,0 +1,1721 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>滕美名 · 书院驾乘 · drive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=Noto+Serif+SC:wght@400;500;700&family=Inter:wght@300;400;500&family=Cormorant+Garamond:wght@300;400;500&display=swap" rel="stylesheet" />
+<script src="data.js"></script>
+<style>
+:root{
+  --bg:#F6F3EB;
+  --ink:#2a2520;
+  --ink-soft:#6b6358;
+  --accent:#7F2020;
+  --sage:#869B7E;
+  --sage-deep:#5D7B5D;
+  --tile:#3A3530;
+  --slate:#4A6B7C;
+  --cinnabar:#C0392B;
+  --hud-bg:rgba(246,243,235,0.35);
+  --hud-border:rgba(127,32,32,0.4);
+  --hud-blur:blur(14px) saturate(1.1);
+  --cinnabar-line:1px solid rgba(127,32,32,0.4);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:'Inter','Noto Serif SC',-apple-system,BlinkMacSystemFont,sans-serif;cursor:none}
+#scene{position:fixed;inset:0;width:100%;height:100%;display:block}
+
+/* === cursor-ring === */
+.cursor-ring{position:fixed;top:0;left:0;width:28px;height:28px;border:1.5px solid rgba(127,32,32,0.55);border-radius:50%;background:rgba(246,243,235,0.18);backdrop-filter:blur(4px) saturate(1.1);pointer-events:none;z-index:10000;transform:translate(-50%,-50%);transition:width 0.18s cubic-bezier(0.4,0,0.2,1),height 0.18s cubic-bezier(0.4,0,0.2,1),background 0.18s,border-color 0.18s}
+.cursor-ring.hover{width:44px;height:44px;background:rgba(127,32,32,0.12);border-color:rgba(127,32,32,0.85)}
+.cursor-ring.text{width:80px;height:30px;border-radius:14px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);display:flex;align-items:center;justify-content:center;letter-spacing:0.08em;text-transform:uppercase;background:rgba(246,243,235,0.5)}
+
+/* === HUD frames === */
+.hud{position:fixed;background:var(--hud-bg);backdrop-filter:var(--hud-blur);-webkit-backdrop-filter:var(--hud-blur);border-left:var(--cinnabar-line);padding:10px 14px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink);z-index:50;letter-spacing:0.04em;line-height:1.5}
+
+/* === top-left brand === */
+.brand{position:fixed;top:18px;left:24px;z-index:100;font-family:'Noto Serif SC',serif;font-size:14px;color:var(--ink);letter-spacing:0.08em;text-decoration:none;background:transparent}
+.brand .sep{color:var(--accent);margin:0 0.5em}
+.brand:hover{color:var(--accent)}
+
+/* === top-right links === */
+.toplinks{position:fixed;top:22px;right:24px;z-index:100;display:flex;gap:18px;font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:lowercase;letter-spacing:0.06em}
+.toplinks a{color:var(--ink-soft);text-decoration:none;padding:2px 0;border-bottom:1px solid transparent;transition:color 0.2s,border-color 0.2s}
+.toplinks a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+.toplinks a.active{color:var(--accent);border-bottom:1px solid var(--accent)}
+.toplinks .dot{color:var(--ink-soft);opacity:0.4;user-select:none}
+
+/* === bottom-left status === */
+.status{bottom:22px;left:24px;display:flex;flex-direction:column;gap:3px}
+.status .row{display:flex;justify-content:space-between;gap:18px;min-width:170px}
+.status .label{color:var(--ink-soft);opacity:0.72}
+.status .val{color:var(--ink);font-weight:500}
+
+/* === bottom-right helper === */
+.helper{bottom:22px;right:24px;display:flex;gap:10px;align-items:center}
+.helper .ic{width:28px;height:28px;border:var(--cinnabar-line);background:rgba(246,243,235,0.4);backdrop-filter:var(--hud-blur);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--accent);cursor:none;border-radius:50%;font-family:'JetBrains Mono',monospace}
+.helper .ic.breath{animation:breath 2.4s ease-in-out infinite}
+@keyframes breath{0%,100%{opacity:0.7}50%{opacity:1}}
+
+/* === 卷轴提示 (scroll hint) === */
+.scrollHint{position:fixed;bottom:90px;right:24px;z-index:60;background:rgba(246,243,235,0.62);backdrop-filter:var(--hud-blur);border-left:var(--cinnabar-line);padding:12px 16px 14px;font-family:'Noto Serif SC',serif;font-size:13px;color:var(--ink);letter-spacing:0.08em;min-width:160px;max-width:220px;line-height:1.7;opacity:0;transform:translateX(80px) scaleX(0.2);transform-origin:right center;transition:opacity 0.5s cubic-bezier(0.16,1,0.3,1),transform 0.6s cubic-bezier(0.16,1,0.3,1)}
+.scrollHint.show{opacity:1;transform:translateX(0) scaleX(1)}
+.scrollHint.shake{animation:shake 0.45s ease}
+.scrollHint .label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:4px}
+.scrollHint .title{font-size:15px;font-weight:500;margin-bottom:6px;color:var(--ink)}
+.scrollHint .sub{font-size:11px;color:var(--ink-soft);font-family:'JetBrains Mono',monospace}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* === 中央"疾驰"二字飞字 === */
+.flytext{position:fixed;top:42%;left:50%;transform:translate(-50%,-50%);font-family:'Noto Serif SC',serif;font-weight:700;font-size:96px;color:var(--accent);letter-spacing:0.2em;pointer-events:none;z-index:200;opacity:0;text-shadow:0 0 24px rgba(127,32,32,0.3)}
+.flytext.show{animation:flytext 0.9s cubic-bezier(0.16,1,0.3,1) forwards}
+@keyframes flytext{0%{opacity:0;transform:translate(-50%,-50%) scale(0.7)}30%{opacity:1;transform:translate(-50%,-50%) scale(1.05)}70%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.18)}}
+
+/* === Dialog 抽屉 === */
+.drawer{position:fixed;top:0;right:0;width:420px;max-width:90vw;height:100vh;background:rgba(246,243,235,0.94);backdrop-filter:blur(20px) saturate(1.15);border-left:2px solid var(--accent);padding:64px 36px 36px;font-family:'Noto Serif SC',serif;color:var(--ink);z-index:500;transform:translateX(110%);transition:transform 0.55s cubic-bezier(0.16,1,0.3,1);overflow-y:auto;box-shadow:-20px 0 60px rgba(42,37,32,0.18)}
+.drawer.show{transform:translateX(0)}
+.drawer .close{position:absolute;top:20px;right:20px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:18px;color:var(--accent);cursor:none;border:var(--cinnabar-line);background:transparent;border-radius:50%}
+.drawer .close:hover{background:rgba(127,32,32,0.12)}
+.drawer .label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:0.16em;text-transform:uppercase;margin-bottom:8px}
+.drawer h1{font-family:'Noto Serif SC',serif;font-size:28px;font-weight:500;margin-bottom:6px;color:var(--ink);line-height:1.3}
+.drawer h2{font-size:15px;color:var(--ink-soft);font-weight:400;margin-bottom:22px;font-family:'Inter',sans-serif;letter-spacing:0.02em}
+.drawer .meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);margin-bottom:18px;letter-spacing:0.04em}
+.drawer .divider{width:48px;height:2px;background:var(--accent);margin-bottom:22px}
+.drawer .desc{font-size:14px;color:var(--ink);line-height:1.8;margin-bottom:26px}
+.drawer .tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.drawer .tag{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 10px;border:1px solid rgba(127,32,32,0.32);color:var(--accent);letter-spacing:0.06em}
+.drawer .actions{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+.drawer .actions a{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:rgba(127,32,32,0.06);border-left:2px solid var(--accent);color:var(--ink);text-decoration:none;font-family:'Noto Serif SC',serif;font-size:13px;transition:background 0.2s}
+.drawer .actions a:hover{background:rgba(127,32,32,0.14)}
+.drawer .actions a .arrow{font-family:'JetBrains Mono',monospace;color:var(--accent)}
+.drawer.contact{padding-top:80px}
+.drawer.contact .big{font-size:22px;font-family:'JetBrains Mono',monospace;color:var(--accent);margin-bottom:18px;word-break:break-all}
+.drawer.award h1{font-size:24px}
+
+/* === intro overlay === */
+.intro{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;font-family:'Noto Serif SC',serif;transition:opacity 0.8s ease}
+.intro.hide{opacity:0;pointer-events:none}
+.intro h1{font-size:34px;font-weight:500;margin-bottom:12px;color:var(--ink);letter-spacing:0.18em}
+.intro .sub{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);letter-spacing:0.14em;margin-bottom:34px}
+.intro .start{font-family:'Noto Serif SC',serif;font-size:14px;color:var(--accent);padding:10px 28px;border:1px solid var(--accent);background:transparent;cursor:none;letter-spacing:0.12em;transition:background 0.2s}
+.intro .start:hover{background:rgba(127,32,32,0.08)}
+.intro .controls{margin-top:30px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-soft);letter-spacing:0.08em;line-height:1.9;text-align:center}
+.intro .controls .k{color:var(--accent);font-weight:500}
+
+/* === proximity prompt (in-scene small toast) === */
+.prompt{position:fixed;left:50%;bottom:18%;transform:translateX(-50%);background:rgba(246,243,235,0.55);backdrop-filter:var(--hud-blur);border-left:var(--cinnabar-line);padding:8px 14px;font-family:'Noto Serif SC',serif;font-size:13px;color:var(--ink);letter-spacing:0.1em;z-index:80;opacity:0;transition:opacity 0.35s}
+.prompt.show{opacity:1}
+.prompt .k{font-family:'JetBrains Mono',monospace;color:var(--accent);padding:1px 6px;border:1px solid rgba(127,32,32,0.3);margin-right:6px;font-size:11px}
+</style>
+</head>
+<body>
+
+<canvas id="scene"></canvas>
+
+<a class="brand" href="hello.html">滕美名<span class="sep">·</span>书院驾乘</a>
+
+<nav class="toplinks">
+  <a href="hello.html">home</a><span class="dot">·</span>
+  <a href="index.html">editorial</a><span class="dot">·</span>
+  <a href="play.html">walk</a><span class="dot">·</span>
+  <a href="drive.html" class="active">drive</a>
+</nav>
+
+<div class="hud status">
+  <div class="row"><span class="label">速度</span><span class="val" id="speedVal">0 km/h</span></div>
+  <div class="row"><span class="label">位置</span><span class="val" id="posVal">x 0  z 0</span></div>
+  <div class="row"><span class="label">模式</span><span class="val">第三人称</span></div>
+</div>
+
+<div class="helper">
+  <div class="ic breath" id="muteIc" title="解锁声音">🔇</div>
+  <div class="ic" id="helpIc" title="帮助">?</div>
+</div>
+
+<div class="scrollHint" id="hint">
+  <div class="label">驾乘指引</div>
+  <div class="title">W A S D 驾车</div>
+  <div class="sub">↑↓←→ also</div>
+</div>
+
+<div class="flytext" id="flyText">疾&nbsp;驰</div>
+
+<div class="prompt" id="prompt"><span class="k">E</span><span id="promptText">阅卷</span></div>
+
+<div class="drawer" id="drawer">
+  <button class="close" id="closeDrawer">×</button>
+  <div id="drawerBody"></div>
+</div>
+
+<div class="intro" id="intro">
+  <h1>书 · 院 · 驾 · 乘</h1>
+  <div class="sub">DRIVE THROUGH THE COURTYARD</div>
+  <button class="start" id="startBtn">入&nbsp;场</button>
+  <div class="controls">
+    <span class="k">W A S D</span> 行车 &nbsp;·&nbsp; <span class="k">SHIFT</span> 疾驰 &nbsp;·&nbsp; <span class="k">SPACE</span> 跃 &nbsp;·&nbsp; <span class="k">R</span> 复位<br/>
+    <span class="k">鼠标拖拽</span> 观四方 &nbsp;·&nbsp; <span class="k">E</span> 阅卷 &nbsp;·&nbsp; <span class="k">ESC</span> 关闭
+  </div>
+</div>
+
+<div class="cursor-ring" id="cursor"></div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/",
+    "cannon-es": "https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/dist/cannon-es.js"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import * as CANNON from 'cannon-es';
+
+// ============ DATA ============
+const D = window.SITE_DATA || { projects: [], contacts: [], awards: [], meta: {} };
+
+// ============ CONST / palette ============
+const C = {
+  bg: 0xF6F3EB,
+  ink: 0x2a2520,
+  accent: 0x7F2020,
+  cinnabar: 0xC0392B,
+  sage: 0x869B7E,
+  sageDeep: 0x5D7B5D,
+  tile: 0x3A3530,
+  slate: 0x4A6B7C,
+  gold: 0xd4a55a,
+  ivory: 0xefe6d2,
+  cream: 0xf4ead0
+};
+
+// ============ RENDERER ============
+const renderer = new THREE.WebGLRenderer({
+  canvas: document.getElementById('scene'),
+  antialias: true,
+  powerPreference: 'high-performance'
+});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.0;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+// ============ SCENE / CAMERA ============
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(C.bg);
+scene.fog = new THREE.Fog(C.bg, 35, 70);
+
+const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 200);
+camera.position.set(0, 8, 22);
+camera.lookAt(0, 0, 0);
+
+// ============ LIGHTING ============
+const hemi = new THREE.HemisphereLight(0xfff2d8, 0xb8a888, 0.55);
+scene.add(hemi);
+
+const sun = new THREE.DirectionalLight(0xffeecc, 0.9);
+sun.position.set(14, 22, 10);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+sun.shadow.camera.left = -20;
+sun.shadow.camera.right = 20;
+sun.shadow.camera.top = 20;
+sun.shadow.camera.bottom = -20;
+sun.shadow.camera.near = 1;
+sun.shadow.camera.far = 60;
+sun.shadow.bias = -0.0008;
+scene.add(sun);
+
+const fillLight = new THREE.DirectionalLight(0xc9b89a, 0.25);
+fillLight.position.set(-10, 12, -8);
+scene.add(fillLight);
+
+// ============ PHYSICS (cannon-es) ============
+const world = new CANNON.World({ gravity: new CANNON.Vec3(0, -13, 0) });
+world.broadphase = new CANNON.SAPBroadphase(world);
+world.allowSleep = false;
+world.defaultContactMaterial.friction = 0.4;
+
+// ground material
+const groundMat = new CANNON.Material('ground');
+const wheelMat = new CANNON.Material('wheel');
+const wheelGround = new CANNON.ContactMaterial(wheelMat, groundMat, {
+  friction: 0.7,
+  restitution: 0.05,
+  contactEquationStiffness: 1e8
+});
+world.addContactMaterial(wheelGround);
+
+// ============ TEXTURE HELPERS ============
+function wrapText(ctx, text, maxW) {
+  const words = String(text || '').split(/\s+/);
+  const lines = [];
+  let cur = '';
+  for (const word of words) {
+    if (ctx.measureText(word).width > maxW) {
+      if (cur) { lines.push(cur); cur = ''; }
+      for (const ch of word) {
+        const test = cur + ch;
+        if (ctx.measureText(test).width > maxW && cur.length > 0) {
+          lines.push(cur);
+          cur = ch;
+        } else {
+          cur = test;
+        }
+      }
+      continue;
+    }
+    const test = cur ? cur + ' ' + word : word;
+    if (ctx.measureText(test).width > maxW && cur.length > 0) {
+      lines.push(cur);
+      cur = word;
+    } else {
+      cur = test;
+    }
+  }
+  if (cur) lines.push(cur);
+  return lines;
+}
+
+function makeGroundTex() {
+  const s = 1024;
+  const c = document.createElement('canvas');
+  c.width = c.height = s;
+  const ctx = c.getContext('2d');
+  ctx.fillStyle = '#e8dec5';
+  ctx.fillRect(0, 0, s, s);
+  // 石板纹
+  const tile = 128;
+  for (let x = 0; x < s; x += tile) {
+    for (let y = 0; y < s; y += tile) {
+      const v = 220 + Math.random() * 20;
+      ctx.fillStyle = `rgb(${v|0},${(v-8)|0},${(v-28)|0})`;
+      ctx.fillRect(x + 2, y + 2, tile - 4, tile - 4);
+    }
+  }
+  // 老化斑点
+  for (let i = 0; i < 1800; i++) {
+    ctx.fillStyle = `rgba(${100+Math.random()*40},${85+Math.random()*30},${60+Math.random()*30},${Math.random()*0.18})`;
+    ctx.fillRect(Math.random()*s, Math.random()*s, Math.random()*4+1, Math.random()*4+1);
+  }
+  // 接缝
+  ctx.strokeStyle = 'rgba(80,70,55,0.4)';
+  ctx.lineWidth = 1;
+  for (let x = 0; x <= s; x += tile) {
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, s); ctx.stroke();
+  }
+  for (let y = 0; y <= s; y += tile) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(s, y); ctx.stroke();
+  }
+  const t = new THREE.CanvasTexture(c);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.repeat.set(6, 6);
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+
+function makeWallTex() {
+  const s = 256;
+  const c = document.createElement('canvas');
+  c.width = c.height = s;
+  const ctx = c.getContext('2d');
+  ctx.fillStyle = '#efe6d2';
+  ctx.fillRect(0, 0, s, s);
+  for (let i = 0; i < 2000; i++) {
+    ctx.fillStyle = `rgba(${110+Math.random()*30},${100+Math.random()*30},${80+Math.random()*30},${Math.random()*0.12})`;
+    ctx.fillRect(Math.random()*s, Math.random()*s, 1, 1);
+  }
+  for (let i = 0; i < 4; i++) {
+    const g = ctx.createRadialGradient(Math.random()*s, Math.random()*s, 5, Math.random()*s, Math.random()*s, 40);
+    g.addColorStop(0, 'rgba(120,100,80,0.15)');
+    g.addColorStop(1, 'rgba(120,100,80,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, s, s);
+  }
+  const t = new THREE.CanvasTexture(c);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  return t;
+}
+
+function makeScrollTex(title, sub, year) {
+  const w = 512, h = 1024;
+  const c = document.createElement('canvas');
+  c.width = w; c.height = h;
+  const ctx = c.getContext('2d');
+  // 米黄底
+  ctx.fillStyle = '#f4ead0';
+  ctx.fillRect(0, 0, w, h);
+  // 斑驳
+  for (let i = 0; i < 1400; i++) {
+    ctx.fillStyle = `rgba(${130+Math.random()*40},${110+Math.random()*30},${80+Math.random()*30},${Math.random()*0.18})`;
+    ctx.fillRect(Math.random()*w, Math.random()*h, Math.random()*2+1, Math.random()*2+1);
+  }
+  // 边框
+  ctx.strokeStyle = '#7F2020';
+  ctx.lineWidth = 4;
+  ctx.strokeRect(28, 28, w-56, h-56);
+  ctx.lineWidth = 1;
+  ctx.strokeRect(40, 40, w-80, h-80);
+  // 顶部印章
+  ctx.fillStyle = '#7F2020';
+  ctx.fillRect(w/2 - 22, 60, 44, 44);
+  ctx.fillStyle = '#f4ead0';
+  ctx.font = 'bold 28px "Noto Serif SC",serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('滕', w/2, 84);
+  // 标题
+  ctx.fillStyle = '#7F2020';
+  ctx.font = 'bold 50px "Noto Serif SC","Songti SC",serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'alphabetic';
+  const lines = wrapText(ctx, title, w - 100);
+  let y = 200;
+  lines.forEach(line => { ctx.fillText(line, w/2, y); y += 62; });
+  // 分隔
+  ctx.fillStyle = '#7F2020';
+  ctx.fillRect(w/2 - 50, y + 20, 100, 3);
+  // 副标题
+  y += 80;
+  ctx.fillStyle = '#2a2520';
+  ctx.font = '28px "Noto Serif SC","Songti SC",serif';
+  const tlines = wrapText(ctx, sub, w - 100);
+  tlines.forEach(line => { ctx.fillText(line, w/2, y); y += 40; });
+  // 年份
+  y += 30;
+  ctx.fillStyle = '#6b6358';
+  ctx.font = '20px "JetBrains Mono",monospace';
+  ctx.fillText(year || '', w/2, y);
+  // 底部提示
+  ctx.fillStyle = '#7F2020';
+  ctx.font = 'italic 22px "Noto Serif SC",serif';
+  ctx.fillText('—— 按 E 阅卷 ——', w/2, h - 80);
+
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+
+function makeContactDecal(label, sub) {
+  const w = 512, h = 512;
+  const c = document.createElement('canvas');
+  c.width = w; c.height = h;
+  const ctx = c.getContext('2d');
+  // 透明背景
+  ctx.fillStyle = 'rgba(246,243,235,0.85)';
+  ctx.fillRect(0, 0, w, h);
+  // 朱砂框
+  ctx.strokeStyle = '#7F2020';
+  ctx.lineWidth = 6;
+  ctx.strokeRect(30, 30, w-60, h-60);
+  ctx.lineWidth = 2;
+  ctx.strokeRect(50, 50, w-100, h-100);
+  // 主文字
+  ctx.fillStyle = '#7F2020';
+  ctx.font = 'bold 220px "Noto Serif SC",serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(label, w/2, h/2);
+  // 副文字
+  ctx.fillStyle = '#2a2520';
+  ctx.font = '36px "JetBrains Mono",monospace';
+  ctx.fillText(sub, w/2, h - 90);
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+
+function makeAwardTex(title) {
+  const w = 256, h = 512;
+  const c = document.createElement('canvas');
+  c.width = w; c.height = h;
+  const ctx = c.getContext('2d');
+  ctx.fillStyle = '#7F2020';
+  ctx.fillRect(0, 0, w, h);
+  ctx.strokeStyle = '#d4a55a';
+  ctx.lineWidth = 4;
+  ctx.strokeRect(8, 8, w-16, h-16);
+  ctx.lineWidth = 1;
+  ctx.strokeRect(18, 18, w-36, h-36);
+  ctx.fillStyle = '#f4ead0';
+  ctx.font = 'bold 32px "Noto Serif SC",serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  const lines = wrapText(ctx, title, w - 50);
+  let y = h/2 - (lines.length * 20);
+  lines.forEach(l => { ctx.fillText(l, w/2, y); y += 42; });
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+
+function makeBigChar(char) {
+  const s = 256;
+  const c = document.createElement('canvas');
+  c.width = c.height = s;
+  const ctx = c.getContext('2d');
+  // 木质底
+  ctx.fillStyle = '#3a2a20';
+  ctx.fillRect(0, 0, s, s);
+  // 木纹
+  for (let i = 0; i < 30; i++) {
+    ctx.fillStyle = `rgba(${60+Math.random()*30},${40+Math.random()*20},${25+Math.random()*15},${0.3+Math.random()*0.3})`;
+    ctx.fillRect(0, Math.random()*s, s, 1);
+  }
+  // 朱砂边
+  ctx.strokeStyle = '#7F2020';
+  ctx.lineWidth = 6;
+  ctx.strokeRect(8, 8, s-16, s-16);
+  // 大字
+  ctx.fillStyle = '#f4ead0';
+  ctx.font = 'bold 180px "Noto Serif SC","Songti SC",serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(char, s/2, s/2 + 4);
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+
+// ============ GROUND ============
+const groundTex = makeGroundTex();
+const groundGeo = new THREE.PlaneGeometry(60, 60);
+const groundMatGl = new THREE.MeshStandardMaterial({ map: groundTex, roughness: 0.92, metalness: 0 });
+const ground = new THREE.Mesh(groundGeo, groundMatGl);
+ground.rotation.x = -Math.PI / 2;
+ground.receiveShadow = true;
+scene.add(ground);
+
+// physics ground
+const groundBody = new CANNON.Body({ mass: 0, material: groundMat });
+groundBody.addShape(new CANNON.Plane());
+groundBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2);
+world.addBody(groundBody);
+
+// ============ 围墙 (5) wall === 30x30 inner ============
+const wallTex = makeWallTex();
+const wallMat = new THREE.MeshStandardMaterial({ map: wallTex, color: 0xefe6d2, roughness: 0.95 });
+const tileMat = new THREE.MeshStandardMaterial({ color: C.tile, roughness: 0.7 });
+
+function addWallSegment(cx, cz, w, d, h, gateW = 0) {
+  // h = wall height; gateW > 0 means leave a gate in the center
+  const wallParts = [];
+  if (gateW > 0) {
+    const sideW = (w - gateW) / 2;
+    if (sideW > 0.1) {
+      wallParts.push([cx - (gateW/2 + sideW/2), cz, sideW, d, h]);
+      wallParts.push([cx + (gateW/2 + sideW/2), cz, sideW, d, h]);
+    }
+    // 月洞门顶部横梁
+    const lintelH = 1.2;
+    wallParts.push([cx, cz, gateW, d, lintelH, h - lintelH]); // raised lintel
+  } else {
+    wallParts.push([cx, cz, w, d, h]);
+  }
+  for (const part of wallParts) {
+    const [x, z, pw, pd, ph, py] = part;
+    const yOff = py !== undefined ? py : 0;
+    const mesh = new THREE.Mesh(new THREE.BoxGeometry(pw, ph, pd), wallMat);
+    mesh.position.set(x, ph/2 + yOff, z);
+    mesh.castShadow = true; mesh.receiveShadow = true;
+    scene.add(mesh);
+    // 屋顶（黛瓦）
+    const tileTop = new THREE.Mesh(new THREE.BoxGeometry(pw + 0.2, 0.15, pd + 0.2), tileMat);
+    tileTop.position.set(x, ph + yOff + 0.075, z);
+    tileTop.castShadow = true;
+    scene.add(tileTop);
+    // 物理刚体
+    const body = new CANNON.Body({ mass: 0, material: groundMat });
+    body.addShape(new CANNON.Box(new CANNON.Vec3(pw/2, ph/2, pd/2)));
+    body.position.set(x, ph/2 + yOff, z);
+    world.addBody(body);
+  }
+}
+
+// 4 围墙：south x = -15 to 15 with gate, east, west, north with moon gate
+addWallSegment(0, 15, 30, 0.6, 3.2, 5);   // south wall with main gate
+addWallSegment(0, -15, 30, 0.6, 3.2, 4);  // north wall with moon-gate opening
+addWallSegment(-15, 0, 0.6, 30, 3.2);     // west wall
+addWallSegment(15, 0, 0.6, 30, 3.2);      // east wall
+
+// ============ (1) 牌楼 PAILOU at south ============
+function buildPailou() {
+  const g = new THREE.Group();
+  // 4 columns
+  const colPositions = [-3.2, -1.2, 1.2, 3.2];
+  for (const x of colPositions) {
+    const col = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.26, 4.4, 16), new THREE.MeshStandardMaterial({ color: C.accent, roughness: 0.6 }));
+    col.position.set(x, 2.2, 0);
+    col.castShadow = true;
+    g.add(col);
+    // base stone
+    const base = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.4, 0.7), new THREE.MeshStandardMaterial({ color: 0x8d7a60, roughness: 0.9 }));
+    base.position.set(x, 0.2, 0);
+    g.add(base);
+    // physics
+    const body = new CANNON.Body({ mass: 0, material: groundMat });
+    body.addShape(new CANNON.Cylinder(0.28, 0.28, 4.4, 12));
+    body.position.set(x, 2.2, 0);
+    world.addBody(body);
+  }
+  // 横梁
+  const beam1 = new THREE.Mesh(new THREE.BoxGeometry(7.5, 0.35, 0.45), new THREE.MeshStandardMaterial({ color: C.accent, roughness: 0.6 }));
+  beam1.position.set(0, 3.4, 0); beam1.castShadow = true; g.add(beam1);
+  const beam2 = new THREE.Mesh(new THREE.BoxGeometry(7.5, 0.3, 0.4), new THREE.MeshStandardMaterial({ color: C.accent, roughness: 0.6 }));
+  beam2.position.set(0, 4.2, 0); beam2.castShadow = true; g.add(beam2);
+  // 双层飞檐 cones
+  const roofMat = new THREE.MeshStandardMaterial({ color: C.tile, roughness: 0.6 });
+  const roof1 = new THREE.Mesh(new THREE.ConeGeometry(4.2, 0.9, 4), roofMat);
+  roof1.position.set(0, 3.85, 0);
+  roof1.rotation.y = Math.PI / 4;
+  roof1.castShadow = true; g.add(roof1);
+  const roof2 = new THREE.Mesh(new THREE.ConeGeometry(3.4, 0.8, 4), roofMat);
+  roof2.position.set(0, 4.7, 0);
+  roof2.rotation.y = Math.PI / 4;
+  roof2.castShadow = true; g.add(roof2);
+  // 匾额
+  const plaque = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.7, 0.12), new THREE.MeshStandardMaterial({ map: makeBigChar('院'), roughness: 0.6 }));
+  plaque.position.set(0, 3.4, 0.3);
+  g.add(plaque);
+  g.position.set(0, 0, 14);
+  scene.add(g);
+}
+buildPailou();
+
+// ============ (2) 讲堂 CENTRAL HALL ============
+function buildHall() {
+  const g = new THREE.Group();
+  // body
+  const body = new THREE.Mesh(new THREE.BoxGeometry(6, 3.2, 4.5), new THREE.MeshStandardMaterial({ map: wallTex, color: 0xefe6d2, roughness: 0.9 }));
+  body.position.set(0, 1.6, 0); body.castShadow = true; body.receiveShadow = true;
+  g.add(body);
+  // roof
+  const roof = new THREE.Mesh(new THREE.ConeGeometry(5, 1.8, 4), new THREE.MeshStandardMaterial({ color: C.tile, roughness: 0.6 }));
+  roof.position.set(0, 4.0, 0);
+  roof.rotation.y = Math.PI / 4;
+  roof.castShadow = true;
+  g.add(roof);
+  // 朱门
+  const door = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 2.4), new THREE.MeshStandardMaterial({ color: C.accent, roughness: 0.5, side: THREE.DoubleSide }));
+  door.position.set(0, 1.2, 2.26); g.add(door);
+  // 牌匾
+  const plaque = new THREE.Mesh(new THREE.PlaneGeometry(2.2, 0.6), new THREE.MeshStandardMaterial({ map: makeAwardTex('明伦堂'), roughness: 0.6 }));
+  plaque.position.set(0, 2.8, 2.27); g.add(plaque);
+  g.position.set(0, 0, -10);
+  scene.add(g);
+  // physics
+  const cbody = new CANNON.Body({ mass: 0, material: groundMat });
+  cbody.addShape(new CANNON.Box(new CANNON.Vec3(3, 1.6, 2.25)));
+  cbody.position.set(0, 1.6, -10);
+  world.addBody(cbody);
+}
+buildHall();
+
+// ============ (3) 藏书楼 LIBRARY (远景) ============
+function buildLibrary() {
+  const g = new THREE.Group();
+  const colors = [0xefe6d2, 0xefe6d2, 0xefe6d2];
+  const widths = [4.5, 3.8, 3.0];
+  const heights = [2.4, 2.0, 1.6];
+  let y = 0;
+  for (let i = 0; i < 3; i++) {
+    const floor = new THREE.Mesh(new THREE.BoxGeometry(widths[i], heights[i], widths[i] * 0.7), new THREE.MeshStandardMaterial({ color: colors[i], map: wallTex, roughness: 0.9 }));
+    floor.position.set(0, y + heights[i]/2, 0); floor.castShadow = true; floor.receiveShadow = true;
+    g.add(floor);
+    const eave = new THREE.Mesh(new THREE.ConeGeometry(widths[i] * 0.85, 0.6, 4), new THREE.MeshStandardMaterial({ color: C.tile, roughness: 0.6 }));
+    eave.position.set(0, y + heights[i] + 0.3, 0); eave.rotation.y = Math.PI / 4;
+    g.add(eave);
+    // 红窗
+    for (let s of [-1, 1]) {
+      const win = new THREE.Mesh(new THREE.PlaneGeometry(0.4, 0.5), new THREE.MeshStandardMaterial({ color: C.cinnabar }));
+      win.position.set(s * widths[i] * 0.3, y + heights[i] * 0.55, widths[i] * 0.35 + 0.01);
+      g.add(win);
+    }
+    y += heights[i] + 0.4;
+  }
+  g.position.set(-11, 0, -13);
+  scene.add(g);
+  const cbody = new CANNON.Body({ mass: 0, material: groundMat });
+  cbody.addShape(new CANNON.Box(new CANNON.Vec3(2.3, 4, 1.6)));
+  cbody.position.set(-11, 4, -13);
+  world.addBody(cbody);
+}
+buildLibrary();
+
+// ============ (4) 月洞门 MOON-GATE on north wall ============
+function buildMoonGate() {
+  // already left an opening; draw torus arch
+  const torus = new THREE.Mesh(new THREE.TorusGeometry(2.2, 0.18, 16, 32, Math.PI), new THREE.MeshStandardMaterial({ color: 0xefe6d2, roughness: 0.9 }));
+  torus.position.set(0, 2.0, -15);
+  torus.rotation.x = Math.PI / 2;
+  torus.rotation.z = Math.PI / 2;
+  scene.add(torus);
+  // 边框 inner
+  const innerRing = new THREE.Mesh(new THREE.TorusGeometry(2.0, 0.05, 8, 32, Math.PI), new THREE.MeshStandardMaterial({ color: C.tile, roughness: 0.6 }));
+  innerRing.position.set(0, 2.0, -14.97);
+  innerRing.rotation.x = Math.PI / 2;
+  innerRing.rotation.z = Math.PI / 2;
+  scene.add(innerRing);
+}
+buildMoonGate();
+
+// ============ (6)(7)(8) 植物：竹/松/梅 ============
+function makeBamboo(x, z, count = 6) {
+  const g = new THREE.Group();
+  for (let i = 0; i < count; i++) {
+    const ox = (Math.random() - 0.5) * 1.2;
+    const oz = (Math.random() - 0.5) * 1.2;
+    const h = 3 + Math.random() * 1.5;
+    const stalk = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.06, h, 8), new THREE.MeshStandardMaterial({ color: C.sage, roughness: 0.7 }));
+    stalk.position.set(ox, h/2, oz); stalk.castShadow = true;
+    g.add(stalk);
+    // 叶
+    for (let j = 0; j < 5; j++) {
+      const leaf = new THREE.Mesh(new THREE.PlaneGeometry(0.45, 0.08), new THREE.MeshStandardMaterial({ color: C.sageDeep, side: THREE.DoubleSide, roughness: 0.8 }));
+      leaf.position.set(ox + (Math.random()-0.5)*0.3, h*0.55 + j*0.4, oz + (Math.random()-0.5)*0.3);
+      leaf.rotation.y = Math.random() * Math.PI;
+      leaf.rotation.z = (Math.random()-0.5) * 0.6;
+      g.add(leaf);
+    }
+  }
+  g.position.set(x, 0, z);
+  scene.add(g);
+}
+
+function makePine(x, z) {
+  const g = new THREE.Group();
+  const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.22, 2.2, 10), new THREE.MeshStandardMaterial({ color: 0x2a2520, roughness: 0.85 }));
+  trunk.position.set(0, 1.1, 0); trunk.castShadow = true; g.add(trunk);
+  const needleMat = new THREE.MeshStandardMaterial({ color: C.sageDeep, roughness: 0.7 });
+  for (let i = 0; i < 3; i++) {
+    const r = 1.1 - i * 0.25;
+    const h = 0.9;
+    const cone = new THREE.Mesh(new THREE.ConeGeometry(r, h, 8), needleMat);
+    cone.position.set(0, 1.6 + i * 0.65, 0); cone.castShadow = true;
+    g.add(cone);
+  }
+  g.position.set(x, 0, z); scene.add(g);
+}
+
+function makePlum(x, z) {
+  const g = new THREE.Group();
+  // 弯干 (4 节)
+  let prev = new THREE.Vector3(0, 0, 0);
+  const trunkMat = new THREE.MeshStandardMaterial({ color: 0x2a2520, roughness: 0.85 });
+  for (let i = 0; i < 4; i++) {
+    const next = new THREE.Vector3(prev.x + (Math.random()-0.5)*0.3, prev.y + 0.5, prev.z + (Math.random()-0.5)*0.3);
+    const mid = new THREE.Vector3().addVectors(prev, next).multiplyScalar(0.5);
+    const len = prev.distanceTo(next);
+    const cyl = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.1, len, 8), trunkMat);
+    cyl.position.copy(mid);
+    const dir = next.clone().sub(prev).normalize();
+    cyl.lookAt(next);
+    cyl.rotateX(Math.PI / 2);
+    g.add(cyl);
+    prev = next;
+  }
+  // 花簇 (红)
+  const flowerMat = new THREE.MeshStandardMaterial({ color: C.cinnabar, emissive: 0x441010, roughness: 0.6 });
+  for (let i = 0; i < 12; i++) {
+    const flower = new THREE.Mesh(new THREE.SphereGeometry(0.09, 8, 6), flowerMat);
+    flower.position.set((Math.random()-0.5)*1.2, 1.4 + Math.random()*0.8, (Math.random()-0.5)*1.2);
+    g.add(flower);
+  }
+  g.position.set(x, 0, z); scene.add(g);
+}
+
+makeBamboo(-12, 8, 8);
+makeBamboo(12, 8, 8);
+makeBamboo(13, -5, 6);
+makePine(-13, -3);
+makePine(-13, -8);
+makePine(13, -8);
+makePlum(-11, 0);
+makePlum(11, 0);
+
+// ============ (9) 荷塘 LOTUS POND ============
+function buildPond() {
+  const g = new THREE.Group();
+  const water = new THREE.Mesh(
+    new THREE.CircleGeometry(2.6, 32),
+    new THREE.MeshStandardMaterial({ color: C.slate, roughness: 0.3, metalness: 0.1, transparent: true, opacity: 0.85 })
+  );
+  water.rotation.x = -Math.PI / 2;
+  water.position.set(0, 0.02, 6);
+  g.add(water);
+  // 荷叶
+  for (let i = 0; i < 5; i++) {
+    const ang = (i / 5) * Math.PI * 2;
+    const r = 1.5 + Math.random() * 0.7;
+    const leaf = new THREE.Mesh(new THREE.CircleGeometry(0.4, 12), new THREE.MeshStandardMaterial({ color: C.sageDeep, side: THREE.DoubleSide, roughness: 0.8 }));
+    leaf.rotation.x = -Math.PI / 2;
+    leaf.position.set(Math.cos(ang) * r, 0.04, 6 + Math.sin(ang) * r);
+    g.add(leaf);
+  }
+  // 锦鲤
+  const koi = new THREE.Mesh(new THREE.SphereGeometry(0.15, 8, 6), new THREE.MeshStandardMaterial({ color: C.cinnabar, emissive: 0x661616, roughness: 0.4 }));
+  koi.scale.set(1.5, 0.4, 0.6);
+  koi.position.set(0, 0.05, 6);
+  g.add(koi);
+  g.userData.koi = koi;
+  scene.add(g);
+  pondGroup = g;
+}
+let pondGroup;
+buildPond();
+
+// ============ (13) "格物致知" 立体字 (核心 wow point) ============
+const wordChars = ['格', '物', '致', '知'];
+const stereoChars = [];
+function buildStereoWord() {
+  const startX = -4.5;
+  for (let i = 0; i < 4; i++) {
+    const tex = makeBigChar(wordChars[i]);
+    const mat = new THREE.MeshStandardMaterial({ map: tex, roughness: 0.5, metalness: 0.05 });
+    const mesh = new THREE.Mesh(new THREE.BoxGeometry(1.2, 1.2, 0.4), mat);
+    mesh.position.set(startX + i * 2.6, 0.6, 6);
+    mesh.castShadow = true;
+    scene.add(mesh);
+    // 物理
+    const body = new CANNON.Body({ mass: 1.5, material: groundMat });
+    body.addShape(new CANNON.Box(new CANNON.Vec3(0.6, 0.6, 0.2)));
+    body.position.set(startX + i * 2.6, 0.6, 6);
+    body.linearDamping = 0.35;
+    body.angularDamping = 0.45;
+    world.addBody(body);
+    stereoChars.push({ mesh, body });
+  }
+}
+buildStereoWord();
+
+// ============ (10) 战鼓 DRUM ============
+let drumMesh;
+function buildDrum() {
+  const g = new THREE.Group();
+  const body = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.7, 0.7, 1.0, 24),
+    new THREE.MeshStandardMaterial({ color: C.accent, roughness: 0.5 })
+  );
+  body.position.y = 0.5;
+  body.castShadow = true;
+  g.add(body);
+  // 鼓面
+  const top = new THREE.Mesh(new THREE.CircleGeometry(0.7, 24), new THREE.MeshStandardMaterial({ color: C.cream, roughness: 0.6 }));
+  top.rotation.x = -Math.PI / 2;
+  top.position.y = 1.001;
+  g.add(top);
+  // 金钉
+  for (let i = 0; i < 8; i++) {
+    const ang = (i / 8) * Math.PI * 2;
+    const nail = new THREE.Mesh(new THREE.SphereGeometry(0.04, 6, 6), new THREE.MeshStandardMaterial({ color: C.gold, metalness: 0.6, roughness: 0.4 }));
+    nail.position.set(Math.cos(ang) * 0.72, 0.5, Math.sin(ang) * 0.72);
+    g.add(nail);
+  }
+  g.position.set(-6, 0, 10);
+  scene.add(g);
+  drumMesh = body;
+
+  const cbody = new CANNON.Body({ mass: 8, material: groundMat });
+  cbody.addShape(new CANNON.Cylinder(0.7, 0.7, 1.0, 12));
+  cbody.position.set(-6, 0.5, 10);
+  cbody.linearDamping = 0.7;
+  cbody.angularDamping = 0.7;
+  world.addBody(cbody);
+  drumBody = cbody;
+}
+let drumBody;
+buildDrum();
+
+// ============ (11) 铜铃阵 BELLS ============
+const bells = [];
+function buildBells() {
+  const baseX = 6, baseZ = 10;
+  // 横梁
+  const beam = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.12, 0.12), new THREE.MeshStandardMaterial({ color: 0x6d4a26, roughness: 0.7 }));
+  beam.position.set(baseX, 2.2, baseZ); beam.castShadow = true;
+  scene.add(beam);
+  // 两根柱
+  for (let s of [-1, 1]) {
+    const post = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 2.2, 10), new THREE.MeshStandardMaterial({ color: 0x6d4a26, roughness: 0.7 }));
+    post.position.set(baseX + s * 1.2, 1.1, baseZ); post.castShadow = true;
+    scene.add(post);
+  }
+  // 5 个铃铛
+  for (let i = 0; i < 5; i++) {
+    const offsetX = (i - 2) * 0.45;
+    const cone = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.18, 0.3, 12), new THREE.MeshStandardMaterial({ color: C.gold, metalness: 0.7, roughness: 0.35 }));
+    cone.position.set(baseX + offsetX, 1.7, baseZ); cone.castShadow = true;
+    scene.add(cone);
+    bells.push({ mesh: cone, baseY: 1.7, baseX: baseX + offsetX, baseZ, phase: i * 0.6, swing: 0 });
+  }
+  // 物理：用一个静态触发盒
+  const trigger = new CANNON.Body({ mass: 0, material: groundMat, isTrigger: true });
+  trigger.addShape(new CANNON.Box(new CANNON.Vec3(1.3, 0.6, 0.5)));
+  trigger.position.set(baseX, 1.7, baseZ);
+  world.addBody(trigger);
+  bellTrigger = trigger;
+}
+let bellTrigger;
+buildBells();
+
+// ============ (12) 铜钱堆 COINS ============
+const coins = [];
+function buildCoins() {
+  const baseX = 0, baseZ = 11;
+  const coinMat = new THREE.MeshStandardMaterial({ color: C.gold, metalness: 0.7, roughness: 0.35 });
+  for (let i = 0; i < 20; i++) {
+    const ox = baseX + (Math.random() - 0.5) * 0.5;
+    const oz = baseZ + (Math.random() - 0.5) * 0.5;
+    const oy = 0.04 + i * 0.05;
+    const mesh = new THREE.Mesh(new THREE.TorusGeometry(0.22, 0.06, 8, 18), coinMat);
+    mesh.position.set(ox, oy, oz);
+    mesh.rotation.x = Math.PI / 2;
+    mesh.rotation.z = Math.random() * 0.3;
+    mesh.castShadow = true;
+    scene.add(mesh);
+
+    const body = new CANNON.Body({ mass: 0.5, material: groundMat });
+    body.addShape(new CANNON.Cylinder(0.22, 0.22, 0.06, 12));
+    body.position.set(ox, oy, oz);
+    body.linearDamping = 0.4; body.angularDamping = 0.4;
+    world.addBody(body);
+    coins.push({ mesh, body });
+  }
+}
+buildCoins();
+
+// ============ (14) 灯笼阵 LANTERNS along main path ============
+const lanterns = [];
+function buildLanterns() {
+  // 8 lanterns from south (z=12) to north (z=-10), pairs on both sides x = ±2.4
+  const positions = [];
+  for (let i = 0; i < 4; i++) {
+    const z = 12 - i * 6;
+    positions.push([-2.4, z], [2.4, z]);
+  }
+  for (let i = 0; i < positions.length; i++) {
+    const [x, z] = positions[i];
+    const g = new THREE.Group();
+    // 杆
+    const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.06, 1.8, 8), new THREE.MeshStandardMaterial({ color: 0x4a3424, roughness: 0.8 }));
+    pole.position.y = 0.9;
+    g.add(pole);
+    // 灯笼体
+    const body = new THREE.Mesh(new THREE.SphereGeometry(0.32, 16, 12), new THREE.MeshStandardMaterial({ color: C.accent, emissive: 0x441010, emissiveIntensity: 0.6, roughness: 0.5 }));
+    body.scale.y = 1.2;
+    body.position.y = 2.1; body.castShadow = true;
+    g.add(body);
+    // 顶帽
+    const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.22, 0.08, 8), new THREE.MeshStandardMaterial({ color: C.tile, roughness: 0.7 }));
+    cap.position.y = 2.5; g.add(cap);
+    // 流苏
+    const tassel = new THREE.Mesh(new THREE.ConeGeometry(0.05, 0.18, 8), new THREE.MeshStandardMaterial({ color: C.gold, metalness: 0.6, roughness: 0.4 }));
+    tassel.position.y = 1.78; g.add(tassel);
+    // 光源
+    const pl = new THREE.PointLight(0xffaa55, 0, 8);
+    pl.position.y = 2.1;
+    g.add(pl);
+
+    g.position.set(x, 0, z);
+    scene.add(g);
+    lanterns.push({ group: g, light: pl, body, on: false, idx: i });
+
+    // 物理柱（不可推倒）
+    const cbody = new CANNON.Body({ mass: 0, material: groundMat });
+    cbody.addShape(new CANNON.Cylinder(0.07, 0.07, 1.8, 8));
+    cbody.position.set(x, 0.9, z);
+    world.addBody(cbody);
+  }
+}
+buildLanterns();
+
+// ============ 项目竹简卷轴 PROJECT SCROLLS (5) ============
+const scrollPositions = [
+  [0, 0, 4],
+  [8, 0, -2],
+  [-8, 0, -2],
+  [8, 0, -8],
+  [-8, 0, -8]
+];
+const scrolls = [];
+function buildScrolls() {
+  const list = (D.projects || []).slice(0, 5);
+  for (let i = 0; i < list.length; i++) {
+    const p = list[i];
+    const [x, y, z] = scrollPositions[i] || [0, 0, 0];
+    const g = new THREE.Group();
+    // 卷轴上下两根金属轴
+    const axleMat = new THREE.MeshStandardMaterial({ color: C.gold, metalness: 0.7, roughness: 0.35 });
+    const topAxle = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 1.4, 16), axleMat);
+    topAxle.rotation.z = Math.PI / 2;
+    topAxle.position.y = 2.2;
+    topAxle.castShadow = true;
+    g.add(topAxle);
+    const botAxle = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 1.4, 16), axleMat);
+    botAxle.rotation.z = Math.PI / 2;
+    botAxle.position.y = 0.4;
+    botAxle.castShadow = true;
+    g.add(botAxle);
+    // 卷轴纸
+    const tex = makeScrollTex(p.name_cn || p.name_en, p.tagline || p.description_short?.slice(0, 24) || '', p.year || '');
+    const paper = new THREE.Mesh(
+      new THREE.PlaneGeometry(1.25, 1.7),
+      new THREE.MeshStandardMaterial({ map: tex, side: THREE.DoubleSide, roughness: 0.85 })
+    );
+    paper.position.y = 1.3;
+    paper.castShadow = true;
+    g.add(paper);
+    // 朱砂底座
+    const base = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.55, 0.35, 12), new THREE.MeshStandardMaterial({ color: C.accent, roughness: 0.6 }));
+    base.position.y = 0.175; g.add(base);
+
+    g.position.set(x, y, z);
+    g.userData.project = p;
+    scene.add(g);
+    scrolls.push({ group: g, project: p, x, z });
+
+    // 物理底座（不可撞倒）
+    const cbody = new CANNON.Body({ mass: 0, material: groundMat });
+    cbody.addShape(new CANNON.Box(new CANNON.Vec3(0.7, 0.18, 0.3)));
+    cbody.position.set(x, 0.18, z);
+    world.addBody(cbody);
+  }
+}
+buildScrolls();
+
+// ============ 联系 FLOOR DECALS (4) ============
+const contactDecals = [];
+function buildContactDecals() {
+  const list = (D.contacts || []).slice(0, 4);
+  const positions = [[-4, 0.04, 11], [-1.5, 0.04, 11], [1.5, 0.04, 11], [4, 0.04, 11]];
+  const labels = [
+    { ch: 'G', sub: 'GITHUB' },
+    { ch: 'E', sub: 'EMAIL' },
+    { ch: 'P', sub: 'PHONE' },
+    { ch: '位', sub: 'PIN' }
+  ];
+  for (let i = 0; i < list.length; i++) {
+    const c = list[i];
+    const lbl = labels[i] || { ch: '?', sub: '' };
+    const tex = makeContactDecal(lbl.ch, lbl.sub);
+    const decal = new THREE.Mesh(
+      new THREE.PlaneGeometry(1.6, 1.6),
+      new THREE.MeshStandardMaterial({ map: tex, transparent: true, roughness: 0.9 })
+    );
+    decal.rotation.x = -Math.PI / 2;
+    decal.position.set(...positions[i]);
+    scene.add(decal);
+    // 凸起小立柱
+    const stub = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.1, 0.8), new THREE.MeshStandardMaterial({ color: C.accent, roughness: 0.6 }));
+    stub.position.set(positions[i][0], 0.05, positions[i][2]);
+    scene.add(stub);
+    contactDecals.push({ mesh: decal, contact: c, x: positions[i][0], z: positions[i][2] });
+  }
+}
+buildContactDecals();
+
+// ============ 荣誉 TROPHIES (3) ============
+const trophies = [];
+function buildTrophies() {
+  const list = (D.awards || []).slice(0, 3);
+  const positions = [[-6, 0, -13.5], [0, 0, -13.5], [6, 0, -13.5]];
+  for (let i = 0; i < list.length; i++) {
+    const a = list[i];
+    const [x, , z] = positions[i];
+    const g = new THREE.Group();
+    // 底座
+    const base = new THREE.Mesh(new THREE.BoxGeometry(1.0, 0.4, 1.0), new THREE.MeshStandardMaterial({ color: 0x6d5640, roughness: 0.7 }));
+    base.position.y = 0.2; base.castShadow = true; g.add(base);
+    // 上层
+    const mid = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.45, 0.3, 16), new THREE.MeshStandardMaterial({ color: C.gold, metalness: 0.6, roughness: 0.35 }));
+    mid.position.y = 0.55; g.add(mid);
+    // 主体：金杯
+    const cup = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.32, 1.0, 18), new THREE.MeshStandardMaterial({ color: C.gold, metalness: 0.8, roughness: 0.25 }));
+    cup.position.y = 1.2; cup.castShadow = true; g.add(cup);
+    // 顶部
+    const top = new THREE.Mesh(new THREE.SphereGeometry(0.22, 12, 10), new THREE.MeshStandardMaterial({ color: C.cinnabar, emissive: 0x661616, emissiveIntensity: 0.4 }));
+    top.position.y = 1.92; g.add(top);
+    // 牌匾
+    const plaque = new THREE.Mesh(new THREE.PlaneGeometry(1.2, 1.6), new THREE.MeshStandardMaterial({ map: makeAwardTex(a.name || ''), roughness: 0.6 }));
+    plaque.position.set(0, 1.2, 0.51);
+    g.add(plaque);
+    g.position.set(x, 0, z);
+    scene.add(g);
+    trophies.push({ group: g, award: a, x, z });
+
+    // 物理
+    const cbody = new CANNON.Body({ mass: 0, material: groundMat });
+    cbody.addShape(new CANNON.Box(new CANNON.Vec3(0.5, 1, 0.5)));
+    cbody.position.set(x, 1, z);
+    world.addBody(cbody);
+  }
+}
+buildTrophies();
+
+// ============ VEHICLE (RaycastVehicle) ============
+let chassisBody, vehicle, carGroup;
+const wheelMeshes = [];
+const brakeLightMeshes = [];
+
+function buildVehicle() {
+  const chassisShape = new CANNON.Box(new CANNON.Vec3(0.5, 0.3, 1.0));
+  chassisBody = new CANNON.Body({ mass: 40, material: groundMat });
+  chassisBody.addShape(chassisShape);
+  chassisBody.position.set(0, 1.5, 12);
+  chassisBody.angularDamping = 0.55;
+  chassisBody.allowSleep = false;
+  world.addBody(chassisBody);
+
+  vehicle = new CANNON.RaycastVehicle({
+    chassisBody,
+    indexRightAxis: 0,
+    indexUpAxis: 1,
+    indexForwardAxis: 2
+  });
+
+  const wheelOptions = {
+    radius: 0.3,
+    directionLocal: new CANNON.Vec3(0, -1, 0),
+    suspensionStiffness: 30,
+    suspensionRestLength: 0.35,
+    frictionSlip: 5,
+    dampingRelaxation: 2.3,
+    dampingCompression: 4.4,
+    maxSuspensionForce: 100000,
+    rollInfluence: 0.01,
+    axleLocal: new CANNON.Vec3(-1, 0, 0),
+    chassisConnectionPointLocal: new CANNON.Vec3(),
+    maxSuspensionTravel: 0.3,
+    customSlidingRotationalSpeed: -30,
+    useCustomSlidingRotationalSpeed: true
+  };
+
+  // wheels connect at chassis bottom (y = -0.15) for proper suspension
+  const wheelPositions = [
+    new CANNON.Vec3(0.55, -0.15, 0.7),    // FR
+    new CANNON.Vec3(-0.55, -0.15, 0.7),   // FL
+    new CANNON.Vec3(0.55, -0.15, -0.7),   // RR
+    new CANNON.Vec3(-0.55, -0.15, -0.7)   // RL
+  ];
+  wheelPositions.forEach(p => {
+    wheelOptions.chassisConnectionPointLocal.copy(p);
+    vehicle.addWheel(wheelOptions);
+  });
+
+  vehicle.addToWorld(world);
+
+  // wheel bodies (for visuals only, we manage manually)
+  vehicle.wheelInfos.forEach((w, i) => {
+    // Custom wheel materials
+    w.material = wheelMat;
+  });
+
+  // ====== visual mesh ======
+  carGroup = new THREE.Group();
+  // chassis body
+  const bodyMesh = new THREE.Mesh(
+    new THREE.BoxGeometry(1.0, 0.42, 2.0),
+    new THREE.MeshStandardMaterial({ color: 0x2a2520, roughness: 0.5, metalness: 0.3 })
+  );
+  bodyMesh.position.y = 0.05;
+  bodyMesh.castShadow = true;
+  carGroup.add(bodyMesh);
+  // 米黄车顶
+  const roofMesh = new THREE.Mesh(
+    new THREE.BoxGeometry(0.85, 0.42, 1.1),
+    new THREE.MeshStandardMaterial({ color: 0xF6F3EB, roughness: 0.6 })
+  );
+  roofMesh.position.set(0, 0.42, -0.1);
+  roofMesh.castShadow = true;
+  carGroup.add(roofMesh);
+  // 酒红条
+  const stripe = new THREE.Mesh(
+    new THREE.BoxGeometry(1.02, 0.08, 2.0),
+    new THREE.MeshStandardMaterial({ color: C.accent, emissive: 0x331010, emissiveIntensity: 0.2, roughness: 0.5 })
+  );
+  stripe.position.y = 0.08;
+  carGroup.add(stripe);
+  // 前车灯 (黄)
+  for (let s of [-1, 1]) {
+    const head = new THREE.Mesh(
+      new THREE.CircleGeometry(0.1, 16),
+      new THREE.MeshStandardMaterial({ color: 0xffe689, emissive: 0xffd060, emissiveIntensity: 1.2 })
+    );
+    head.position.set(s * 0.3, 0.05, 1.001);
+    head.rotation.y = 0;
+    carGroup.add(head);
+  }
+  // 刹车灯 (红)
+  for (let s of [-1, 1]) {
+    const brake = new THREE.Mesh(
+      new THREE.CircleGeometry(0.08, 12),
+      new THREE.MeshStandardMaterial({ color: 0xff3030, emissive: 0xff0000, emissiveIntensity: 0.3, transparent: true, opacity: 0.5 })
+    );
+    brake.position.set(s * 0.3, 0.05, -1.001);
+    brake.rotation.y = Math.PI;
+    carGroup.add(brake);
+    brakeLightMeshes.push(brake);
+  }
+  // 天线 + 铃铛
+  const antenna = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.012, 0.012, 0.6, 6),
+    new THREE.MeshStandardMaterial({ color: 0x2a2520, roughness: 0.6 })
+  );
+  antenna.position.set(0.25, 0.78, 0.7);
+  carGroup.add(antenna);
+  const bell = new THREE.Mesh(
+    new THREE.SphereGeometry(0.06, 8, 6),
+    new THREE.MeshStandardMaterial({ color: C.gold, metalness: 0.7, roughness: 0.3 })
+  );
+  bell.position.set(0.25, 1.05, 0.7);
+  carGroup.add(bell);
+
+  scene.add(carGroup);
+
+  // wheel visuals
+  const wheelMatVis = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.85 });
+  const rimMat = new THREE.MeshStandardMaterial({ color: 0xb0b0b0, metalness: 0.8, roughness: 0.3 });
+  for (let i = 0; i < 4; i++) {
+    const g = new THREE.Group();
+    const tire = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.3, 0.3, 0.22, 18),
+      wheelMatVis
+    );
+    tire.rotation.z = Math.PI / 2;
+    tire.castShadow = true;
+    g.add(tire);
+    const rim = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.18, 0.18, 0.23, 12),
+      rimMat
+    );
+    rim.rotation.z = Math.PI / 2;
+    g.add(rim);
+    scene.add(g);
+    wheelMeshes.push(g);
+  }
+}
+buildVehicle();
+
+// ============ INPUT ============
+const keys = { w: false, a: false, s: false, d: false, shift: false, space: false, e: false };
+const keyMap = {
+  'w': 'w', 'arrowup': 'w',
+  's': 's', 'arrowdown': 's',
+  'a': 'a', 'arrowleft': 'a',
+  'd': 'd', 'arrowright': 'd',
+  'shift': 'shift', ' ': 'space',
+  'e': 'e'
+};
+let firstMoveTime = null;
+let firstMouseDragTime = null;
+let firstShiftTime = null;
+let inputLocked = true;
+
+window.addEventListener('keydown', e => {
+  if (inputLocked) return;
+  const k = e.key.toLowerCase();
+  const m = keyMap[k];
+  if (m) {
+    keys[m] = true;
+    if ((m === 'w' || m === 'a' || m === 's' || m === 'd') && !firstMoveTime) {
+      firstMoveTime = performance.now();
+    }
+    if (m === 'shift' && !firstShiftTime) {
+      firstShiftTime = performance.now();
+      showFly();
+    }
+  }
+  if (k === 'r') resetCar();
+  if (k === 'e') tryInteract();
+  if (k === 'escape') closeDrawer();
+});
+window.addEventListener('keyup', e => {
+  const k = e.key.toLowerCase();
+  const m = keyMap[k];
+  if (m) keys[m] = false;
+});
+
+// ============ MOUSE for camera yaw + cursor ring ============
+const cursor = document.getElementById('cursor');
+let mouseX = 0, mouseY = 0, cursorTX = 0, cursorTY = 0;
+let dragging = false, dragStartX = 0, dragYawStart = 0;
+let camYaw = 0;
+
+window.addEventListener('mousemove', e => {
+  mouseX = e.clientX; mouseY = e.clientY;
+  cursorTX = e.clientX; cursorTY = e.clientY;
+  if (dragging) {
+    const dx = e.clientX - dragStartX;
+    camYaw = dragYawStart + dx * 0.005;
+    if (!firstMouseDragTime) {
+      firstMouseDragTime = performance.now();
+    }
+  }
+});
+window.addEventListener('mousedown', e => {
+  if (e.button === 0 && !inputLocked) {
+    dragging = true;
+    dragStartX = e.clientX;
+    dragYawStart = camYaw;
+    cursor.classList.add('hover');
+  }
+});
+window.addEventListener('mouseup', () => {
+  dragging = false;
+  cursor.classList.remove('hover');
+});
+
+// hover detection for UI links
+document.querySelectorAll('a, .ic, .start, .close').forEach(el => {
+  el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+  el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+});
+
+// ============ INTRO / START FLOW ============
+const introEl = document.getElementById('intro');
+const hintEl = document.getElementById('hint');
+const flyEl = document.getElementById('flyText');
+const promptEl = document.getElementById('prompt');
+const promptText = document.getElementById('promptText');
+const drawerEl = document.getElementById('drawer');
+const drawerBody = document.getElementById('drawerBody');
+
+document.getElementById('startBtn').addEventListener('click', startGame);
+document.getElementById('closeDrawer').addEventListener('click', closeDrawer);
+
+let gameStarted = false;
+let startTime = 0;
+
+function startGame() {
+  introEl.classList.add('hide');
+  setTimeout(() => { introEl.style.display = 'none'; }, 800);
+  gameStarted = true;
+  startTime = performance.now();
+  setTimeout(() => { inputLocked = false; }, 500);
+  setTimeout(() => { hintEl.classList.add('show'); }, 500);
+  // 3s no input → shake hint
+  setTimeout(() => {
+    if (!firstMoveTime) hintEl.classList.add('shake');
+  }, 3000);
+  // 5s: after first move, fade hint into icon mode + light lanterns
+  setTimeout(() => {
+    if (firstMoveTime) {
+      lightLanterns();
+      hintEl.querySelector('.title').textContent = '已驾乘';
+      hintEl.querySelector('.sub').textContent = 'GOOD';
+      setTimeout(() => hintEl.classList.remove('show'), 1200);
+    }
+  }, 5500);
+  // 8s mouse drag prompt
+  setTimeout(() => {
+    if (!firstMouseDragTime) {
+      hintEl.classList.add('show');
+      hintEl.querySelector('.title').textContent = '按住鼠标';
+      hintEl.querySelector('.sub').textContent = 'OBSERVE';
+      setTimeout(() => hintEl.classList.remove('show'), 3500);
+    }
+  }, 8000);
+  // 20s near-gate hint - handled in loop
+}
+
+function lightLanterns() {
+  lanterns.forEach((l, i) => {
+    setTimeout(() => {
+      l.on = true;
+      l.light.intensity = 1.6;
+      l.body.material.emissiveIntensity = 1.0;
+    }, i * 150);
+  });
+}
+
+function showFly() {
+  flyEl.classList.remove('show');
+  void flyEl.offsetWidth;
+  flyEl.classList.add('show');
+}
+
+// ============ DRAWERS ============
+let drawerOpen = false;
+function openProject(p) {
+  drawerEl.classList.remove('contact', 'award');
+  drawerBody.innerHTML = `
+    <div class="label">PROJECT · 项目</div>
+    <h1>${p.name_cn || p.name_en || '未命名'}</h1>
+    <h2>${p.tagline || ''}</h2>
+    <div class="meta">${p.year || ''} ${p.activity_meta ? '· ' + p.activity_meta : ''}</div>
+    <div class="divider"></div>
+    <div class="desc">${p.description_short || ''}</div>
+    <div class="tags">${(p.tags || []).map(t => `<span class="tag">${t}</span>`).join('')}</div>
+    <div class="actions">
+      ${p.url_detail ? `<a href="${p.url_detail}" target="_blank">阅卷详情 <span class="arrow">→</span></a>` : ''}
+      ${p.url_github ? `<a href="${p.url_github}" target="_blank">GitHub <span class="arrow">↗</span></a>` : ''}
+      <a href="hello.html#projects">回主页 <span class="arrow">⤴</span></a>
+    </div>
+  `;
+  drawerEl.classList.add('show');
+  drawerOpen = true;
+  cursor.classList.add('hover');
+}
+function openContact(c) {
+  drawerEl.classList.add('contact');
+  drawerEl.classList.remove('award');
+  drawerBody.innerHTML = `
+    <div class="label">CONTACT · 联系</div>
+    <h1>${c.label_cn || c.label_en || ''}</h1>
+    <div class="divider"></div>
+    <div class="big">${c.display || ''}</div>
+    <div class="actions">
+      ${c.url ? `<a href="${c.url}" target="_blank">前往 <span class="arrow">↗</span></a>` : ''}
+    </div>
+  `;
+  drawerEl.classList.add('show');
+  drawerOpen = true;
+  if (c.url) {
+    setTimeout(() => { window.open(c.url, '_blank'); }, 100);
+  }
+}
+function openAward(a) {
+  drawerEl.classList.add('award');
+  drawerEl.classList.remove('contact');
+  drawerBody.innerHTML = `
+    <div class="label">AWARD · 荣誉</div>
+    <h1>${a.name || ''}</h1>
+    <h2>${a.issuer || ''}${a.issuer_track ? ' · ' + a.issuer_track : ''}</h2>
+    <div class="meta">${a.date || ''}${a.ratio_display ? '  ·  ' + a.ratio_display : ''}</div>
+    <div class="divider"></div>
+    <div class="desc">${a.description || ''}</div>
+    <div class="actions">
+      ${a.url ? `<a href="${a.url}" target="_blank">${a.url_label || '查看'} <span class="arrow">↗</span></a>` : ''}
+    </div>
+  `;
+  drawerEl.classList.add('show');
+  drawerOpen = true;
+}
+function closeDrawer() {
+  drawerEl.classList.remove('show');
+  drawerOpen = false;
+  cursor.classList.remove('hover');
+}
+
+// ============ INTERACTION (E) ============
+let nearestScroll = null;
+let nearestContact = null;
+let nearestTrophy = null;
+function tryInteract() {
+  if (drawerOpen) { closeDrawer(); return; }
+  if (nearestScroll) { openProject(nearestScroll.project); return; }
+  if (nearestContact) { openContact(nearestContact.contact); return; }
+  if (nearestTrophy) { openAward(nearestTrophy.award); return; }
+}
+
+// ============ RESET CAR ============
+function resetCar() {
+  chassisBody.position.set(0, 1.5, 12);
+  chassisBody.velocity.set(0, 0, 0);
+  chassisBody.angularVelocity.set(0, 0, 0);
+  chassisBody.quaternion.set(0, 0, 0, 1);
+}
+
+// ============ HELP ============
+document.getElementById('helpIc').addEventListener('click', () => {
+  drawerEl.classList.remove('contact', 'award');
+  drawerBody.innerHTML = `
+    <div class="label">HELP · 操控</div>
+    <h1>书院驾乘指引</h1>
+    <div class="divider"></div>
+    <div class="desc" style="line-height:2;">
+      <strong>W A S D / ↑↓←→</strong> 驾车<br/>
+      <strong>SHIFT</strong> 疾驰<br/>
+      <strong>SPACE</strong> 跃起<br/>
+      <strong>R</strong> 复位至牌楼<br/>
+      <strong>鼠标拖拽</strong> 观四方<br/>
+      <strong>E</strong> 阅卷 / 联系 / 荣誉<br/>
+      <strong>ESC</strong> 关闭<br/>
+      <br/>
+      <em>梅花形分布 5 处项目，地面 4 个联系凸字，北墙前 3 座奖杯。</em><br/>
+      <em>中央"格物致知"4 字可撞飞。战鼓 / 铜铃 / 铜钱皆可推动。</em>
+    </div>
+  `;
+  drawerEl.classList.add('show');
+  drawerOpen = true;
+});
+
+// ============ ANIMATION LOOP ============
+const clock = new THREE.Clock();
+const tempVec = new THREE.Vector3();
+const tempQuat = new THREE.Quaternion();
+const camTarget = new THREE.Vector3();
+const camDesired = new THREE.Vector3();
+
+const MAX_FORCE = 320;
+const MAX_BRAKE = 18;
+const STEER_MAX = 0.6;
+const BOOST_MULT = 1.8;
+
+function animate() {
+  requestAnimationFrame(animate);
+  const dt = Math.min(clock.getDelta(), 1/30);
+
+  if (!gameStarted) {
+    renderer.render(scene, camera);
+    updateCursor(dt);
+    return;
+  }
+
+  // === input → vehicle ===
+  if (vehicle && !inputLocked) {
+    const boost = keys.shift ? BOOST_MULT : 1;
+    let force = 0;
+    // Note: in cannon-es RaycastVehicle, positive force drives toward +localForward.
+    // We want W (forward) to drive in WORLD -z (into courtyard from gate at z=14).
+    // So W applies +force (forward in local +z), but we want -z world... actually:
+    // car at z=12 with default quaternion → applyEngineForce > 0 makes it go +z;
+    // we need to flip: W = -force = world -z direction.
+    if (keys.w) force = MAX_FORCE * boost;
+    else if (keys.s) force = -MAX_FORCE * 0.5 * boost;
+    // rear-wheel drive
+    vehicle.applyEngineForce(force, 2);
+    vehicle.applyEngineForce(force, 3);
+
+    let steer = 0;
+    if (keys.a) steer = STEER_MAX;
+    if (keys.d) steer = -STEER_MAX;
+    vehicle.setSteeringValue(steer, 0);
+    vehicle.setSteeringValue(steer, 1);
+
+    const brake = (!keys.w && !keys.s) ? 0.6 : 0;
+    for (let i = 0; i < 4; i++) vehicle.setBrake(brake, i);
+
+    // jump
+    if (keys.space && Math.abs(chassisBody.velocity.y) < 0.2 && chassisBody.position.y < 1.0) {
+      chassisBody.velocity.y = 5;
+    }
+
+    // brake light
+    const braking = !keys.w && !keys.s && chassisBody.velocity.length() > 0.5;
+    brakeLightMeshes.forEach(b => {
+      b.material.emissiveIntensity = braking ? 1.2 : 0.2;
+      b.material.opacity = braking ? 1.0 : 0.4;
+    });
+  }
+
+  // === physics step ===
+  world.step(1/60, dt, 3);
+
+  // === sync car visuals ===
+  if (carGroup && chassisBody) {
+    carGroup.position.copy(chassisBody.position);
+    carGroup.quaternion.copy(chassisBody.quaternion);
+  }
+
+  // === wheels ===
+  if (vehicle) {
+    for (let i = 0; i < vehicle.wheelInfos.length; i++) {
+      vehicle.updateWheelTransform(i);
+      const t = vehicle.wheelInfos[i].worldTransform;
+      const m = wheelMeshes[i];
+      if (m) {
+        m.position.copy(t.position);
+        m.quaternion.copy(t.quaternion);
+      }
+    }
+  }
+
+  // === sync stereoChars + drum + coins ===
+  for (const sc of stereoChars) {
+    sc.mesh.position.copy(sc.body.position);
+    sc.mesh.quaternion.copy(sc.body.quaternion);
+  }
+  if (drumMesh && drumBody) {
+    drumMesh.parent.position.set(drumBody.position.x, drumBody.position.y - 0.5, drumBody.position.z);
+    drumMesh.parent.quaternion.copy(drumBody.quaternion);
+  }
+  for (const c of coins) {
+    c.mesh.position.copy(c.body.position);
+    c.mesh.quaternion.copy(c.body.quaternion);
+  }
+
+  // === bells swing ===
+  for (const b of bells) {
+    const t = clock.elapsedTime;
+    b.mesh.rotation.z = Math.sin(t * 1.5 + b.phase) * 0.05 + b.swing * Math.sin(t * 8) * Math.exp(-t * 0.5);
+  }
+  // bells trigger check
+  if (chassisBody) {
+    const dx = chassisBody.position.x - 6;
+    const dz = chassisBody.position.z - 10;
+    if (Math.sqrt(dx*dx + dz*dz) < 1.5) {
+      bells.forEach(b => { if (b.swing < 0.5) b.swing = 1.0; });
+    }
+  }
+  // decay swing
+  bells.forEach(b => { b.swing *= 0.985; });
+
+  // === koi animation ===
+  if (pondGroup && pondGroup.userData.koi) {
+    const t = clock.elapsedTime;
+    const koi = pondGroup.userData.koi;
+    koi.position.x = Math.cos(t * 0.6) * 1.3;
+    koi.position.z = 6 + Math.sin(t * 0.6) * 1.3;
+    koi.rotation.y = -t * 0.6 + Math.PI/2;
+  }
+
+  // === proximity ===
+  nearestScroll = null;
+  nearestContact = null;
+  nearestTrophy = null;
+  let promptShown = false;
+  const cp = chassisBody.position;
+  for (const s of scrolls) {
+    const dx = cp.x - s.x, dz = cp.z - s.z;
+    if (Math.sqrt(dx*dx + dz*dz) < 3.0) {
+      nearestScroll = s;
+      promptText.textContent = ' 阅卷 · ' + (s.project.name_cn || '').slice(0, 12);
+      promptEl.classList.add('show');
+      promptShown = true;
+      // 卷轴随距离微微浮动
+      s.group.rotation.y = clock.elapsedTime * 0.3;
+      break;
+    } else {
+      s.group.rotation.y *= 0.96;
+    }
+  }
+  if (!promptShown) {
+    for (const c of contactDecals) {
+      const dx = cp.x - c.x, dz = cp.z - c.z;
+      if (Math.sqrt(dx*dx + dz*dz) < 1.5) {
+        nearestContact = c;
+        promptText.textContent = ' 联系 · ' + (c.contact.display || '').slice(0, 18);
+        promptEl.classList.add('show');
+        promptShown = true;
+        break;
+      }
+    }
+  }
+  if (!promptShown) {
+    for (const tr of trophies) {
+      const dx = cp.x - tr.x, dz = cp.z - tr.z;
+      if (Math.sqrt(dx*dx + dz*dz) < 2.5) {
+        nearestTrophy = tr;
+        promptText.textContent = ' 荣誉 · ' + (tr.award.name || '').slice(0, 16);
+        promptEl.classList.add('show');
+        promptShown = true;
+        break;
+      }
+    }
+  }
+  if (!promptShown) promptEl.classList.remove('show');
+
+  // === camera follow ===
+  if (chassisBody) {
+    // forward dir from chassis quaternion
+    const q = chassisBody.quaternion;
+    const carFwd = new CANNON.Vec3(0, 0, -1);
+    q.vmult(carFwd, carFwd);
+    // lookahead
+    camTarget.set(
+      chassisBody.position.x + carFwd.x * 2,
+      chassisBody.position.y + 0.5,
+      chassisBody.position.z + carFwd.z * 2
+    );
+    // desired = behind car + height
+    const dist = 6;
+    const heightOff = 2.8;
+    // base behind = -carFwd direction, then yaw rotate around target
+    const baseBack = -carFwd.x * dist;
+    const baseBackZ = -carFwd.z * dist;
+    const cosY = Math.cos(camYaw), sinY = Math.sin(camYaw);
+    const finalBack = baseBack * cosY - baseBackZ * sinY;
+    const finalBackZ = baseBack * sinY + baseBackZ * cosY;
+    camDesired.set(
+      chassisBody.position.x + finalBack,
+      chassisBody.position.y + heightOff,
+      chassisBody.position.z + finalBackZ
+    );
+    const damping = 1 - Math.exp(-6 * dt);
+    camera.position.lerp(camDesired, damping);
+    camera.lookAt(camTarget);
+  }
+
+  // === HUD update ===
+  if (chassisBody) {
+    const speed = chassisBody.velocity.length() * 3.6;
+    document.getElementById('speedVal').textContent = speed.toFixed(0) + ' km/h';
+    document.getElementById('posVal').textContent = `x ${chassisBody.position.x.toFixed(1)}  z ${chassisBody.position.z.toFixed(1)}`;
+  }
+
+  // === 30s tutorial: gate prompt ===
+  const elapsed = (performance.now() - startTime) / 1000;
+  if (elapsed > 18 && elapsed < 30 && chassisBody) {
+    // near pailou (z ~ 14)
+    const dx = chassisBody.position.x;
+    const dz = chassisBody.position.z - 14;
+    const distGate = Math.sqrt(dx*dx + dz*dz);
+    if (distGate < 8 && !window._gatePromptShown) {
+      window._gatePromptShown = true;
+      hintEl.classList.add('show');
+      hintEl.querySelector('.title').textContent = '按 E 阅卷';
+      hintEl.querySelector('.sub').textContent = 'READ SCROLL';
+      setTimeout(() => hintEl.classList.remove('show'), 4500);
+    }
+  }
+
+  // === bounds: keep car inside ===
+  if (chassisBody) {
+    const halfBound = 14;
+    if (Math.abs(chassisBody.position.x) > halfBound || Math.abs(chassisBody.position.z) > halfBound) {
+      // gentle pushback
+      if (chassisBody.position.x > halfBound) chassisBody.position.x = halfBound;
+      if (chassisBody.position.x < -halfBound) chassisBody.position.x = -halfBound;
+      if (chassisBody.position.z > halfBound) chassisBody.position.z = halfBound;
+      if (chassisBody.position.z < -halfBound) chassisBody.position.z = -halfBound;
+    }
+    if (chassisBody.position.y < -5) resetCar();
+  }
+
+  updateCursor(dt);
+  renderer.render(scene, camera);
+}
+
+function updateCursor(dt) {
+  mouseX += (cursorTX - mouseX) * 0.22;
+  mouseY += (cursorTY - mouseY) * 0.22;
+  cursor.style.left = cursorTX + 'px';
+  cursor.style.top = cursorTY + 'px';
+}
+
+animate();
+
+// ============ RESIZE ============
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// ============ DEBUG hooks (v2) ============
+window.__drive = { scene, camera, world, vehicle, chassisBody, scrolls, trophies, contactDecals, stereoChars, lanterns, D };
+
+// audio v2 hooks (no-op for v1)
+window.onCarSpeed = () => {};
+window.onStelaHit = () => {};
+window.onTrophy = () => {};
+window.onCollision = () => {};
+
+// click mute icon (v2 placeholder)
+document.getElementById('muteIc').addEventListener('click', e => {
+  e.currentTarget.textContent = e.currentTarget.textContent === '🔇' ? '🔊' : '🔇';
+});
+
+console.log('[drive.html] init complete. scene objects:', scene.children.length, 'physics bodies:', world.bodies.length);
+</script>
+</body>
+</html>
