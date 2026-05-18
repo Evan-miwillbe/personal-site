@@ -39,7 +39,7 @@
       <circle cx="22" cy="4" r="3" fill="#869B7E"/>
     </g>
     <!-- 顶部 logo -->
-    <text x="120" y="68" text-anchor="middle" font-family="'Songti SC', serif" font-size="11" fill="#7F2020" letter-spacing="2">滕老师 · 培训反馈</text>
+    <text x="120" y="68" text-anchor="middle" font-family="'Songti SC', serif" font-size="11" fill="#7F2020" letter-spacing="2">销售代教培训反馈</text>
     <line x1="40" y1="78" x2="200" y2="78" stroke="#7F2020" stroke-width=".5" opacity=".4"/>
     <!-- 第一题 -->
     <text x="22" y="106" font-family="'Songti SC', serif" font-size="11" fill="#1c1916" opacity=".6">1 / 5</text>
@@ -90,7 +90,7 @@
       <circle cx="22" cy="4" r="3" fill="#869B7E"/>
     </g>
 
-    <text x="120" y="68" text-anchor="middle" font-family="'Songti SC', serif" font-size="11" fill="#7F2020" letter-spacing="2">滕老师 · 培训反馈</text>
+    <text x="120" y="68" text-anchor="middle" font-family="'Songti SC', serif" font-size="11" fill="#7F2020" letter-spacing="2">销售代教培训反馈</text>
     <line x1="40" y1="78" x2="200" y2="78" stroke="#7F2020" stroke-width=".5" opacity=".4"/>
 
     <!-- 第三题 - 文本反馈 -->

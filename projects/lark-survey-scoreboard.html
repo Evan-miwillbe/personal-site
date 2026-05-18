@@ -79,7 +79,10 @@
   .img-placeholder.tall{aspect-ratio:4/3}
   .img-placeholder.wide{aspect-ratio:21/9}
   .img-placeholder.phone{aspect-ratio:9/16;max-width:320px;margin:0 auto}
-  .case-image-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:48px}
+  .case-image{display:block;max-width:100%;width:auto;height:auto;max-height:78vh;margin-left:auto;margin-right:auto;border-radius:16px;box-shadow:var(--shadow);background:var(--card)}
+  .case-image-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:48px;align-items:start}
+  .case-image-row .case-image{max-height:58vh;width:100%}
+  .hero-image .case-image{max-height:84vh;width:100%;max-width:none;border-radius:0;box-shadow:none}
   @media(max-width:680px){.case-image-row{grid-template-columns:1fr}}
   .phone-row{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:48px;max-width:760px;margin-left:auto;margin-right:auto}
   @media(max-width:680px){.phone-row{grid-template-columns:1fr}}

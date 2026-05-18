@@ -18,7 +18,7 @@
     <circle cx="170" cy="-3" r="4" fill="#7F2020">
       <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
     </circle>
-    <text y="42" font-size="42" font-weight="500" fill="#1c1916" font-family="'Songti SC', serif">滕老师 · <tspan font-style="italic" fill="#7F2020">领航计划培训反馈大屏</tspan></text>
+    <text y="42" font-size="42" font-weight="500" fill="#1c1916" font-family="'Songti SC', serif"><tspan font-style="italic" fill="#7F2020">销售代教培训 · 反馈大屏</tspan></text>
     <text y="70" font-size="14" fill="#1c1916" opacity=".6" font-family="'JetBrains Mono', monospace" letter-spacing="2">2026.04.18 · 18:42 · 美动医疗培训中心</text>
   </g>
 
