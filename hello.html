@@ -661,9 +661,9 @@
     backdrop-filter:blur(6px);
     -webkit-backdrop-filter:blur(6px);
   }
-  /* hover 项目卡 / 社交卡：放大到 2.5 + 强模糊 + 显示文字 */
+  /* hover 项目卡 / 社交卡：略放大 + 强模糊 + 显示文字（保持比 48px 箭头框小） */
   .cursor-ring.text .circle{
-    transform:scale(2.5);
+    transform:scale(1.1);
     background:rgba(127, 32, 32, 0.28);
     border-color:rgba(127, 32, 32, 0);
     backdrop-filter:blur(10px);
@@ -673,9 +673,9 @@
     position:absolute; top:50%; left:50%;
     transform:translate(-50%,-50%) scale(.3);
     font-family:"Noto Serif SC",serif;
-    font-size:13px; font-weight:500;
+    font-size:11px; font-weight:500;
     color:#F6F3EB;
-    letter-spacing:.08em; white-space:nowrap;
+    letter-spacing:.04em; white-space:nowrap;
     opacity:0;
     transition:opacity .25s .15s, transform .4s cubic-bezier(.55,.085,0,.99) .08s;
     pointer-events:none;
