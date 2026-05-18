@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&family=Noto+Serif+SC:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="data.js"></script>
 <style>
   :root{
     --paper:#fbfaf6;
@@ -416,29 +417,15 @@
 
   <!-- ============ 顶部铭牌 ============ -->
   <header class="nameplate">
-    <div class="surname-cn">滕美名</div>
-    <div class="name-en">Teng Meiming · Evan</div>
+    <div class="surname-cn" data-source="meta.name_cn"></div>
+    <div class="name-en" data-source="meta.name_en_full"></div>
     <div class="rule"></div>
-    <div class="role">AI Skill 与 Multi-Agent 协作框架开发者</div>
-    <div class="meta">
-      <span>SHANGHAI</span>·<span>退役军人</span>·<span>2026</span>
-    </div>
+    <div class="role" data-source="meta.role"></div>
+    <div class="meta" data-source="meta.tag_strip"></div>
   </header>
 
   <!-- ============ 引子 ============ -->
-  <section>
-    <p class="lede">
-      我从 <em>2026 年 1 月</em>开始学 AI，3 月动手写第一个 Skill。
-      到 5 月，做出一套自己的 Multi-Agent 研究框架——
-      其中两个 Skill 被字节飞书官方选入「<em>十佳</em>」，
-      将收录至 larksuite 开源库附作者署名。
-    </p>
-    <p class="lede">
-      上海对外经贸大学国际经济与贸易（全英语实验班）应届。
-      武警湖南总队长沙支队退役。
-      <em>慢工的研究型</em>创造者，喜欢和前沿待在一起，自己上手做一个控制得住的版本。
-    </p>
-  </section>
+  <section data-source="lede"></section>
 
   <!-- ============ I · INDEX ============ -->
   <section id="index">
@@ -447,52 +434,7 @@
       <span class="label">Index</span>
       <span class="title-cn">作品索引</span>
     </div>
-    <ul class="index-list">
-      <li class="index-row">
-        <span class="year">2026.04—05</span>
-        <span class="body">
-          <strong>Multi-Agent Research</strong> · 多 Agent 深度研究框架
-          <span class="desc">v9.0 / 453 行 / 77 commits / 47 轮控制实验 / 17 个钩子全部验证</span>
-        </span>
-      </li>
-      <li class="index-row">
-        <span class="year">2026.05</span>
-        <span class="body">
-          <strong>knowledge-healer</strong> · 飞书知识库自愈巡检
-          <span class="desc">3+2 多 Agent 并行架构，7 维健康诊断，跨源交叉验证（文档 vs 群聊）</span>
-        </span>
-        <span class="tag">★ 十佳</span>
-      </li>
-      <li class="index-row">
-        <span class="year">2026.04</span>
-        <span class="body">
-          <strong>lark-survey-scoreboard</strong> · 飞书实时评分大屏
-          <span class="desc">AI 读妙记自动出题 · 手机评分 + 大屏 1 秒刷新 · 总成本 ¥0</span>
-        </span>
-        <span class="tag">★ 十佳</span>
-      </li>
-      <li class="index-row">
-        <span class="year">2026.04</span>
-        <span class="body">
-          <strong>bitable-orchestrator</strong> · 飞书多维表智能编排
-          <span class="desc">5 阶段安全管线 · Dry-Run 预演 · 原子回滚 · 依赖图拓扑排序</span>
-        </span>
-      </li>
-      <li class="index-row">
-        <span class="year">2026.03—</span>
-        <span class="body">
-          <strong>Obsidian LifeOS</strong> · 个人知识与精力管理系统
-          <span class="desc">日 / 周 / 月三层视图 + 知识库面板，近 2 万字沉淀</span>
-        </span>
-      </li>
-      <li class="index-row">
-        <span class="year">2026.03+</span>
-        <span class="body">
-          <strong>Skill 生态</strong> · auto-new / academic-research / pdf-to-md / dream-insights ...
-          <span class="desc">18 个自用 Skill，从「金龟宠物」第一个起步</span>
-        </span>
-      </li>
-    </ul>
+    <ul class="index-list" data-source="projects"></ul>
   </section>
 
   <!-- ============ II · RECOGNITION ============ -->
@@ -503,29 +445,9 @@
       <span class="title-cn">认证与荣誉</span>
     </div>
 
-    <div class="award-card">
-      <div class="award-label">入选 · 2026.05.13</div>
-      <h4>飞书 CLI 创作者大赛「十佳优秀 Skill」<br/>3 项投稿，2 项入选 · 67%</h4>
-      <p>
-        由字节跳动 larksuite 官方团队主办的 GitHub 赛道。
-        <strong>knowledge-healer</strong> 与 <strong>lark-survey-scoreboard</strong> 入选，
-        将收录至飞书 CLI 官方开源库并附作者署名。
-        另一作品 <strong>bitable-orchestrator</strong> 定位偏 ToB 企业级未入选——
-        三个作品均为同期独立完成。
-      </p>
-      <div class="meta">
-        <span>主办 · 字节跳动 · 飞书 CLI 团队</span>
-        <span>赛道 · GitHub Skill 投稿</span>
-      </div>
-    </div>
+    <div data-source="award_card"></div>
 
-    <ul class="other-honors">
-      <li>上海市校报好新闻通讯类一等奖 · 市级<span>2020—2021</span></li>
-      <li>个人嘉奖一次 · 武警湖南总队<span>入伍期间</span></li>
-      <li>北大田野经济学课题报告 · 被上海市发改委采纳<span>2022</span></li>
-      <li>上海对外经贸大学优秀共青团员 · 校级<span>—</span></li>
-      <li>优秀学生奖学金二等奖 · 校级<span>—</span></li>
-    </ul>
+    <ul class="other-honors" data-source="other_honors"></ul>
   </section>
 
   <!-- ============ III · WORK ============ -->
@@ -535,120 +457,7 @@
       <span class="label">Work</span>
       <span class="title-cn">主要项目</span>
     </div>
-
-    <!-- Multi-Agent -->
-    <article class="work-entry">
-      <div class="work-head">
-        <span class="work-no">No. 01</span>
-        <h3>Multi-Agent Research<br/><span style="font-size:.7em;color:var(--ink-mute);font-weight:400;">多 Agent 深度研究框架</span></h3>
-      </div>
-      <div class="work-meta">
-        <span>2026.04 — 2026.05</span>
-        <span>13 天 · v1 → v9.0</span>
-        <span>个人独立研究</span>
-      </div>
-      <p>
-        针对 Claude Code 官方深度研究"机制黑盒、流程不可控"的痛点，
-        独立设计可自定义虚拟研究团队 Skill。
-        从 v1.0 到 v9.0 经历 <strong>77 次 commit</strong>，从 PM 中心制 7-Agent
-        简化为扁平星型 2-3 Agent，<strong>v6.0 较 v5.4 行数下降约 80%</strong>（893→221）。
-      </p>
-      <p class="quote">
-        Lost in Middle 效应——关键约束放 prompt 中间合规率 0% (0/6)，
-        放首尾合规率 100% (6/6)。47 轮实验中通过消融严格区分
-        "机制有效" 与 "机制必要"，17 个操作钩子中确认 2 个 KEEP、14 个被模型行为内化。
-      </p>
-      <p>
-        方法论已落地为 <strong>knowledge-healer</strong> 飞书知识库自愈工具，
-        入选飞书 CLI 创作者大赛十佳——
-        从理论框架到工程产出到第三方认证的完整闭环。
-      </p>
-      <div class="work-links">
-        <a href="https://github.com/Evan-miwillbe" target="_blank">→ GitHub 主页（仓库整理中，本周公开）</a>
-      </div>
-    </article>
-
-    <!-- knowledge-healer -->
-    <article class="work-entry">
-      <div class="work-head">
-        <span class="work-no">No. 02</span>
-        <h3>knowledge-healer · 飞书知识库自愈巡检</h3>
-        <span class="badge">★ 飞书十佳</span>
-      </div>
-      <div class="work-meta">
-        <span>2026.04 — 2026.05</span>
-        <span>多 Agent 落地工具</span>
-        <span>MIT License</span>
-      </div>
-      <p>
-        新人入职第一天，主管说"去看 wiki 上的报销流程"。
-        照着走一遍被财务打回。主管说"哦那个早改了，直接提交就行"。
-        调研显示 <strong>70% 以上企业知识库"几乎无人用或仅勉强有人用"</strong>——
-        写一篇文档是一次性成本，维护是持续成本，没人愿意管。
-      </p>
-      <p>
-        Knowledge Healer 用 <strong>3+2 多 Agent 并行架构</strong>对知识库做 7 维健康诊断——
-        不只找"文档有没有问题"，还找"<strong>该有但没有的内容</strong>"。
-        关键创新：跨源交叉验证（文档 vs 群聊），检测知识漂移——
-        文档没改，但群里有人说"我们现在不这么做了"，
-        这是纯文档检查工具做不到的。
-      </p>
-      <div class="work-links">
-        <a href="https://github.com/Evan-miwillbe/knowledge-healer" target="_blank">→ GitHub</a>
-        <a href="https://bytedance.larkoffice.com/wiki/K6wZw4IYQiJGvmkSrZ8cD5ZznHd" target="_blank">→ 官方公示</a>
-      </div>
-    </article>
-
-    <!-- lark-survey-scoreboard -->
-    <article class="work-entry">
-      <div class="work-head">
-        <span class="work-no">No. 03</span>
-        <h3>lark-survey-scoreboard · 飞书实时评分大屏</h3>
-        <span class="badge">★ 飞书十佳</span>
-      </div>
-      <div class="work-meta">
-        <span>2026.04</span>
-        <span>来源 · 美动医疗实习需求</span>
-      </div>
-      <p class="quote">
-        "这个项目起源于我的实习。一场培训结束的时候，
-        领导说能不能做个实时的反馈问卷。Poll Everywhere 是很好的工具，
-        但很多想实现的功能并不能通过现成网站实现。<br/>
-        飞书表格免费，调用飞书 CLI 能操作它，AI 能帮我想题目。
-        那就把这三件事串起来。"
-      </p>
-      <p>
-        培训结束，打开飞书妙记，对着它说一句话，评分问卷就自己长出来了。
-        不是模板——是 AI 读完了你这场培训讲了什么，替你想好了该问什么。
-        <strong>手机打分，大屏 1 秒刷新，数据存自己的飞书 Base。总成本 ¥0。</strong>
-      </p>
-      <div class="work-links">
-        <a href="https://github.com/Evan-miwillbe/lark-survey-scoreboard" target="_blank">→ GitHub</a>
-      </div>
-    </article>
-
-    <!-- Obsidian LifeOS -->
-    <article class="work-entry">
-      <div class="work-head">
-        <span class="work-no">No. 04</span>
-        <h3>Obsidian LifeOS</h3>
-      </div>
-      <div class="work-meta">
-        <span>2026.03 — 至今</span>
-        <span>个人项目 · 高频日常使用</span>
-        <span>近 2 万字知识库</span>
-      </div>
-      <p>
-        日 / 周 / 月三层任务视图 + 知识库管理面板，
-        基于 Claude Code Superpowers 开发。集成精力评分、习惯打卡、
-        各维度平衡分析。灵感来自 Karpathy 的 LLM-as-Wiki 概念。
-      </p>
-      <p>
-        配套：基于韩国开发者开源 Obsidian 终端插件二次开发——
-        <strong>主题色适配 · Tab 多页 · 上下分屏 · 一键复制路径</strong>。
-      </p>
-    </article>
-
+    <div data-source="work_entries"></div>
   </section>
 
   <!-- ============ IV · EXPERIENCE ============ -->
@@ -658,50 +467,7 @@
       <span class="label">Experience</span>
       <span class="title-cn">经历</span>
     </div>
-    <ul class="index-list timeline">
-      <li class="index-row">
-        <span class="year">2026.01—04</span>
-        <span class="body">
-          <strong>上海美动医疗器材贸易有限公司</strong> · 人力资源实习生（培训方向）
-          <span class="desc">流程自动化与 AI 工具落地：识别跨表汇总痛点，借助 AI 生成 VBA 多表自动化；操作北森 HR 系统；培训痛点直接孵化出 lark-survey-scoreboard。</span>
-        </span>
-      </li>
-      <li class="index-row">
-        <span class="year">2025.07—09</span>
-        <span class="body">
-          <strong>天风证券行业研究所</strong> · 策略研究组实习生
-          <span class="desc">半导体材料行业深度研究，独立完成 40 页+ 行业报告；产出 8 篇 REITs 周报（4 篇内部 + 4 篇外发）；将周报流程 SOP 化为飞书文档模板供团队复用。</span>
-        </span>
-      </li>
-      <li class="index-row">
-        <span class="year">2022.09—2024.09</span>
-        <span class="body">
-          <strong>武警湖南总队长沙支队</strong> · 义务兵
-          <span class="desc">服役期间个人嘉奖一次。三公里考核稳居连队第一，支队级比武三公里第二。代理文书期间负责基层统计表格报送 90+ 份、连队周工作安排 4 篇——最早一次系统性的「SOP 思维」训练。</span>
-        </span>
-      </li>
-      <li class="index-row">
-        <span class="year">2024.09—2025.09</span>
-        <span class="body">
-          <strong>国防军事协会</strong> · 宣传部部长
-          <span class="desc">参与制定两次线下大型活动方案；牵头组织「樱花节个人形象照」拍摄，协调 50+ 社员。</span>
-        </span>
-      </li>
-      <li class="index-row">
-        <span class="year">2021.10—至今</span>
-        <span class="body">
-          <strong>校党委宣传部 · 海鸥通讯社</strong> · 文编部编辑
-          <span class="desc">采访校园大师剧《汪尧田》获上海市校报好新闻通讯类一等奖；共同署名稿件 14 篇，总阅读量 6w+，最高单篇 1w+。</span>
-        </span>
-      </li>
-      <li class="index-row">
-        <span class="year">2022.07—08</span>
-        <span class="body">
-          <strong>北京大学田野经济学暑期实践</strong> · 核心成员
-          <span class="desc">《新冠疫情下中小微企业供应链韧性研究》，电访上海青浦区 30+ 中小微企业，完成 26 份有效问卷，报告被上海市发改委采纳。</span>
-        </span>
-      </li>
-    </ul>
+    <ul class="index-list timeline" data-source="experiences"></ul>
   </section>
 
   <!-- ============ V · DETAILS ============ -->
@@ -714,63 +480,26 @@
 
     <div class="detail-block">
       <div class="detail-label">Education · 教育</div>
-      <div class="detail-body">
-        上海对外经贸大学 · 国际经济与贸易（全英语实验班）· 国家级一流本科专业建设点 ·
-        <code>2021.09 — 2027.06</code>（因服兵役延期 2 年）·
-        GPA <code>3.3/4.0（前 20%）</code> · 团支书 ·
-        代表课程：程序设计基础与应用 91 / 中级微观经济学 88 / 国际商务 91 / 财政学 91 ·
-        英语 CET-6 <code>521</code>。
-      </div>
+      <div class="detail-body" data-source="education"></div>
     </div>
 
-    <div class="detail-block">
-      <div class="detail-label">AI Stack · 现在用的工具</div>
-      <div class="detail-body">
-        <code>Claude Code</code> · <code>Codex</code> · <code>Cursor</code> ·
-        <code>Skill 设计与编排</code> · <code>Multi-Agent 架构</code> ·
-        <code>Prompt 工程</code> · <code>MCP 集成</code> ·
-        <code>Vibe Coding</code>（前端交互 + 后端数据库部署）·
-        <code>飞书 CLI</code>。
-      </div>
-    </div>
-
-    <div class="detail-block">
-      <div class="detail-label">Foundation · 老本行</div>
-      <div class="detail-body">
-        <code>Excel</code>（XLOOKUP / FILTER / INDIRECT / 数据透视 / 制图）·
-        <code>VBA 自动化</code> · <code>SQL 基础</code> · <code>Python 基础</code> ·
-        <code>PowerPoint / Word</code> · <code>iFind</code>。
-      </div>
-    </div>
+    <div data-source="skill_blocks"></div>
 
     <div class="detail-block">
       <div class="detail-label">Off-screen · 屏幕之外</div>
-      <div class="detail-body">
-        全马 PB <code>3:35</code> / 半马 PB <code>1:42</code>。
-        18 篇随笔，慢工的写作者。
-        基于 Claude Opus 4.6 协作完成本职 AI 项目——非 CS 科班，
-        贡献是产品 taste 与迭代节奏。
-      </div>
+      <div class="detail-body" data-source="off_screen"></div>
     </div>
   </section>
 
   <!-- ============ VI · CONTACT ============ -->
   <section id="contact" class="contact">
     <div class="closing">想聊聊？</div>
-    <p>
-      我在找<strong>能让我和前沿待在一起、能动手做 AI 工具</strong>的位置——
-      腾讯研究院 / 字节研究院类研究岗、AI Agent / Developer Experience PM、
-      AI 创业团队早期员工、AI 行业研究。
-    </p>
-    <div class="contact-list">
-      <a href="mailto:Tengmeiming@163.com">Tengmeiming@163.com</a>
-      <a href="https://github.com/Evan-miwillbe" target="_blank">github.com/Evan-miwillbe</a>
-      <a href="tel:+8618516773139">+86 185-1677-3139</a>
-    </div>
+    <p data-source="contact_intro"></p>
+    <div class="contact-list" data-source="contacts"></div>
   </section>
 
   <footer class="foot">
-    Made by · <span class="seal">滕</span> · Teng Meiming · MMXXVI · Shanghai
+    Made by · <span class="seal" data-source="meta.surname_cn"></span> · <span data-source="meta.name_en"></span> · MMXXVI · <span data-source="meta.city_en_upper"></span>
   </footer>
 
 </div>
@@ -817,6 +546,321 @@
       spark(e.clientX, e.clientY, ang, col);
     }
   }, {passive:true});
+})();
+</script>
+
+<!-- ============ 数据注入 · 从 data.js 读 SITE_DATA 渲染 ============ -->
+<script>
+(function(){
+  'use strict';
+
+  var D = window.SITE_DATA || {};
+  var meta = D.meta || {};
+  var contacts = D.contacts || [];
+  var projects = (D.projects || []).slice().sort(function(a,b){ return (a.sort_order||0)-(b.sort_order||0); });
+  var experiences = (D.experiences || []).slice().sort(function(a,b){ return (a.sort_order||0)-(b.sort_order||0); });
+  var awards = (D.awards || []).slice().sort(function(a,b){ return (a.sort_order||0)-(b.sort_order||0); });
+  var skills = (D.skills || []).slice().sort(function(a,b){ return (a.sort_order||0)-(b.sort_order||0); });
+  var offScreen = D.off_screen || [];
+
+  function esc(s){
+    if(s == null) return '';
+    return String(s)
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;')
+      .replace(/'/g,'&#39;');
+  }
+  function $(sel){ return document.querySelector(sel); }
+  function setBySource(key, html){
+    var el = document.querySelector('[data-source="'+key+'"]');
+    if(el) el.innerHTML = html;
+  }
+  function setTextBySource(key, txt){
+    var els = document.querySelectorAll('[data-source="'+key+'"]');
+    for(var i=0;i<els.length;i++){ els[i].textContent = txt == null ? '' : txt; }
+  }
+
+  // ---------- 顶部铭牌 ----------
+  setTextBySource('meta.name_cn', meta.name_cn ?? '');
+  setTextBySource('meta.name_en_full',
+    [meta.name_en, meta.nickname_en].filter(Boolean).join(' · ')
+  );
+  setTextBySource('meta.role', meta.role ?? '');
+  setTextBySource('meta.surname_cn', meta.surname_cn ?? '');
+  setTextBySource('meta.name_en', meta.name_en ?? '');
+  setTextBySource('meta.city_en_upper', (meta.city_en || '').toUpperCase());
+
+  // 铭牌底部 meta 条：CITY · 退役军人 · GRAD_YEAR
+  (function(){
+    var parts = [];
+    if(meta.city_en) parts.push(esc(meta.city_en.toUpperCase()));
+    if(meta.veteran) parts.push(esc(meta.veteran_branch_cn ? (meta.veteran_branch_cn + '退役') : '退役军人'));
+    if(meta.graduation_year) parts.push(esc(String(meta.graduation_year)));
+    var html = parts.map(function(p){ return '<span>'+p+'</span>'; }).join('·');
+    setBySource('meta.tag_strip', html);
+  })();
+
+  // ---------- 引子 lede ----------
+  (function(){
+    var top10 = (awards || []).filter(function(a){ return a.type === 'competition'; })[0];
+    var top10Name = top10 ? '<em>十佳</em>' : '<em>官方认证</em>';
+    var ratio = (top10 && top10.ratio_display) ? top10.ratio_display : (meta.feishu_top10_ratio || '');
+    // 计算入选数与投稿数（projects 中 award_status === undefined 且 featured_award === '飞书十佳'）
+    var entered = projects.filter(function(p){ return p.featured_award === '飞书十佳'; }).length;
+    var submitted = ratio && ratio.indexOf('/') > -1 ? parseInt(ratio.split('/')[1], 10) : null;
+
+    var p1 =
+      '我从 <em>2026 年 1 月</em>开始学 AI，3 月动手写第一个 Skill。'+
+      '到 5 月，做出一套自己的 Multi-Agent 研究框架——'+
+      '其中'+(entered ? esc(String(entered)) : '两')+'个 Skill 被字节飞书官方选入「'+top10Name+'」，'+
+      '将收录至 larksuite 开源库附作者署名。';
+
+    var school = esc(meta.school_cn || '');
+    var p2Parts = [];
+    if(school) p2Parts.push(school + '国际经济与贸易（全英语实验班）应届');
+    if(meta.veteran){
+      p2Parts.push((meta.veteran_branch_cn || '') + '湖南总队长沙支队退役');
+    }
+    var p2 = p2Parts.join('。')+'。<em>慢工的研究型</em>创造者，喜欢和前沿待在一起，自己上手做一个控制得住的版本。';
+
+    setBySource('lede',
+      '<p class="lede">'+p1+'</p>'+
+      '<p class="lede">'+p2+'</p>'
+    );
+  })();
+
+  // ---------- I · INDEX (projects 索引) ----------
+  (function(){
+    if(!projects.length){ setBySource('projects', ''); return; }
+    var html = projects.map(function(p){
+      var year = esc(p.year || '');
+      var nameEn = esc(p.name_en || '');
+      var nameCn = p.name_cn ? ' · ' + esc(p.name_cn) : (p.tagline && p.tagline !== p.name_cn ? ' · ' + esc(p.tagline) : '');
+      var desc = esc(p.activity_meta || p.description_short || '');
+      var isTop10 = p.featured_award === '飞书十佳';
+      var tag = isTop10 ? '<span class="tag">★ 十佳</span>' : '';
+      return ''+
+        '<li class="index-row">'+
+          '<span class="year">'+year+'</span>'+
+          '<span class="body">'+
+            '<strong>'+nameEn+'</strong>'+nameCn+
+            (desc ? '<span class="desc">'+desc+'</span>' : '')+
+          '</span>'+
+          tag+
+        '</li>';
+    }).join('');
+    setBySource('projects', html);
+  })();
+
+  // ---------- II · RECOGNITION ----------
+  (function(){
+    var top10 = awards.filter(function(a){ return a.type === 'competition'; })[0];
+    if(top10){
+      var dateStr = top10.date ? top10.date.replace(/-/g,'.') : '';
+      var ratio = top10.ratio_display || '';
+      var submitted = ratio.indexOf('/') > -1 ? parseInt(ratio.split('/')[1],10) : null;
+      var entered = ratio.indexOf('/') > -1 ? parseInt(ratio.split('/')[0],10) : null;
+      var pct = (submitted && entered) ? Math.round(entered/submitted*100)+'%' : '';
+
+      // 入选项目（飞书十佳）与未入选项目
+      var hitProjects = projects.filter(function(p){ return p.featured_award === '飞书十佳'; });
+      var missProjects = projects.filter(function(p){ return p.award_status === '未入选'; });
+      var hitNames = hitProjects.map(function(p){ return '<strong>'+esc(p.name_en)+'</strong>'; }).join(' 与 ');
+      var missName = missProjects[0] ? '<strong>'+esc(missProjects[0].name_en)+'</strong>' : '';
+
+      var bodyP = '由'+esc(top10.issuer || '主办方')+'官方团队主办的'+esc(top10.issuer_track || '')+'。'+
+        (hitNames ? hitNames + ' 入选，将收录至飞书 CLI 官方开源库并附作者署名。' : '')+
+        (missName ? '另一作品 '+missName+' 定位偏 ToB 企业级未入选——三个作品均为同期独立完成。' : '');
+
+      var html =
+        '<div class="award-card">'+
+          '<div class="award-label">入选 · '+esc(dateStr)+'</div>'+
+          '<h4>'+esc(top10.name)+'<br/>'+esc(ratio ? (submitted+' 项投稿，'+entered+' 项入选 · '+pct) : '')+'</h4>'+
+          '<p>'+bodyP+'</p>'+
+          '<div class="meta">'+
+            '<span>主办 · '+esc(top10.issuer || '')+'</span>'+
+            (top10.issuer_track ? '<span>赛道 · '+esc(top10.issuer_track)+'</span>' : '')+
+          '</div>'+
+        '</div>';
+      setBySource('award_card', html);
+    } else {
+      setBySource('award_card', '');
+    }
+
+    // other-honors：awards 中 type !== 'competition' 的（数据源为准）
+    var others = awards.filter(function(a){ return a.type !== 'competition'; });
+    var ohHtml = others.map(function(a){
+      var when = a.date ? esc(a.date.replace(/-/g,'.')) :
+                 (a.id === 'a-pap-merit' ? '入伍期间' : '—');
+      var label = esc(a.name) + (a.issuer ? ' · ' + esc(a.issuer) : '');
+      return '<li>'+label+'<span>'+when+'</span></li>';
+    }).join('');
+    setBySource('other_honors', ohHtml);
+  })();
+
+  // ---------- III · WORK (详细项目块) ----------
+  (function(){
+    // 仅取 featured === true 的 projects 作详细块；按 sort_order 渲染
+    var featured = projects.filter(function(p){ return p.featured; });
+    var html = featured.map(function(p, idx){
+      var no = 'No. ' + String(idx+1).padStart(2,'0');
+      var nameEn = esc(p.name_en);
+      var nameCn = p.name_cn && p.name_cn !== p.tagline ? p.name_cn : (p.tagline || '');
+      var titleHtml = '<h3>'+nameEn +
+        (nameCn ? '<br/><span style="font-size:.7em;color:var(--ink-mute);font-weight:400;">'+esc(nameCn)+'</span>' : '')+
+        '</h3>';
+
+      var badge = p.featured_award === '飞书十佳' ? '<span class="badge">★ 飞书十佳</span>' : '';
+
+      var metaParts = [];
+      if(p.year) metaParts.push('<span>'+esc(p.year)+'</span>');
+      if(p.tagline && p.tagline !== nameCn) metaParts.push('<span>'+esc(p.tagline)+'</span>');
+      if(p.activity_meta) metaParts.push('<span>'+esc(p.activity_meta)+'</span>');
+      if(p.cost) metaParts.push('<span>'+esc(p.cost)+'</span>');
+      // 关于 license 等附加描述目前 schema 未单列，跳过
+
+      var desc = p.description_short ? '<p>'+esc(p.description_short)+'</p>' : '';
+
+      // 链接块：优先 url_github + url_detail
+      var linkParts = [];
+      if(p.url_github){
+        linkParts.push('<a href="'+esc(p.url_github)+'" target="_blank">→ GitHub</a>');
+      }
+      if(p.url_detail){
+        linkParts.push('<a href="'+esc(p.url_detail)+'">→ 项目详情</a>');
+      }
+      // 官方公示链接（若是飞书十佳，从 award.url 取）
+      if(p.featured_award === '飞书十佳'){
+        var top10 = awards.filter(function(a){ return a.type === 'competition'; })[0];
+        if(top10 && top10.url){
+          linkParts.push('<a href="'+esc(top10.url)+'" target="_blank">→ '+esc(top10.url_label || '官方公示')+'</a>');
+        }
+      }
+      var linksHtml = linkParts.length ? '<div class="work-links">'+linkParts.join('')+'</div>' : '';
+
+      return ''+
+        '<article class="work-entry">'+
+          '<div class="work-head">'+
+            '<span class="work-no">'+no+'</span>'+
+            titleHtml+
+            badge+
+          '</div>'+
+          '<div class="work-meta">'+metaParts.join('')+'</div>'+
+          desc+
+          linksHtml+
+        '</article>';
+    }).join('');
+    setBySource('work_entries', html);
+  })();
+
+  // ---------- IV · EXPERIENCE (经历时间线) ----------
+  (function(){
+    var html = experiences.map(function(e){
+      // date_range 格式化：data.js 是 "2026 · 01—04" / "2022 · 09 — 2024 · 09"
+      // 渲染回 "2026.01—04" 这种紧凑形式
+      var year = (e.date_range || '').replace(/\s/g,'').replace(/·/g,'.');
+      var orgCn = esc(e.org_cn || '');
+      var roleEn = e.role_en ? ' · '+esc(e.role_en) : '';
+      var summary = esc(e.summary || '');
+      var note = e.note ? ' '+esc(e.note) : '';
+      return ''+
+        '<li class="index-row">'+
+          '<span class="year">'+esc(year)+'</span>'+
+          '<span class="body">'+
+            '<strong>'+orgCn+'</strong>'+roleEn+
+            '<span class="desc">'+summary+note+'</span>'+
+          '</span>'+
+        '</li>';
+    }).join('');
+    setBySource('experiences', html);
+  })();
+
+  // ---------- V · DETAILS ----------
+  // Education
+  (function(){
+    var parts = [];
+    if(meta.school_cn) parts.push(esc(meta.school_cn));
+    parts.push('国际经济与贸易（全英语实验班）');
+    parts.push('国家级一流本科专业建设点');
+    parts.push('<code>2021.09 — 2027.06</code>（因服兵役延期 2 年）');
+    parts.push('GPA <code>3.3/4.0（前 20%）</code>');
+    parts.push('团支书');
+    parts.push('代表课程：程序设计基础与应用 91 / 中级微观经济学 88 / 国际商务 91 / 财政学 91');
+    parts.push('英语 CET-6 <code>521</code>');
+    setBySource('education', parts.join(' · ') + '。');
+  })();
+
+  // Skill blocks（按 skills 数组生成 detail-block；前两组用作 AI Stack + Foundation 兼容旧版）
+  (function(){
+    if(!skills.length){ setBySource('skill_blocks', ''); return; }
+    // 与旧版兼容：前两组分别命名 "AI Stack" "Foundation" 以贴近 hello.html 风格
+    // 这里改为按 skills 自身 category_cn / category_en 渲染，多组都展示
+    var html = skills.map(function(s){
+      var label = (s.category_en || '') + (s.category_cn ? ' · ' + s.category_cn : '');
+      var itemsHtml = (s.items || []).map(function(it){
+        return '<code>'+esc(it)+'</code>';
+      }).join(' · ');
+      return ''+
+        '<div class="detail-block">'+
+          '<div class="detail-label">'+esc(label)+'</div>'+
+          '<div class="detail-body">'+itemsHtml+'。</div>'+
+        '</div>';
+    }).join('');
+    setBySource('skill_blocks', html);
+  })();
+
+  // Off-screen
+  (function(){
+    var runItem = offScreen.filter(function(o){ return o.id === 'off-run'; })[0];
+    var writeItem = offScreen.filter(function(o){ return o.id === 'off-write'; })[0];
+
+    var fullPb = '', halfPb = '', essayCount = '', essayReads = '';
+    if(runItem && runItem.stats){
+      runItem.stats.forEach(function(st){
+        if(st.label_en === 'Full Marathon PB') fullPb = st.num;
+        else if(st.label_en === 'Half Marathon PB') halfPb = st.num;
+      });
+    }
+    if(writeItem && writeItem.stats){
+      writeItem.stats.forEach(function(st){
+        if(st.label_en === 'Personal Essays') essayCount = st.num;
+        else if(st.label_en === 'Campus Reads') essayReads = st.num;
+      });
+    }
+    fullPb = fullPb || meta.marathon_full_pb || '';
+    halfPb = halfPb || meta.marathon_half_pb || '';
+    essayCount = essayCount || meta.essay_count || '';
+
+    var html =
+      '全马 PB <code>'+esc(fullPb)+'</code> / 半马 PB <code>'+esc(halfPb)+'</code>。'+
+      esc(essayCount)+' 篇随笔，慢工的写作者。'+
+      '基于 Claude Opus 4.6 协作完成本职 AI 项目——非 CS 科班，'+
+      '贡献是产品 taste 与迭代节奏。';
+    setBySource('off_screen', html);
+  })();
+
+  // ---------- VI · CONTACT ----------
+  (function(){
+    // contact intro 散文（保留风格，只把"找的位置"动态读 meta.looking_for_cn）
+    var lookingFor = meta.looking_for_cn || '';
+    // looking_for_cn 形如 "腾讯研究院 / 字节研究院类研究岗 · AI Agent / DevEx PM · ..."
+    var intro = '我在找<strong>能让我和前沿待在一起、能动手做 AI 工具</strong>的位置——'+esc(lookingFor)+'。';
+    setBySource('contact_intro', intro);
+
+    // contacts 列表（按 sort_order，过滤掉无 url 的 location）
+    var visible = contacts.slice().sort(function(a,b){ return (a.sort_order||0)-(b.sort_order||0); })
+      .filter(function(c){ return c.url; });
+    var html = visible.map(function(c){
+      var isExternal = /^https?:/i.test(c.url);
+      var target = isExternal ? ' target="_blank"' : '';
+      var text = c.type === 'github' ? 'github.com/' + (c.display || '') : (c.display || c.label_cn || '');
+      return '<a href="'+esc(c.url)+'"'+target+'>'+esc(text)+'</a>';
+    }).join('');
+    setBySource('contacts', html);
+  })();
+
 })();
 </script>
 

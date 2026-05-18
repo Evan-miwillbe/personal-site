@@ -3,203 +3,328 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-<title>滕美名 · 探索 · Drive Around</title>
+<title>滕美名 · 书院 · Courtyard</title>
+<script src="data.js"></script>
 <style>
+  :root{
+    --accent:#7F2020;
+    --accent-hover:#a02828;
+    --bg:#F6F3EB;
+    --sage:#869B7E;
+    --sand:#C9CAAC;
+    --ink:#2a2520;
+    --hanzi:"Noto Serif SC","Songti SC","STSong",serif;
+    --mono:"JetBrains Mono","SF Mono",monospace;
+  }
   *{margin:0;padding:0;box-sizing:border-box}
-  html,body{width:100%;height:100%;overflow:hidden;background:#dfe6ed;font-family:"Inter","HarmonyOS Sans SC","PingFang SC",sans-serif;color:#1b1a17}
+  html,body{
+    width:100%;height:100%;overflow:hidden;
+    background:var(--bg);color:var(--ink);
+    font-family:var(--hanzi);
+  }
   canvas{display:block;cursor:grab;outline:none}
   canvas:active{cursor:grabbing}
 
-  /* 加载页 */
+  /* ============ 加载页 ============ */
   #loader{
     position:fixed;inset:0;
-    background:#fbfaf6;
+    background:var(--bg);
     display:flex;flex-direction:column;align-items:center;justify-content:center;
     z-index:100;
-    transition:opacity .6s;
+    transition:opacity .8s ease;
   }
   #loader.hidden{opacity:0;pointer-events:none}
   #loader .seal{
-    font-family:"Noto Serif SC","Songti SC",serif;
-    font-size:64px;color:#8b2f2f;
-    border:2px solid #8b2f2f;
-    padding:8px 16px;
-    margin-bottom:32px;
+    font-family:var(--hanzi);
+    font-size:88px;color:var(--accent);
+    border:3px solid var(--accent);
+    width:140px;height:140px;
+    display:flex;align-items:center;justify-content:center;
+    line-height:1;
+    margin-bottom:28px;
+    box-shadow:0 0 0 6px var(--bg), 0 0 0 8px var(--accent);
+    letter-spacing:0;
   }
-  #loader .hint{
-    font-size:13px;color:#666;letter-spacing:.16em;margin-top:8px;
+  #loader .seal-sub{
+    font-size:13px;letter-spacing:.4em;color:var(--ink);
+    margin-bottom:24px;opacity:.7;
   }
   #loader .progress{
-    width:200px;height:2px;background:#eee;margin-top:24px;
+    width:220px;height:2px;background:#e6e1d2;
+    overflow:hidden;
   }
   #loader .progress .bar{
-    height:100%;background:#8b2f2f;width:0%;transition:width .3s;
+    height:100%;background:var(--accent);width:0%;
+    transition:width .25s ease;
+  }
+  #loader .hint{
+    font-size:11px;color:var(--ink);opacity:.5;
+    letter-spacing:.2em;margin-top:18px;
   }
 
-  /* HUD */
+  /* ============ HUD ============ */
   #hud{
     position:fixed;top:24px;left:24px;
-    background:rgba(251,250,246,.85);
-    backdrop-filter:blur(8px);
-    border:1px solid rgba(139,47,47,.3);
-    border-left:3px solid #8b2f2f;
-    padding:14px 20px;
-    font-size:13px;line-height:1.7;
+    background:rgba(246,243,235,.88);
+    backdrop-filter:blur(10px);
+    border:1px solid rgba(127,32,32,.25);
+    border-left:3px solid var(--accent);
+    padding:16px 22px;
+    font-size:13px;line-height:1.8;
     z-index:10;
-    max-width:280px;
+    max-width:300px;
+    box-shadow:0 4px 20px rgba(42,37,32,.08);
   }
-  #hud strong{color:#8b2f2f;font-weight:600;letter-spacing:.04em}
-  #hud .keys{font-family:"JetBrains Mono",monospace;font-size:11px;color:#555;margin-top:6px;letter-spacing:.04em}
+  #hud .title{
+    font-size:15px;font-weight:600;color:var(--accent);
+    letter-spacing:.08em;margin-bottom:4px;
+  }
+  #hud .subtitle{
+    font-size:12px;color:var(--ink);opacity:.7;
+    margin-bottom:12px;letter-spacing:.05em;
+  }
+  #hud .keys{
+    font-family:var(--mono);font-size:11px;
+    color:var(--ink);opacity:.75;
+    letter-spacing:.03em;
+    border-top:1px dashed rgba(127,32,32,.2);
+    padding-top:10px;margin-top:4px;
+  }
   #hud .keys kbd{
-    background:#fff;border:1px solid #ccc;border-bottom-width:2px;
-    padding:1px 6px;border-radius:3px;font-family:inherit;font-size:10px;
-    margin:0 1px;
+    background:#fff;border:1px solid #c8c1ad;border-bottom-width:2px;
+    padding:1px 6px;border-radius:3px;font-family:inherit;
+    font-size:10px;margin:0 2px;color:var(--accent);
   }
+  #hud .keys div{margin:3px 0}
 
-  /* 右上角 切回简历 */
+  /* ============ 顶部链接 ============ */
   .toplinks{
     position:fixed;top:24px;right:24px;z-index:10;
-    display:flex;gap:14px;
+    display:flex;gap:10px;
   }
   .toplinks a{
-    background:rgba(251,250,246,.85);
-    backdrop-filter:blur(8px);
-    border:1px solid #ccc;
-    padding:8px 14px;
-    font-size:12px;text-decoration:none;color:#1b1a17;
-    letter-spacing:.04em;
+    background:rgba(246,243,235,.88);
+    backdrop-filter:blur(10px);
+    border:1px solid #c8c1ad;
+    padding:9px 16px;
+    font-size:12px;text-decoration:none;color:var(--ink);
+    letter-spacing:.06em;
+    transition:all .2s;
+    font-family:var(--hanzi);
+  }
+  .toplinks a:hover{
+    border-color:var(--accent);
+    color:var(--accent);
+    background:rgba(246,243,235,.95);
+  }
+
+  /* ============ 项目 Dialog ============ */
+  #dialog{
+    position:fixed;left:50%;bottom:32px;
+    transform:translateX(-50%) translateY(140%);
+    width:min(580px,calc(100% - 48px));
+    background:var(--bg);
+    border:2px solid var(--accent);
+    border-radius:2px;
+    padding:24px 28px 22px;
+    z-index:20;
+    transition:transform .4s cubic-bezier(.2,.8,.2,1);
+    box-shadow:0 16px 48px rgba(127,32,32,.18), 0 0 0 1px rgba(127,32,32,.1) inset;
+  }
+  #dialog.show{transform:translateX(-50%) translateY(0)}
+  #dialog::before{
+    content:"";position:absolute;top:-1px;left:50%;transform:translateX(-50%);
+    width:60px;height:4px;background:var(--accent);
+  }
+  #dialog .label{
+    font-size:10px;letter-spacing:.4em;color:var(--accent);
+    margin-bottom:6px;
+  }
+  #dialog .name{
+    font-size:22px;font-weight:600;color:var(--ink);
+    margin-bottom:6px;letter-spacing:.04em;
+  }
+  #dialog .tagline{
+    font-size:13px;color:var(--ink);opacity:.75;
+    line-height:1.6;margin-bottom:18px;
+  }
+  #dialog .row{
+    display:flex;justify-content:space-between;align-items:center;
+    gap:12px;
+  }
+  #dialog .badge{
+    display:inline-block;
+    font-size:11px;letter-spacing:.1em;
+    color:var(--accent);border:1px solid var(--accent);
+    padding:3px 10px;border-radius:2px;
+    background:rgba(127,32,32,.05);
+  }
+  #dialog .badge.featured{
+    background:var(--accent);color:var(--bg);
+  }
+  #dialog .actions{display:flex;gap:10px}
+  #dialog button{
+    font-family:var(--hanzi);font-size:13px;
+    padding:9px 20px;border:none;cursor:pointer;
+    letter-spacing:.08em;
     transition:all .2s;
   }
-  .toplinks a:hover{border-color:#8b2f2f;color:#8b2f2f}
-
-  /* Dialog 弹窗 */
-  #dialog{
-    position:fixed;left:50%;bottom:32px;transform:translateX(-50%) translateY(120%);
-    width:min(560px,calc(100% - 48px));
-    background:rgba(251,250,246,.96);
-    backdrop-filter:blur(12px);
-    border:1px solid rgba(139,47,47,.3);
-    border-top:3px solid #8b2f2f;
-    padding:28px 32px;
-    z-index:20;
-    transition:transform .4s cubic-bezier(.2,.9,.3,1.2);
-    box-shadow:0 12px 40px rgba(0,0,0,.12);
+  #dialog .primary{background:var(--accent);color:var(--bg)}
+  #dialog .primary:hover{background:var(--accent-hover)}
+  #dialog .ghost{
+    background:transparent;color:var(--ink);
+    border:1px solid #c8c1ad;
   }
-  #dialog.open{transform:translateX(-50%) translateY(0)}
-  #dialog .dlg-label{
-    font-family:"JetBrains Mono",monospace;
-    font-size:10px;color:#8b2f2f;
-    letter-spacing:.24em;text-transform:uppercase;
-    margin-bottom:10px;
-  }
-  #dialog h3{
-    font-family:"Noto Serif SC","Songti SC",serif;
-    font-size:22px;font-weight:500;margin-bottom:12px;line-height:1.4;
-  }
-  #dialog p{font-size:14.5px;line-height:1.75;color:#4a4842;margin-bottom:12px}
-  #dialog .dlg-meta{
-    font-family:"JetBrains Mono",monospace;
-    font-size:11px;color:#888;letter-spacing:.06em;
-    border-top:1px dashed #ccc;padding-top:10px;
-    display:flex;flex-wrap:wrap;gap:18px;
-  }
-  #dialog .dlg-close{
-    position:absolute;top:14px;right:18px;
-    width:28px;height:28px;border-radius:50%;
-    border:1px solid #ccc;background:none;cursor:pointer;
-    font-size:14px;color:#888;line-height:1;
-  }
-  #dialog .dlg-close:hover{border-color:#8b2f2f;color:#8b2f2f}
-  #dialog a{color:#8b2f2f}
-
-  /* 移动端方向键 */
-  #touch{
-    position:fixed;bottom:24px;left:24px;
-    display:none;z-index:15;
-    grid-template-columns:repeat(3,52px);grid-template-rows:repeat(3,52px);
-    gap:6px;
-  }
-  #touch button{
-    background:rgba(251,250,246,.7);
-    backdrop-filter:blur(6px);
-    border:1px solid #aaa;
-    border-radius:8px;
-    font-size:18px;color:#333;
-    -webkit-tap-highlight-color:transparent;
-    touch-action:none;
-  }
-  #touch button:active{background:#8b2f2f;color:#fff}
-  #touch .up{grid-column:2;grid-row:1}
-  #touch .left{grid-column:1;grid-row:2}
-  #touch .down{grid-column:2;grid-row:2}
-  #touch .right{grid-column:3;grid-row:2}
-  @media(max-width:768px){
-    #touch{display:grid}
-    #hud{font-size:12px;padding:10px 14px;max-width:240px}
+  #dialog .ghost:hover{border-color:var(--accent);color:var(--accent)}
+  #dialog .hint{
+    font-size:10px;color:var(--ink);opacity:.45;
+    letter-spacing:.2em;margin-top:14px;text-align:right;
   }
 
-  /* 速度计 */
-  #speedo{
-    position:fixed;bottom:24px;right:24px;z-index:10;
-    font-family:"JetBrains Mono",monospace;
-    background:rgba(251,250,246,.85);
-    backdrop-filter:blur(8px);
-    border:1px solid #ccc;
-    padding:8px 14px;font-size:12px;letter-spacing:.06em;
-    color:#555;
+  /* ============ 接近提示 ============ */
+  #proximity{
+    position:fixed;left:50%;bottom:24px;transform:translateX(-50%);
+    background:rgba(127,32,32,.92);
+    color:var(--bg);
+    padding:8px 18px;font-size:12px;
+    letter-spacing:.15em;
+    opacity:0;transition:opacity .3s;
+    z-index:15;border-radius:2px;
+    pointer-events:none;
   }
-  #speedo .num{color:#8b2f2f;font-size:16px;font-weight:600}
+  #proximity.show{opacity:1}
+  #proximity kbd{
+    background:var(--bg);color:var(--accent);
+    padding:1px 6px;border-radius:2px;font-family:var(--mono);
+    font-size:10px;margin:0 4px;
+  }
+
+  /* ============ 罗盘 / 项目计数 ============ */
+  #compass{
+    position:fixed;bottom:24px;right:24px;
+    background:rgba(246,243,235,.88);
+    backdrop-filter:blur(10px);
+    border:1px solid #c8c1ad;
+    border-radius:50%;
+    width:64px;height:64px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:11px;color:var(--ink);
+    letter-spacing:.1em;
+    z-index:10;
+    flex-direction:column;
+  }
+  #compass .count{
+    font-size:18px;color:var(--accent);font-weight:600;
+    line-height:1;
+  }
+  #compass .lbl{
+    font-size:9px;letter-spacing:.2em;opacity:.6;
+    margin-top:3px;
+  }
+
+  /* ============ 移动端拦截 ============ */
+  #mobile-block{
+    position:fixed;inset:0;
+    background:var(--bg);
+    display:none;
+    flex-direction:column;align-items:center;justify-content:center;
+    z-index:200;
+    padding:32px;
+  }
+  #mobile-block.show{display:flex}
+  #mobile-block .seal{
+    font-family:var(--hanzi);
+    font-size:64px;color:var(--accent);
+    border:2px solid var(--accent);
+    width:100px;height:100px;
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:24px;
+  }
+  #mobile-block h2{
+    font-size:18px;color:var(--ink);letter-spacing:.1em;
+    margin-bottom:8px;font-weight:600;
+  }
+  #mobile-block p{
+    font-size:13px;color:var(--ink);opacity:.7;
+    line-height:1.8;text-align:center;
+    max-width:280px;margin-bottom:24px;
+  }
+  #mobile-block .links{display:flex;flex-direction:column;gap:10px;width:100%;max-width:240px}
+  #mobile-block .links a{
+    display:block;text-align:center;
+    padding:12px;text-decoration:none;
+    border:1px solid var(--accent);color:var(--accent);
+    font-size:13px;letter-spacing:.1em;
+  }
+  #mobile-block .links a.primary{
+    background:var(--accent);color:var(--bg);
+  }
 </style>
 </head>
 <body>
 
-<!-- 加载页 -->
+<!-- ============ 加载页 ============ -->
 <div id="loader">
   <div class="seal">滕</div>
-  <div style="font-family:'Noto Serif SC',serif;font-size:18px;letter-spacing:.12em;color:#1b1a17;">
-    滕美名 · DRIVE AROUND
-  </div>
-  <div class="hint">正在加载 3D 场景...</div>
-  <div class="progress"><div class="bar" id="bar"></div></div>
+  <div class="seal-sub">书 院 庭 院</div>
+  <div class="progress"><div class="bar" id="loadBar"></div></div>
+  <div class="hint">L O A D I N G</div>
 </div>
 
-<!-- HUD 提示 -->
+<!-- ============ 移动端拦截 ============ -->
+<div id="mobile-block">
+  <div class="seal">滕</div>
+  <h2>推荐桌面浏览器查看</h2>
+  <p>这是 3D 庭院探索版本，需要键盘 / 鼠标交互。手机请访问主页或编辑版。</p>
+  <div class="links">
+    <a class="primary" href="hello.html">主 页 · 书院风</a>
+    <a href="index.html">编 辑 版 · 古籍风</a>
+  </div>
+</div>
+
+<!-- ============ HUD ============ -->
 <div id="hud">
-  <strong>开车探索我的项目</strong><br/>
-  撞到地上立着的方块，会展开详情。
+  <div class="title">步入书院</div>
+  <div class="subtitle">走近卷轴 / 石碑 · 查看作品</div>
   <div class="keys">
-    <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> / 方向键 · 拖动旋转视角
+    <div><kbd>W A S D</kbd> 行走</div>
+    <div><kbd>Shift</kbd> 奔走 · <kbd>Space</kbd> 轻跃</div>
+    <div><kbd>鼠标拖拽</kbd> 环顾四周</div>
+    <div><kbd>E</kbd> 或 <kbd>Enter</kbd> 查看项目</div>
   </div>
 </div>
 
-<!-- 右上角链接 -->
+<!-- ============ 顶部链接 ============ -->
 <div class="toplinks">
-  <a href="index.html">→ 简历版</a>
+  <a href="hello.html">← 主页</a>
+  <a href="index.html">编辑版</a>
 </div>
 
-<!-- 弹窗 -->
+<!-- ============ 接近提示 ============ -->
+<div id="proximity">按 <kbd>E</kbd> 查看 · <kbd>Enter</kbd></div>
+
+<!-- ============ 罗盘 ============ -->
+<div id="compass">
+  <div class="count" id="projCount">0</div>
+  <div class="lbl">作 品</div>
+</div>
+
+<!-- ============ Dialog ============ -->
 <div id="dialog">
-  <button class="dlg-close" onclick="closeDialog()">×</button>
-  <div class="dlg-label" id="dlg-label">PROJECT</div>
-  <h3 id="dlg-title">—</h3>
-  <p id="dlg-body">—</p>
-  <div class="dlg-meta" id="dlg-meta"></div>
+  <div class="label" id="dlgLabel">作 品</div>
+  <div class="name" id="dlgName">—</div>
+  <div class="tagline" id="dlgTagline">—</div>
+  <div class="row">
+    <span class="badge" id="dlgBadge"></span>
+    <div class="actions">
+      <button class="ghost" id="dlgClose">关闭 (ESC)</button>
+      <button class="primary" id="dlgGo">查看详情</button>
+    </div>
+  </div>
+  <div class="hint">A · 退出 · E · 进入</div>
 </div>
 
-<!-- 移动端方向键 -->
-<div id="touch">
-  <button class="up" data-key="w">▲</button>
-  <button class="left" data-key="a">◀</button>
-  <button class="down" data-key="s">▼</button>
-  <button class="right" data-key="d">▶</button>
-</div>
-
-<!-- 速度计 -->
-<div id="speedo">
-  <span class="num" id="speed">0</span> · KM/H
-</div>
-
-<!-- Three.js ESM 配置 -->
+<!-- ============ Three.js importmap ============ -->
 <script type="importmap">
 {
   "imports": {
@@ -211,488 +336,1122 @@
 
 <script type="module">
 import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { FontLoader } from 'three/addons/loaders/FontLoader.js';
-import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
+
+// ============ 移动端拦截 ============
+if ('ontouchstart' in window && !window.matchMedia('(min-width: 900px)').matches) {
+  document.getElementById('mobile-block').classList.add('show');
+  document.getElementById('loader').classList.add('hidden');
+  throw new Error('mobile-blocked');
+}
+
+// ============ 配色 ============
+const C = {
+  accent: 0x7F2020,
+  accentLight: 0xa02828,
+  bg: 0xF6F3EB,
+  sage: 0x869B7E,
+  sageDark: 0x5d6e57,
+  sand: 0xC9CAAC,
+  ink: 0x2a2520,
+  brick: 0x9a8d72,
+  brickDark: 0x6e6650,
+  wall: 0xefe6d2,
+  roof: 0x3a3128,
+  wood: 0x6b3a2a,
+  bamboo: 0x7a8b5a,
+  bamboo2: 0x9aab74,
+  lantern: 0xff5050,
+};
 
 // ============ 项目数据 ============
-const PROJECTS = [
-  {
-    id:'multi-agent',
-    label:'PROJECT · 01',
-    title:'Multi-Agent Research · 多 Agent 深度研究框架',
-    body:'13 天 / 77 commits / 47 轮控制实验 / v1 → v9.0。从 PM 中心制 7-Agent 简化为扁平星型 2-3 Agent，实证 Lost in Middle 效应（中间合规率 0% vs 首尾 100%）。',
-    meta:'2026.04—05 · 个人独立研究 · 方法论已落地为飞书十佳作品',
-    pos:[-18, 0, -12], size:[6,5,2.5], color:0xb84a4a, name:'Multi-Agent'
-  },
-  {
-    id:'knowledge-healer',
-    label:'★ 飞书 CLI 十佳',
-    title:'knowledge-healer · 飞书知识库自愈巡检',
-    body:'3+2 多 Agent 并行架构，对飞书知识库做 7 维健康诊断。关键创新：跨源交叉验证（文档 vs 群聊），检测知识漂移——文档没改，但群里有人说"现在不这么做了"。',
-    meta:'2026.05 · MIT License · github.com/Evan-miwillbe/knowledge-healer',
-    pos:[12, 0, -18], size:[5,6,2.5], color:0xc8943a, name:'knowledge-\nhealer'
-  },
-  {
-    id:'lark-scoreboard',
-    label:'★ 飞书 CLI 十佳',
-    title:'lark-survey-scoreboard · 飞书实时评分大屏',
-    body:'培训结束打开飞书妙记说一句话，AI 替你想题目、生成问卷。手机评分，大屏 1 秒刷新，数据存自己的飞书 Base，总成本 ¥0。起源于美动医疗实习需求。',
-    meta:'2026.04 · github.com/Evan-miwillbe/lark-survey-scoreboard',
-    pos:[20, 0, 8], size:[5,5.5,2.5], color:0xe8b86f, name:'lark-survey'
-  },
-  {
-    id:'obsidian',
-    label:'PROJECT · 04',
-    title:'Obsidian LifeOS · 个人知识管理系统',
-    body:'日 / 周 / 月三层任务视图 + 知识库面板。基于 Claude Code Superpowers 开发。配套韩国开发者开源终端插件二改（Tab 多页 / 上下分屏 / 一键复制路径）。',
-    meta:'2026.03 — 至今 · 近 2 万字知识库',
-    pos:[-22, 0, 8], size:[6,4.5,2.5], color:0x6b8e7e, name:'LifeOS'
-  },
-  {
-    id:'about',
-    label:'ABOUT',
-    title:'关于滕美名',
-    body:'上海对外经贸大学国际经济与贸易（全英语实验班）应届。武警湖南总队长沙支队退役。GPA 3.3，团支书。一条能力主线：识别重复模式 → 工具化 → 沉淀复用——从部队文书 SOP 到天风 REITs 周报 SOP 到美动 VBA 到 AI Skill 生态一脉相承。',
-    meta:'22 岁 · 上海 · 慢工的研究型创造者',
-    pos:[0, 0, 22], size:[7,6,2.5], color:0x4a6b8e, name:'About'
-  },
-  {
-    id:'contact',
-    label:'CONTACT',
-    title:'想聊聊？',
-    body:'我在找能让我和前沿待在一起、能动手做 AI 工具的位置——腾讯研究院 / 字节研究院类研究岗、AI Agent / Developer Experience PM、AI 创业团队早期员工、AI 行业研究。',
-    meta:'Tengmeiming@163.com · +86 185-1677-3139 · github.com/Evan-miwillbe',
-    pos:[0, 0, -26], size:[7,5,2.5], color:0x8b2f2f, name:'Contact'
-  }
+const FALLBACK_PROJECTS = [
+  { id:'multi-agent-research', name_cn:'Multi-Agent Research', tagline:'13 天 / 77 commits / v9.0 收敛', url_detail:'projects/multi-agent-research.html', featured_award:null, color:'#7F2020' },
+  { id:'knowledge-healer', name_cn:'Knowledge Healer', tagline:'3+2 Agent 知识库自愈巡检', url_detail:'projects/knowledge-healer.html', featured_award:'飞书十佳', color:'#7F2020' },
+  { id:'lark-survey-scoreboard', name_cn:'Lark Survey Scoreboard', tagline:'飞书实时评分大屏', url_detail:'projects/lark-survey-scoreboard.html', featured_award:'飞书十佳', color:'#869B7E' },
+  { id:'obsidian-lifeos', name_cn:'Obsidian LifeOS', tagline:'日 / 周 / 月三层任务系统', url_detail:'projects/obsidian-lifeos.html', featured_award:null, color:'#869B7E' },
+  { id:'bitable-orchestrator', name_cn:'Bitable Orchestrator', tagline:'飞书多维表智能编排', url_detail:'projects/bitable-orchestrator.html', featured_award:null, color:'#C9CAAC' }
 ];
+const PROJECTS = (window.SITE_DATA && Array.isArray(window.SITE_DATA.projects) && window.SITE_DATA.projects.length)
+  ? window.SITE_DATA.projects : FALLBACK_PROJECTS;
+document.getElementById('projCount').textContent = PROJECTS.length;
 
-// ============ 场景设置 ============
+// ============ Three.js 基础 ============
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xdfe6ed);
-scene.fog = new THREE.Fog(0xdfe6ed, 35, 90);
+scene.background = new THREE.Color(C.bg);
+scene.fog = new THREE.Fog(0xeae3cf, 28, 90);
 
-const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 200);
-const renderer = new THREE.WebGLRenderer({antialias:true});
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+const camera = new THREE.PerspectiveCamera(55, innerWidth/innerHeight, 0.1, 300);
+camera.position.set(0, 3.2, 14);
+
+const renderer = new THREE.WebGLRenderer({ antialias:true });
+renderer.setPixelRatio(Math.min(2, devicePixelRatio));
+renderer.setSize(innerWidth, innerHeight);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
 document.body.appendChild(renderer.domElement);
 
 // ============ 光照 ============
-const ambient = new THREE.AmbientLight(0xffffff, 0.55);
+const ambient = new THREE.AmbientLight(0xfff4e0, 0.55);
 scene.add(ambient);
 
-const sun = new THREE.DirectionalLight(0xfff5e0, 1.1);
-sun.position.set(20, 40, 18);
+const sun = new THREE.DirectionalLight(0xfff0d8, 0.95);
+sun.position.set(18, 26, 12);
 sun.castShadow = true;
 sun.shadow.mapSize.set(2048, 2048);
-sun.shadow.camera.left = -50;
-sun.shadow.camera.right = 50;
-sun.shadow.camera.top = 50;
-sun.shadow.camera.bottom = -50;
+sun.shadow.camera.left = -30;
+sun.shadow.camera.right = 30;
+sun.shadow.camera.top = 30;
+sun.shadow.camera.bottom = -30;
 sun.shadow.camera.near = 1;
-sun.shadow.camera.far = 100;
-sun.shadow.bias = -0.0005;
+sun.shadow.camera.far = 80;
+sun.shadow.bias = -0.0006;
 scene.add(sun);
 
-// 半球光让暗部不死黑
-const hemi = new THREE.HemisphereLight(0xc4d4e0, 0xe8dcc0, 0.3);
-scene.add(hemi);
+const fill = new THREE.HemisphereLight(0xfff4e0, 0x5d6e57, 0.35);
+scene.add(fill);
+
+// ============ 程序化纹理：青砖地面 ============
+function makeBrickTexture() {
+  const s = 512;
+  const c = document.createElement('canvas');
+  c.width = c.height = s;
+  const ctx = c.getContext('2d');
+  // 底色
+  ctx.fillStyle = '#a89c82';
+  ctx.fillRect(0, 0, s, s);
+  // 砖块
+  const tileW = 64, tileH = 32;
+  for (let y = 0; y < s; y += tileH) {
+    const offset = (y / tileH) % 2 === 0 ? 0 : tileW / 2;
+    for (let x = -tileW; x < s + tileW; x += tileW) {
+      const tx = x + offset;
+      const shade = 130 + Math.floor(Math.random() * 40);
+      ctx.fillStyle = `rgb(${shade-10},${shade-18},${shade-35})`;
+      ctx.fillRect(tx + 1, y + 1, tileW - 2, tileH - 2);
+      // 颗粒
+      for (let i = 0; i < 8; i++) {
+        ctx.fillStyle = `rgba(0,0,0,${Math.random()*0.08})`;
+        ctx.fillRect(tx + Math.random()*tileW, y + Math.random()*tileH, 2, 2);
+      }
+    }
+    // 缝隙
+    ctx.fillStyle = '#5a5240';
+    ctx.fillRect(0, y, s, 1);
+  }
+  for (let x = 0; x < s; x += tileW/2) {
+    ctx.fillStyle = '#5a5240';
+    ctx.fillRect(x, 0, 1, s);
+  }
+  const tex = new THREE.CanvasTexture(c);
+  tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+  tex.repeat.set(10, 10);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+
+function makeMossTexture() {
+  const s = 256;
+  const c = document.createElement('canvas');
+  c.width = c.height = s;
+  const ctx = c.getContext('2d');
+  const g = ctx.createRadialGradient(s/2, s/2, 20, s/2, s/2, s/2);
+  g.addColorStop(0, 'rgba(134,155,126,0.0)');
+  g.addColorStop(0.6, 'rgba(93,110,87,0.4)');
+  g.addColorStop(1, 'rgba(70,85,60,0.8)');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, s, s);
+  for (let i = 0; i < 80; i++) {
+    ctx.fillStyle = `rgba(134,155,126,${Math.random()*0.6})`;
+    ctx.beginPath();
+    ctx.arc(Math.random()*s, Math.random()*s, Math.random()*4 + 1, 0, Math.PI*2);
+    ctx.fill();
+  }
+  const tex = new THREE.CanvasTexture(c);
+  return tex;
+}
+
+function makeWallTexture() {
+  const s = 256;
+  const c = document.createElement('canvas');
+  c.width = c.height = s;
+  const ctx = c.getContext('2d');
+  ctx.fillStyle = '#efe6d2';
+  ctx.fillRect(0, 0, s, s);
+  for (let i = 0; i < 2000; i++) {
+    ctx.fillStyle = `rgba(${110+Math.random()*30},${100+Math.random()*30},${80+Math.random()*30},${Math.random()*0.12})`;
+    ctx.fillRect(Math.random()*s, Math.random()*s, 1, 1);
+  }
+  // 水渍
+  for (let i = 0; i < 4; i++) {
+    const g = ctx.createRadialGradient(Math.random()*s, Math.random()*s, 5, Math.random()*s, Math.random()*s, 40);
+    g.addColorStop(0, 'rgba(120,100,80,0.15)');
+    g.addColorStop(1, 'rgba(120,100,80,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, s, s);
+  }
+  const tex = new THREE.CanvasTexture(c);
+  tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+  return tex;
+}
+
+function makeScrollTexture(title, tagline) {
+  const w = 256, h = 512;
+  const c = document.createElement('canvas');
+  c.width = w; c.height = h;
+  const ctx = c.getContext('2d');
+  // 米黄底
+  ctx.fillStyle = '#f4ead0';
+  ctx.fillRect(0, 0, w, h);
+  // 老旧纹理
+  for (let i = 0; i < 500; i++) {
+    ctx.fillStyle = `rgba(${120+Math.random()*40},${100+Math.random()*30},${70+Math.random()*30},${Math.random()*0.1})`;
+    ctx.fillRect(Math.random()*w, Math.random()*h, 1, 1);
+  }
+  // 边框
+  ctx.strokeStyle = '#7F2020';
+  ctx.lineWidth = 3;
+  ctx.strokeRect(16, 16, w-32, h-32);
+  ctx.lineWidth = 1;
+  ctx.strokeRect(22, 22, w-44, h-44);
+  // 标题
+  ctx.fillStyle = '#7F2020';
+  ctx.font = 'bold 26px "Noto Serif SC","Songti SC",serif';
+  ctx.textAlign = 'center';
+  // 中文分行
+  const lines = wrapText(ctx, title, w - 60);
+  let y = 80;
+  lines.forEach(line => { ctx.fillText(line, w/2, y); y += 34; });
+  // 分隔
+  ctx.fillStyle = '#7F2020';
+  ctx.fillRect(w/2 - 30, y + 12, 60, 2);
+  // tagline
+  ctx.fillStyle = '#2a2520';
+  ctx.font = '15px "Noto Serif SC","Songti SC",serif';
+  const tlines = wrapText(ctx, tagline, w - 60);
+  y += 50;
+  tlines.forEach(line => { ctx.fillText(line, w/2, y); y += 22; });
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+
+function wrapText(ctx, text, maxW) {
+  const words = String(text).split(/\s+/);
+  const lines = [];
+  let cur = '';
+  for (const word of words) {
+    if (ctx.measureText(word).width > maxW) {
+      if (cur) { lines.push(cur); cur = ''; }
+      for (const ch of word) {
+        const test = cur + ch;
+        if (ctx.measureText(test).width > maxW && cur.length > 0) {
+          lines.push(cur);
+          cur = ch;
+        } else {
+          cur = test;
+        }
+      }
+      continue;
+    }
+    const test = cur ? cur + ' ' + word : word;
+    if (ctx.measureText(test).width > maxW && cur.length > 0) {
+      lines.push(cur);
+      cur = word;
+    } else {
+      cur = test;
+    }
+  }
+  if (cur) lines.push(cur);
+  return lines;
+}
+
+function makePlaqueTexture(text) {
+  const w = 512, h = 128;
+  const c = document.createElement('canvas');
+  c.width = w; c.height = h;
+  const ctx = c.getContext('2d');
+  ctx.fillStyle = '#7F2020';
+  ctx.fillRect(0, 0, w, h);
+  // 金边
+  ctx.strokeStyle = '#d4a55a';
+  ctx.lineWidth = 4;
+  ctx.strokeRect(6, 6, w-12, h-12);
+  ctx.lineWidth = 1;
+  ctx.strokeRect(14, 14, w-28, h-28);
+  // 文字
+  ctx.fillStyle = '#f4ead0';
+  ctx.font = 'bold 64px "Noto Serif SC","Songti SC",serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(text, w/2, h/2 + 4);
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
 
 // ============ 地面 ============
-const groundGeo = new THREE.PlaneGeometry(120, 120, 60, 60);
+const groundGeo = new THREE.PlaneGeometry(80, 80, 1, 1);
 const groundMat = new THREE.MeshStandardMaterial({
-  color:0xeae3d2, roughness:0.95, metalness:0
+  map: makeBrickTexture(), roughness: 0.85, metalness: 0,
 });
 const ground = new THREE.Mesh(groundGeo, groundMat);
 ground.rotation.x = -Math.PI/2;
 ground.receiveShadow = true;
 scene.add(ground);
 
-// 网格线辅助
-const grid = new THREE.GridHelper(120, 60, 0xc8c0ad, 0xd8d2c0);
-grid.position.y = 0.01;
-scene.add(grid);
-
-// ============ 车辆 ============
-const car = new THREE.Group();
-const bodyGeo = new THREE.BoxGeometry(1.4, 0.55, 2.2);
-const bodyMat = new THREE.MeshStandardMaterial({color:0x8b2f2f, roughness:0.5, metalness:0.15});
-const carBody = new THREE.Mesh(bodyGeo, bodyMat);
-carBody.position.y = 0.65;
-carBody.castShadow = true;
-car.add(carBody);
-
-// 车顶（简化驾驶舱）
-const cabinGeo = new THREE.BoxGeometry(1.1, 0.4, 1.0);
-const cabinMat = new THREE.MeshStandardMaterial({color:0x1b1a17, roughness:0.3});
-const cabin = new THREE.Mesh(cabinGeo, cabinMat);
-cabin.position.set(0, 1.12, -0.1);
-cabin.castShadow = true;
-car.add(cabin);
-
-// 4 个轮子
-const wheelGeo = new THREE.CylinderGeometry(0.32, 0.32, 0.28, 16);
-const wheelMat = new THREE.MeshStandardMaterial({color:0x222, roughness:0.7});
-const wheelPositions = [[-0.7,0.32,0.75],[0.7,0.32,0.75],[-0.7,0.32,-0.75],[0.7,0.32,-0.75]];
-const wheels = [];
-wheelPositions.forEach(p=>{
-  const w = new THREE.Mesh(wheelGeo, wheelMat);
-  w.rotation.z = Math.PI/2;
-  w.position.set(...p);
-  w.castShadow = true;
-  car.add(w);
-  wheels.push(w);
+// 边缘苔藓圈
+const mossGeo = new THREE.PlaneGeometry(80, 80);
+const mossMat = new THREE.MeshStandardMaterial({
+  map: makeMossTexture(),
+  transparent: true, opacity: 0.7,
+  roughness: 1, depthWrite: false,
 });
+const moss = new THREE.Mesh(mossGeo, mossMat);
+moss.rotation.x = -Math.PI/2;
+moss.position.y = 0.01;
+scene.add(moss);
 
-// 前灯
-[-0.45, 0.45].forEach(x=>{
-  const head = new THREE.Mesh(
-    new THREE.SphereGeometry(0.08,8,8),
-    new THREE.MeshStandardMaterial({color:0xfff5b8, emissive:0xfff5b8, emissiveIntensity:.3})
+// ============ 院墙（围合） ============
+const wallTex = makeWallTexture();
+wallTex.repeat.set(6, 1);
+const wallMat = new THREE.MeshStandardMaterial({ map: wallTex, color: C.wall, roughness: 0.9 });
+const wallTopMat = new THREE.MeshStandardMaterial({ color: C.roof, roughness: 0.6 });
+
+function makeWallSegment(w, h, t) {
+  const g = new THREE.Group();
+  const body = new THREE.Mesh(new THREE.BoxGeometry(w, h, t), wallMat);
+  body.position.y = h/2;
+  body.castShadow = true; body.receiveShadow = true;
+  g.add(body);
+  // 黛瓦顶
+  const cap = new THREE.Mesh(new THREE.BoxGeometry(w + 0.2, 0.2, t + 0.4), wallTopMat);
+  cap.position.y = h + 0.1;
+  cap.castShadow = true;
+  g.add(cap);
+  return g;
+}
+
+const wallH = 3.2, wallT = 0.5, courtyard = 24;
+// 后墙
+const wB = makeWallSegment(courtyard*2, wallH, wallT);
+wB.position.set(0, 0, -courtyard);
+scene.add(wB);
+// 左墙
+const wL = makeWallSegment(courtyard*2, wallH, wallT);
+wL.position.set(-courtyard, 0, 0);
+wL.rotation.y = Math.PI/2;
+scene.add(wL);
+// 右墙
+const wR = makeWallSegment(courtyard*2, wallH, wallT);
+wR.position.set(courtyard, 0, 0);
+wR.rotation.y = Math.PI/2;
+scene.add(wR);
+// 前墙留入口
+const wF1 = makeWallSegment(courtyard - 3, wallH, wallT);
+wF1.position.set(-(courtyard/2 + 1.5), 0, courtyard);
+scene.add(wF1);
+const wF2 = makeWallSegment(courtyard - 3, wallH, wallT);
+wF2.position.set(courtyard/2 + 1.5, 0, courtyard);
+scene.add(wF2);
+
+// ============ 主书院建筑（后方中央） ============
+function buildHall(x, z, scale = 1) {
+  const g = new THREE.Group();
+  const w = 10 * scale, d = 6 * scale, h = 4 * scale;
+  // 主体
+  const body = new THREE.Mesh(
+    new THREE.BoxGeometry(w, h, d),
+    new THREE.MeshStandardMaterial({ map: wallTex.clone(), color: C.wall, roughness: 0.9 })
   );
-  head.position.set(x, 0.7, 1.12);
-  car.add(head);
-});
-
-scene.add(car);
-
-// 车辆运动状态
-const carState = {
-  speed: 0,
-  heading: 0,          // 朝向（弧度）
-  steering: 0,
-  maxSpeed: 0.42,
-  accel: 0.012,
-  brake: 0.025,
-  friction: 0.985,
-  turnRate: 0.038,
-};
-
-// ============ 项目方块 ============
-const projectMeshes = [];
-const interactionRadius = 4.5;
-
-function createProjectBlock(proj){
-  const group = new THREE.Group();
-  group.position.set(proj.pos[0], proj.pos[1], proj.pos[2]);
-  group.userData = proj;
-
-  // 主块
-  const geo = new THREE.BoxGeometry(...proj.size);
-  const mat = new THREE.MeshStandardMaterial({
-    color: proj.color, roughness:0.45, metalness:0.05,
+  body.material.map.repeat.set(3, 1);
+  body.position.y = h/2;
+  body.castShadow = true; body.receiveShadow = true;
+  g.add(body);
+  // 屋顶（双坡）
+  const roofH = 2 * scale;
+  const roofGeo = new THREE.BufferGeometry();
+  const v = new Float32Array([
+    -w/2 - 0.5, 0, -d/2 - 0.4,   w/2 + 0.5, 0, -d/2 - 0.4,   0, roofH, -d/2 - 0.4,
+    -w/2 - 0.5, 0,  d/2 + 0.4,   w/2 + 0.5, 0,  d/2 + 0.4,   0, roofH,  d/2 + 0.4,
+  ]);
+  // 简化：用 box + 角度
+  const roof = new THREE.Mesh(
+    new THREE.ConeGeometry(d/2 + 0.8, roofH, 4),
+    new THREE.MeshStandardMaterial({ color: C.roof, roughness: 0.6, flatShading: true })
+  );
+  roof.rotation.y = Math.PI/4;
+  roof.scale.set(1.4 * (w/(d+1.6)), 1, 1);
+  roof.position.y = h + roofH/2;
+  roof.castShadow = true;
+  g.add(roof);
+  // 屋脊
+  const ridge = new THREE.Mesh(
+    new THREE.BoxGeometry(w + 1, 0.25, 0.3),
+    new THREE.MeshStandardMaterial({ color: C.ink, roughness: 0.5 })
+  );
+  ridge.position.y = h + roofH - 0.1;
+  g.add(ridge);
+  // 门
+  const door = new THREE.Mesh(
+    new THREE.BoxGeometry(2.2 * scale, 2.8 * scale, 0.15),
+    new THREE.MeshStandardMaterial({ color: C.accent, roughness: 0.5 })
+  );
+  door.position.set(0, 1.4 * scale, d/2 + 0.08);
+  door.castShadow = true;
+  g.add(door);
+  // 门框
+  const frame = new THREE.Mesh(
+    new THREE.BoxGeometry(2.6 * scale, 3.2 * scale, 0.25),
+    new THREE.MeshStandardMaterial({ color: C.wood, roughness: 0.6 })
+  );
+  frame.position.set(0, 1.6 * scale, d/2 + 0.04);
+  g.add(frame);
+  // 匾额（"知行书院"）
+  const plaqueMat = new THREE.MeshStandardMaterial({
+    map: makePlaqueTexture('知行书院'),
+    roughness: 0.5,
+    emissive: 0x220505, emissiveIntensity: 0.15,
   });
-  const mesh = new THREE.Mesh(geo, mat);
-  mesh.position.y = proj.size[1]/2;
-  mesh.castShadow = true;
-  mesh.receiveShadow = true;
-  group.add(mesh);
-
-  // 顶部"光柱"提示有交互
-  const beamGeo = new THREE.CylinderGeometry(0.05, 0.05, 3, 8);
-  const beamMat = new THREE.MeshBasicMaterial({color: proj.color, transparent:true, opacity:0.4});
-  const beam = new THREE.Mesh(beamGeo, beamMat);
-  beam.position.y = proj.size[1] + 1.5;
-  group.add(beam);
-  group.userData.beam = beam;
-
-  // 顶部小球（hover 感）
-  const orbGeo = new THREE.SphereGeometry(0.18, 12, 12);
-  const orbMat = new THREE.MeshStandardMaterial({color: proj.color, emissive: proj.color, emissiveIntensity:0.6});
-  const orb = new THREE.Mesh(orbGeo, orbMat);
-  orb.position.y = proj.size[1] + 3.2;
-  group.add(orb);
-  group.userData.orb = orb;
-
-  scene.add(group);
-  projectMeshes.push(group);
-  return group;
-}
-
-PROJECTS.forEach(createProjectBlock);
-
-// ============ 装饰：散落的几何体（"小石头"） ============
-const decoColors = [0xc4baa3, 0xb5a890, 0xa89880];
-for(let i = 0; i < 40; i++){
-  const size = Math.random()*0.8 + 0.4;
-  const geo = Math.random() > 0.5
-    ? new THREE.BoxGeometry(size, size*0.6, size)
-    : new THREE.IcosahedronGeometry(size*0.6, 0);
-  const mat = new THREE.MeshStandardMaterial({
-    color: decoColors[Math.floor(Math.random()*3)], roughness:0.9
-  });
-  const m = new THREE.Mesh(geo, mat);
-  // 避开车辆出生点
-  let x,z;
-  do{
-    x = (Math.random()-0.5) * 100;
-    z = (Math.random()-0.5) * 100;
-  } while(Math.abs(x) < 6 && Math.abs(z) < 6);
-  m.position.set(x, size*0.3, z);
-  m.rotation.y = Math.random() * Math.PI * 2;
-  m.castShadow = true;
-  m.receiveShadow = true;
-  scene.add(m);
-}
-
-// 几棵"树"
-function makeTree(x, z){
-  const trunk = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.15, 0.2, 1.4),
-    new THREE.MeshStandardMaterial({color:0x6b4423, roughness:0.9})
+  const plaque = new THREE.Mesh(
+    new THREE.BoxGeometry(3.6 * scale, 0.9 * scale, 0.18),
+    plaqueMat
   );
-  trunk.position.set(x, 0.7, z);
-  trunk.castShadow = true;
-  scene.add(trunk);
-  const leaves = new THREE.Mesh(
-    new THREE.ConeGeometry(0.9, 1.8, 8),
-    new THREE.MeshStandardMaterial({color:0x5a7d5a, roughness:0.85})
-  );
-  leaves.position.set(x, 2.0, z);
-  leaves.castShadow = true;
-  scene.add(leaves);
-}
-for(let i=0;i<12;i++){
-  let x,z;
-  do{ x = (Math.random()-0.5)*100; z = (Math.random()-0.5)*100; }
-  while(Math.abs(x)<10 && Math.abs(z)<10);
-  makeTree(x, z);
-}
-
-// ============ 3D 文字（姓名） ============
-let nameText, projectLabels = [];
-const fontLoader = new FontLoader();
-const bar = document.getElementById('bar');
-bar.style.width = '40%';
-
-fontLoader.load(
-  'https://unpkg.com/three@0.160.0/examples/fonts/helvetiker_regular.typeface.json',
-  (font) => {
-    bar.style.width = '90%';
-
-    // 主姓名
-    const nameGeo = new TextGeometry('TENG MEIMING', {
-      font, size:2.2, height:0.5,
-      curveSegments:6, bevelEnabled:true,
-      bevelThickness:0.05, bevelSize:0.03, bevelSegments:3
-    });
-    nameGeo.computeBoundingBox();
-    const w = nameGeo.boundingBox.max.x - nameGeo.boundingBox.min.x;
-    nameGeo.translate(-w/2, 0, 0);
-    const nameMat = new THREE.MeshStandardMaterial({color:0x1b1a17, roughness:0.4, metalness:0.1});
-    nameText = new THREE.Mesh(nameGeo, nameMat);
-    nameText.position.set(0, 0.5, 0);
-    nameText.castShadow = true;
-    scene.add(nameText);
-
-    // 项目方块旁边的小标签
-    PROJECTS.forEach(p=>{
-      const labelText = p.name || p.id;
-      const labelGeo = new TextGeometry(labelText, {
-        font, size:0.55, height:0.1,
-        curveSegments:4
-      });
-      labelGeo.computeBoundingBox();
-      const lw = labelGeo.boundingBox.max.x - labelGeo.boundingBox.min.x;
-      labelGeo.translate(-lw/2, 0, 0);
-      const labelMat = new THREE.MeshStandardMaterial({color:0x1b1a17});
-      const label = new THREE.Mesh(labelGeo, labelMat);
-      label.position.set(p.pos[0], p.size[1] + 0.5, p.pos[2] + p.size[2]/2 + 0.1);
-      label.castShadow = true;
-      scene.add(label);
-      projectLabels.push(label);
-    });
-
-    bar.style.width = '100%';
-    setTimeout(()=>{
-      document.getElementById('loader').classList.add('hidden');
-    }, 400);
-  },
-  (xhr)=>{ bar.style.width = (40 + xhr.loaded/xhr.total*50) + '%'; },
-  ()=>{
-    // font load failed, still continue
-    document.getElementById('loader').classList.add('hidden');
+  plaque.position.set(0, 3.4 * scale, d/2 + 0.15);
+  plaque.castShadow = true;
+  g.add(plaque);
+  // 两侧朱红柱
+  for (const sx of [-1, 1]) {
+    const col = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.18, 0.18, h, 12),
+      new THREE.MeshStandardMaterial({ color: C.accent, roughness: 0.4 })
+    );
+    col.position.set(sx * (w/2 - 0.6), h/2, d/2 + 0.3);
+    col.castShadow = true;
+    g.add(col);
   }
+  // 台阶
+  for (let i = 0; i < 3; i++) {
+    const step = new THREE.Mesh(
+      new THREE.BoxGeometry(w * 0.6, 0.18, 0.5 + i * 0.3),
+      new THREE.MeshStandardMaterial({ color: C.sand, roughness: 0.8 })
+    );
+    step.position.set(0, 0.09 + i * 0.18, d/2 + 0.4 + i * 0.25);
+    step.receiveShadow = true;
+    g.add(step);
+  }
+  g.position.set(x, 0, z);
+  return g;
+}
+
+scene.add(buildHall(0, -courtyard + 5, 1));
+// 侧亭
+function buildPavilion(x, z) {
+  const g = new THREE.Group();
+  const w = 4, d = 4, h = 2.6;
+  // 四柱
+  for (const sx of [-1, 1]) for (const sz of [-1, 1]) {
+    const col = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.14, 0.14, h, 10),
+      new THREE.MeshStandardMaterial({ color: C.accent, roughness: 0.4 })
+    );
+    col.position.set(sx * w/2, h/2, sz * d/2);
+    col.castShadow = true;
+    g.add(col);
+  }
+  // 顶
+  const roof = new THREE.Mesh(
+    new THREE.ConeGeometry(w * 0.8, 1.8, 4),
+    new THREE.MeshStandardMaterial({ color: C.roof, roughness: 0.6, flatShading: true })
+  );
+  roof.rotation.y = Math.PI/4;
+  roof.position.y = h + 0.9;
+  roof.castShadow = true;
+  g.add(roof);
+  // 顶尖
+  const tip = new THREE.Mesh(
+    new THREE.SphereGeometry(0.12, 8, 8),
+    new THREE.MeshStandardMaterial({ color: C.accent, emissive: 0x7F2020, emissiveIntensity: 0.4 })
+  );
+  tip.position.y = h + 1.9;
+  g.add(tip);
+  // 台基
+  const base = new THREE.Mesh(
+    new THREE.BoxGeometry(w + 0.4, 0.2, d + 0.4),
+    new THREE.MeshStandardMaterial({ color: C.sand, roughness: 0.8 })
+  );
+  base.position.y = 0.1;
+  base.receiveShadow = true;
+  g.add(base);
+  g.position.set(x, 0, z);
+  return g;
+}
+scene.add(buildPavilion(-courtyard + 6, -8));
+
+// ============ 中央石台（"滕"印章基座） ============
+const centralBase = new THREE.Group();
+const baseTier1 = new THREE.Mesh(
+  new THREE.CylinderGeometry(2.4, 2.6, 0.3, 32),
+  new THREE.MeshStandardMaterial({ color: C.sand, roughness: 0.8 })
 );
+baseTier1.position.y = 0.15;
+baseTier1.receiveShadow = true; baseTier1.castShadow = true;
+centralBase.add(baseTier1);
+const baseTier2 = new THREE.Mesh(
+  new THREE.CylinderGeometry(1.8, 2.0, 0.25, 32),
+  new THREE.MeshStandardMaterial({ color: 0xb8b69c, roughness: 0.8 })
+);
+baseTier2.position.y = 0.42;
+baseTier2.receiveShadow = true; baseTier2.castShadow = true;
+centralBase.add(baseTier2);
+// 印章主体
+const sealBody = new THREE.Mesh(
+  new THREE.BoxGeometry(1.6, 1.6, 1.6),
+  new THREE.MeshStandardMaterial({ color: C.accent, roughness: 0.4, metalness: 0.1 })
+);
+sealBody.position.y = 1.35;
+sealBody.castShadow = true;
+centralBase.add(sealBody);
+centralBase.position.set(0, 0, 0);
+scene.add(centralBase);
 
-// ============ 控制 ============
-const keys = {w:false,a:false,s:false,d:false};
-document.addEventListener('keydown', e=>{
-  const k = e.key.toLowerCase();
-  if(k==='w'||k==='arrowup') keys.w = true;
-  if(k==='a'||k==='arrowleft') keys.a = true;
-  if(k==='s'||k==='arrowdown') keys.s = true;
-  if(k==='d'||k==='arrowright') keys.d = true;
-  if(k==='escape') closeDialog();
-});
-document.addEventListener('keyup', e=>{
-  const k = e.key.toLowerCase();
-  if(k==='w'||k==='arrowup') keys.w = false;
-  if(k==='a'||k==='arrowleft') keys.a = false;
-  if(k==='s'||k==='arrowdown') keys.s = false;
-  if(k==='d'||k==='arrowright') keys.d = false;
-});
-
-// 触屏按钮
-document.querySelectorAll('#touch button').forEach(btn=>{
-  const k = btn.dataset.key;
-  const down = e=>{ e.preventDefault(); keys[k]=true; };
-  const up = e=>{ e.preventDefault(); keys[k]=false; };
-  btn.addEventListener('touchstart', down);
-  btn.addEventListener('touchend', up);
-  btn.addEventListener('mousedown', down);
-  btn.addEventListener('mouseup', up);
-});
-
-// 相机控制
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-controls.dampingFactor = 0.08;
-controls.minDistance = 4;
-controls.maxDistance = 30;
-controls.maxPolarAngle = Math.PI/2 - 0.1;
-controls.target.copy(car.position);
-
-// ============ Dialog ============
-let activeDialogId = null;
-function openDialog(proj){
-  if(activeDialogId === proj.id) return;
-  activeDialogId = proj.id;
-  document.getElementById('dlg-label').textContent = proj.label;
-  document.getElementById('dlg-title').textContent = proj.title;
-  document.getElementById('dlg-body').textContent = proj.body;
-  document.getElementById('dlg-meta').innerHTML = proj.meta.split(' · ').map(s=>{
-    if(s.includes('@')) return `<a href="mailto:${s}">${s}</a>`;
-    if(s.startsWith('github.com')) return `<a href="https://${s}" target="_blank">${s}</a>`;
-    return `<span>${s}</span>`;
-  }).join('');
-  document.getElementById('dialog').classList.add('open');
+// 印章顶面贴"滕"字 canvas（中文走 canvas 贴图）
+const sealTopCanvas = document.createElement('canvas');
+sealTopCanvas.width = sealTopCanvas.height = 256;
+{
+  const ctx = sealTopCanvas.getContext('2d');
+  ctx.fillStyle = '#7F2020';
+  ctx.fillRect(0, 0, 256, 256);
+  ctx.fillStyle = '#f4ead0';
+  ctx.fillRect(20, 20, 216, 216);
+  ctx.fillStyle = '#7F2020';
+  ctx.font = 'bold 180px "Noto Serif SC","Songti SC",serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('滕', 128, 140);
 }
-window.closeDialog = function(){
-  activeDialogId = null;
-  document.getElementById('dialog').classList.remove('open');
+const sealTopTex = new THREE.CanvasTexture(sealTopCanvas);
+sealTopTex.colorSpace = THREE.SRGBColorSpace;
+const sealTop = new THREE.Mesh(
+  new THREE.PlaneGeometry(1.4, 1.4),
+  new THREE.MeshStandardMaterial({ map: sealTopTex, roughness: 0.4 })
+);
+sealTop.rotation.x = -Math.PI/2;
+sealTop.position.y = 2.16;
+scene.add(sealTop);
+
+// ============ 灯笼 ============
+const lanterns = [];
+function makeLantern(x, y, z, scaleVal = 1) {
+  const g = new THREE.Group();
+  // 吊绳
+  const rope = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.015, 0.015, 0.8, 6),
+    new THREE.MeshStandardMaterial({ color: C.ink })
+  );
+  rope.position.y = 0.4;
+  g.add(rope);
+  // 灯笼主体
+  const body = new THREE.Mesh(
+    new THREE.SphereGeometry(0.32 * scaleVal, 16, 12),
+    new THREE.MeshStandardMaterial({
+      color: 0xc63030,
+      emissive: 0xff4040, emissiveIntensity: 0.55,
+      roughness: 0.5,
+    })
+  );
+  body.scale.y = 0.85;
+  body.position.y = -0.05;
+  g.add(body);
+  // 上下盖
+  const cap = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.18 * scaleVal, 0.18 * scaleVal, 0.08, 12),
+    new THREE.MeshStandardMaterial({ color: C.ink, roughness: 0.7 })
+  );
+  cap.position.y = 0.22 * scaleVal;
+  g.add(cap);
+  const cap2 = cap.clone();
+  cap2.position.y = -0.32 * scaleVal;
+  g.add(cap2);
+  // 流苏
+  const tassel = new THREE.Mesh(
+    new THREE.ConeGeometry(0.06, 0.25, 8),
+    new THREE.MeshStandardMaterial({ color: 0xe8b840 })
+  );
+  tassel.position.y = -0.5 * scaleVal;
+  g.add(tassel);
+  // 点光源
+  const pl = new THREE.PointLight(0xff7040, 0.7, 6, 2);
+  pl.position.y = -0.05;
+  g.add(pl);
+
+  g.position.set(x, y, z);
+  g.userData.baseY = y;
+  g.userData.phase = Math.random() * Math.PI * 2;
+  lanterns.push(g);
+  return g;
+}
+
+// 入口两侧 + 院子各角
+scene.add(makeLantern(-3, 3.5, courtyard - 0.5));
+scene.add(makeLantern(3, 3.5, courtyard - 0.5));
+scene.add(makeLantern(-8, 3.0, -8, 1.1));
+scene.add(makeLantern(8, 3.0, -8, 1.1));
+scene.add(makeLantern(-12, 2.8, 6));
+scene.add(makeLantern(12, 2.8, 6));
+// 落地灯笼（杆）
+function makeStandingLantern(x, z) {
+  const g = new THREE.Group();
+  const pole = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.05, 0.07, 2.4, 8),
+    new THREE.MeshStandardMaterial({ color: C.ink, roughness: 0.7 })
+  );
+  pole.position.y = 1.2;
+  pole.castShadow = true;
+  g.add(pole);
+  const lan = makeLantern(0, 2.3, 0, 0.85);
+  g.add(lan);
+  g.position.set(x, 0, z);
+  return g;
+}
+scene.add(makeStandingLantern(-5, courtyard - 3));
+scene.add(makeStandingLantern(5, courtyard - 3));
+
+// ============ 竹子 ============
+function makeBamboo(x, z, height = 5) {
+  const g = new THREE.Group();
+  const segs = Math.floor(height / 0.7);
+  for (let i = 0; i < segs; i++) {
+    const seg = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.07, 0.08, 0.65, 8),
+      new THREE.MeshStandardMaterial({ color: C.bamboo, roughness: 0.7 })
+    );
+    seg.position.y = i * 0.7 + 0.35;
+    seg.castShadow = true;
+    g.add(seg);
+    // 节
+    const node = new THREE.Mesh(
+      new THREE.TorusGeometry(0.08, 0.015, 4, 8),
+      new THREE.MeshStandardMaterial({ color: C.sageDark })
+    );
+    node.position.y = i * 0.7 + 0.7;
+    node.rotation.x = Math.PI/2;
+    g.add(node);
+  }
+  // 顶部叶片簇
+  for (let i = 0; i < 6; i++) {
+    const leaf = new THREE.Mesh(
+      new THREE.ConeGeometry(0.18, 0.7, 4),
+      new THREE.MeshStandardMaterial({ color: i % 2 ? C.bamboo : C.bamboo2, roughness: 0.6, flatShading: true })
+    );
+    const ang = (i / 6) * Math.PI * 2;
+    leaf.position.set(Math.cos(ang) * 0.25, height - 0.2 + Math.random()*0.4, Math.sin(ang) * 0.25);
+    leaf.rotation.set(Math.random()*0.4, Math.random(), Math.random()*0.4);
+    leaf.castShadow = true;
+    g.add(leaf);
+  }
+  g.position.set(x, 0, z);
+  g.rotation.y = Math.random() * Math.PI;
+  return g;
+}
+
+// 竹林（左右两侧，避开中央和入口）
+const bambooSpots = [
+  [-15, -14], [-14, -10], [-16, -6], [-15, -2], [-14, 4], [-15, 10], [-13, 14],
+  [15, -14], [14, -10], [16, -6], [15, -2], [14, 4], [15, 10], [13, 14],
+  [-10, -18], [-6, -18], [6, -18], [10, -18],
+];
+bambooSpots.forEach(([x, z]) => {
+  scene.add(makeBamboo(x + (Math.random()-0.5)*1.2, z + (Math.random()-0.5)*1.2, 4 + Math.random()*2.5));
+});
+
+// ============ 灌木丛 ============
+function makeBush(x, z, scale = 1) {
+  const g = new THREE.Group();
+  for (let i = 0; i < 5; i++) {
+    const s = (0.3 + Math.random() * 0.25) * scale;
+    const ball = new THREE.Mesh(
+      new THREE.IcosahedronGeometry(s, 0),
+      new THREE.MeshStandardMaterial({
+        color: i % 2 ? C.sage : C.bamboo2,
+        roughness: 0.9, flatShading: true,
+      })
+    );
+    ball.position.set((Math.random()-0.5)*0.6*scale, s * 0.7, (Math.random()-0.5)*0.6*scale);
+    ball.castShadow = true; ball.receiveShadow = true;
+    g.add(ball);
+  }
+  g.position.set(x, 0, z);
+  return g;
+}
+const bushSpots = [
+  [-8, courtyard - 4], [8, courtyard - 4],
+  [-18, 12], [18, 12], [-18, -12], [18, -12],
+  [-6, -courtyard + 9], [6, -courtyard + 9],
+  [-11, 4], [11, 4],
+];
+bushSpots.forEach(([x, z]) => scene.add(makeBush(x, z, 0.8 + Math.random()*0.4)));
+
+// ============ 松树 / 盆景 ============
+function makePine(x, z) {
+  const g = new THREE.Group();
+  const trunk = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.15, 0.22, 2.2, 8),
+    new THREE.MeshStandardMaterial({ color: C.wood, roughness: 0.8 })
+  );
+  trunk.position.y = 1.1;
+  trunk.castShadow = true;
+  g.add(trunk);
+  for (let i = 0; i < 3; i++) {
+    const cone = new THREE.Mesh(
+      new THREE.ConeGeometry(1.0 - i * 0.18, 1.1, 8),
+      new THREE.MeshStandardMaterial({ color: C.sageDark, roughness: 0.8, flatShading: true })
+    );
+    cone.position.y = 1.6 + i * 0.7;
+    cone.castShadow = true;
+    g.add(cone);
+  }
+  g.position.set(x, 0, z);
+  return g;
+}
+scene.add(makePine(-courtyard + 4, -courtyard + 4));
+scene.add(makePine(courtyard - 4, -courtyard + 4));
+
+// 盆景（中央石台前）
+function makePotPlant(x, z) {
+  const g = new THREE.Group();
+  const pot = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.4, 0.3, 0.45, 16),
+    new THREE.MeshStandardMaterial({ color: C.brick, roughness: 0.8 })
+  );
+  pot.position.y = 0.22;
+  pot.castShadow = true;
+  g.add(pot);
+  const top = new THREE.Mesh(
+    new THREE.IcosahedronGeometry(0.5, 0),
+    new THREE.MeshStandardMaterial({ color: C.sage, roughness: 0.9, flatShading: true })
+  );
+  top.position.y = 0.75;
+  top.castShadow = true;
+  g.add(top);
+  g.position.set(x, 0, z);
+  return g;
+}
+scene.add(makePotPlant(-3.5, 3));
+scene.add(makePotPlant(3.5, 3));
+
+// ============ 踏脚石（散布） ============
+const stepPositions = [
+  [4, 6], [6, 7.5], [8, 9], [-4, 6], [-6, 7.5], [-8, 9],
+  [4, -6], [6, -8], [-4, -6], [-6, -8],
+];
+stepPositions.forEach(([x, z]) => {
+  const s = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.6 + Math.random()*0.2, 0.7 + Math.random()*0.2, 0.15, 6 + Math.floor(Math.random()*3)),
+    new THREE.MeshStandardMaterial({ color: 0x9a8d72, roughness: 0.95, flatShading: true })
+  );
+  s.position.set(x + (Math.random()-0.5)*0.8, 0.075, z + (Math.random()-0.5)*0.8);
+  s.rotation.y = Math.random() * Math.PI;
+  s.receiveShadow = true; s.castShadow = true;
+  scene.add(s);
+});
+
+// ============ 项目展示物（卷轴 / 石碑） ============
+const projectObjects = [];
+function placeProjects() {
+  const n = PROJECTS.length;
+  const radius = 9.5;
+  for (let i = 0; i < n; i++) {
+    const proj = PROJECTS[i];
+    const ang = (i / n) * Math.PI * 2 + Math.PI/2; // 起始在前方
+    const px = Math.cos(ang) * radius;
+    const pz = Math.sin(ang) * radius;
+    const featured = !!proj.featured_award;
+    const obj = featured ? makeStele(proj) : makeScroll(proj);
+    obj.position.set(px, 0, pz);
+    obj.lookAt(0, obj.position.y, 0);
+    obj.userData.project = proj;
+    obj.userData.baseRotY = obj.rotation.y;
+    projectObjects.push(obj);
+    scene.add(obj);
+  }
+}
+
+function makeScroll(proj) {
+  const g = new THREE.Group();
+  // 基座（小石台）
+  const base = new THREE.Mesh(
+    new THREE.BoxGeometry(1.6, 0.3, 0.8),
+    new THREE.MeshStandardMaterial({ color: C.sand, roughness: 0.85 })
+  );
+  base.position.y = 0.15;
+  base.castShadow = true; base.receiveShadow = true;
+  g.add(base);
+  // 卷轴架（两根木杆）
+  for (const sx of [-1, 1]) {
+    const pole = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.06, 0.06, 2.8, 8),
+      new THREE.MeshStandardMaterial({ color: C.wood, roughness: 0.7 })
+    );
+    pole.position.set(sx * 0.7, 1.7, 0);
+    pole.castShadow = true;
+    g.add(pole);
+    // 顶端帽
+    const cap = new THREE.Mesh(
+      new THREE.SphereGeometry(0.1, 8, 8),
+      new THREE.MeshStandardMaterial({ color: C.accent, roughness: 0.4 })
+    );
+    cap.position.set(sx * 0.7, 3.1, 0);
+    g.add(cap);
+  }
+  // 卷轴纸面
+  const scrollMat = new THREE.MeshStandardMaterial({
+    map: makeScrollTexture(proj.name_cn || proj.id, proj.tagline || ''),
+    roughness: 0.7, side: THREE.DoubleSide,
+  });
+  const scroll = new THREE.Mesh(
+    new THREE.PlaneGeometry(1.3, 2.4),
+    scrollMat
+  );
+  scroll.position.set(0, 1.7, 0.05);
+  scroll.rotation.y = Math.PI;
+  scroll.castShadow = true;
+  g.add(scroll);
+  // 上下卷轴轴
+  for (const dy of [-1.25, 1.25]) {
+    const roll = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.09, 0.09, 1.5, 12),
+      new THREE.MeshStandardMaterial({ color: C.wood, roughness: 0.6 })
+    );
+    roll.rotation.z = Math.PI/2;
+    roll.position.set(0, 1.7 + dy, 0.05);
+    g.add(roll);
+  }
+  // 高亮光环（隐藏，靠近时显示）
+  const halo = new THREE.Mesh(
+    new THREE.RingGeometry(1.1, 1.4, 32),
+    new THREE.MeshBasicMaterial({ color: C.accent, transparent: true, opacity: 0, side: THREE.DoubleSide })
+  );
+  halo.rotation.x = -Math.PI/2;
+  halo.position.y = 0.05;
+  g.add(halo);
+  g.userData.halo = halo;
+  return g;
+}
+
+function makeStele(proj) {
+  // 石碑（飞书十佳等 featured）
+  const g = new THREE.Group();
+  // 基座（两层）
+  const base1 = new THREE.Mesh(
+    new THREE.BoxGeometry(2.0, 0.3, 1.2),
+    new THREE.MeshStandardMaterial({ color: C.sand, roughness: 0.85 })
+  );
+  base1.position.y = 0.15;
+  base1.castShadow = true; base1.receiveShadow = true;
+  g.add(base1);
+  const base2 = new THREE.Mesh(
+    new THREE.BoxGeometry(1.6, 0.2, 0.9),
+    new THREE.MeshStandardMaterial({ color: 0xb8b69c, roughness: 0.85 })
+  );
+  base2.position.y = 0.4;
+  base2.castShadow = true; base2.receiveShadow = true;
+  g.add(base2);
+  // 碑身
+  const stele = new THREE.Mesh(
+    new THREE.BoxGeometry(1.4, 2.6, 0.4),
+    new THREE.MeshStandardMaterial({
+      map: makeScrollTexture(proj.name_cn || proj.id, proj.tagline || ''),
+      roughness: 0.8,
+    })
+  );
+  stele.position.y = 1.8;
+  stele.rotation.y = Math.PI;
+  stele.castShadow = true; stele.receiveShadow = true;
+  g.add(stele);
+  // 碑顶（小屋檐）
+  const top = new THREE.Mesh(
+    new THREE.BoxGeometry(1.7, 0.18, 0.55),
+    new THREE.MeshStandardMaterial({ color: C.roof, roughness: 0.6 })
+  );
+  top.position.y = 3.2;
+  top.castShadow = true;
+  g.add(top);
+  // 顶尖（金色星 = 飞书十佳标记）
+  const star = new THREE.Mesh(
+    new THREE.OctahedronGeometry(0.18, 0),
+    new THREE.MeshStandardMaterial({
+      color: 0xe8b840,
+      emissive: 0xc89020, emissiveIntensity: 0.6,
+      roughness: 0.3, metalness: 0.4,
+    })
+  );
+  star.position.y = 3.55;
+  g.add(star);
+  g.userData.star = star;
+  // 浮动光晕
+  const glow = new THREE.Mesh(
+    new THREE.RingGeometry(1.3, 1.7, 32),
+    new THREE.MeshBasicMaterial({ color: 0xe8b840, transparent: true, opacity: 0.25, side: THREE.DoubleSide })
+  );
+  glow.rotation.x = -Math.PI/2;
+  glow.position.y = 0.04;
+  g.add(glow);
+  g.userData.glow = glow;
+  // 高亮 halo
+  const halo = new THREE.Mesh(
+    new THREE.RingGeometry(1.4, 1.7, 32),
+    new THREE.MeshBasicMaterial({ color: C.accent, transparent: true, opacity: 0, side: THREE.DoubleSide })
+  );
+  halo.rotation.x = -Math.PI/2;
+  halo.position.y = 0.06;
+  g.add(halo);
+  g.userData.halo = halo;
+  return g;
+}
+
+placeProjects();
+
+// ============ 第一人称行走控制 ============
+const player = {
+  pos: new THREE.Vector3(0, 1.7, 14),
+  vel: new THREE.Vector3(),
+  yaw: 0,        // 朝向角（鼠标拖拽改变）
+  pitch: -0.05,
+  onGround: true,
+  jumpVel: 0,
 };
 
-// ============ 动画循环 ============
-const clock = new THREE.Clock();
-function animate(){
-  requestAnimationFrame(animate);
-  const dt = clock.getDelta();
-  const t = clock.elapsedTime;
-
-  // 车辆控制
-  if(keys.w) carState.speed = Math.min(carState.speed + carState.accel, carState.maxSpeed);
-  else if(keys.s) carState.speed = Math.max(carState.speed - carState.brake, -carState.maxSpeed*0.5);
-  else carState.speed *= carState.friction;
-
-  if(Math.abs(carState.speed) > 0.001){
-    const turn = (keys.a ? 1 : 0) - (keys.d ? 1 : 0);
-    carState.heading += turn * carState.turnRate * Math.sign(carState.speed) * Math.min(Math.abs(carState.speed)/carState.maxSpeed, 1);
+const keys = {};
+addEventListener('keydown', e => {
+  keys[e.code] = true;
+  if (e.code === 'Space') {
+    if (player.onGround) {
+      player.jumpVel = 4.5;
+      player.onGround = false;
+    }
+    e.preventDefault();
   }
-
-  car.position.x += Math.sin(carState.heading) * carState.speed;
-  car.position.z += Math.cos(carState.heading) * carState.speed;
-  car.rotation.y = carState.heading;
-
-  // 边界
-  car.position.x = Math.max(-55, Math.min(55, car.position.x));
-  car.position.z = Math.max(-55, Math.min(55, car.position.z));
-
-  // 轮子滚动
-  wheels.forEach(w=>{ w.rotation.x -= carState.speed * 2; });
-
-  // 相机跟随
-  const camTargetX = car.position.x;
-  const camTargetZ = car.position.z;
-  controls.target.lerp(new THREE.Vector3(camTargetX, 1, camTargetZ), 0.08);
-  // 相机距离根据速度推远
-  controls.update();
-
-  // 项目交互
-  let nearestProj = null;
-  let nearestDist = Infinity;
-  projectMeshes.forEach(g=>{
-    const dx = g.position.x - car.position.x;
-    const dz = g.position.z - car.position.z;
-    const d = Math.sqrt(dx*dx + dz*dz);
-    // 浮动小球动画
-    if(g.userData.orb) g.userData.orb.position.y = g.userData.size[1] + 3.2 + Math.sin(t*2 + g.position.x)*0.15;
-    if(g.userData.beam) g.userData.beam.material.opacity = 0.3 + Math.sin(t*1.5)*0.1;
-    if(d < nearestDist){ nearestDist = d; nearestProj = g.userData; }
-  });
-  if(nearestDist < interactionRadius && nearestProj){
-    openDialog(nearestProj);
-  } else if(nearestDist > interactionRadius + 1.5 && activeDialogId){
+  if (e.code === 'KeyE' || e.code === 'Enter') {
+    tryInteract();
+  }
+  if (e.code === 'Escape') {
     closeDialog();
   }
+});
+addEventListener('keyup', e => { keys[e.code] = false; });
 
-  // 速度计
-  document.getElementById('speed').textContent = Math.round(Math.abs(carState.speed)/carState.maxSpeed * 120);
+// 鼠标拖拽旋转
+let dragging = false;
+let lastX = 0, lastY = 0;
+renderer.domElement.addEventListener('mousedown', e => {
+  dragging = true; lastX = e.clientX; lastY = e.clientY;
+});
+addEventListener('mouseup', () => { dragging = false; });
+addEventListener('mousemove', e => {
+  if (!dragging) return;
+  const dx = e.clientX - lastX;
+  const dy = e.clientY - lastY;
+  lastX = e.clientX; lastY = e.clientY;
+  player.yaw -= dx * 0.005;
+  player.pitch -= dy * 0.003;
+  player.pitch = Math.max(-0.7, Math.min(0.5, player.pitch));
+});
+
+// ============ 碰撞 / 边界 ============
+function clampPosition(p) {
+  const lim = courtyard - 1.2;
+  p.x = Math.max(-lim, Math.min(lim, p.x));
+  p.z = Math.max(-lim, Math.min(courtyard + 4, p.z));
+  // 中央石台
+  const distCenter = Math.hypot(p.x, p.z);
+  if (distCenter < 2.7) {
+    const ang = Math.atan2(p.z, p.x);
+    p.x = Math.cos(ang) * 2.7;
+    p.z = Math.sin(ang) * 2.7;
+  }
+  // 项目物体
+  projectObjects.forEach(o => {
+    const d = Math.hypot(p.x - o.position.x, p.z - o.position.z);
+    if (d < 1.0) {
+      const ang = Math.atan2(p.z - o.position.z, p.x - o.position.x);
+      p.x = o.position.x + Math.cos(ang) * 1.0;
+      p.z = o.position.z + Math.sin(ang) * 1.0;
+    }
+  });
+}
+
+// ============ Dialog 交互 ============
+const dialog = document.getElementById('dialog');
+const dlgName = document.getElementById('dlgName');
+const dlgTagline = document.getElementById('dlgTagline');
+const dlgBadge = document.getElementById('dlgBadge');
+const dlgGo = document.getElementById('dlgGo');
+const dlgClose = document.getElementById('dlgClose');
+const proximity = document.getElementById('proximity');
+
+let currentProj = null;
+let dialogOpen = false;
+
+function tryInteract() {
+  const target = findNearest();
+  if (target && target.dist < 4.5) {
+    openDialog(target.obj.userData.project);
+  }
+}
+function findNearest() {
+  let best = null;
+  projectObjects.forEach(o => {
+    const d = Math.hypot(player.pos.x - o.position.x, player.pos.z - o.position.z);
+    if (!best || d < best.dist) best = { obj: o, dist: d };
+  });
+  return best;
+}
+function openDialog(proj) {
+  if (!proj) return;
+  currentProj = proj;
+  dlgName.textContent = proj.name_cn || proj.id;
+  dlgTagline.textContent = proj.tagline || '';
+  if (proj.featured_award) {
+    dlgBadge.textContent = '★ ' + proj.featured_award;
+    dlgBadge.classList.add('featured');
+    dlgBadge.style.display = 'inline-block';
+  } else {
+    dlgBadge.textContent = '作 品';
+    dlgBadge.classList.remove('featured');
+    dlgBadge.style.display = 'inline-block';
+  }
+  dialog.classList.add('show');
+  dialogOpen = true;
+}
+function closeDialog() {
+  dialog.classList.remove('show');
+  dialogOpen = false;
+  currentProj = null;
+}
+dlgClose.addEventListener('click', closeDialog);
+dlgGo.addEventListener('click', () => {
+  if (currentProj && currentProj.url_detail) {
+    location.href = currentProj.url_detail;
+  }
+});
+
+// ============ 主循环 ============
+const clock = new THREE.Clock();
+function tick() {
+  const dt = Math.min(0.05, clock.getDelta());
+  const t = clock.elapsedTime;
+
+  // 移动
+  const speed = (keys['ShiftLeft'] || keys['ShiftRight']) ? 7.5 : 4.0;
+  const dir = new THREE.Vector3();
+  if (keys['KeyW'] || keys['ArrowUp']) dir.z -= 1;
+  if (keys['KeyS'] || keys['ArrowDown']) dir.z += 1;
+  if (keys['KeyA'] || keys['ArrowLeft']) dir.x -= 1;
+  if (keys['KeyD'] || keys['ArrowRight']) dir.x += 1;
+  if (dir.lengthSq() > 0) dir.normalize();
+  // 朝向相机：yaw=0 时朝 -Z，W (dir.z=-1) 应让 z 减小
+  const cosY = Math.cos(player.yaw), sinY = Math.sin(player.yaw);
+  const moveX = dir.x * cosY + dir.z * sinY;
+  const moveZ = -dir.x * sinY + dir.z * cosY;
+  player.pos.x += moveX * speed * dt;
+  player.pos.z += moveZ * speed * dt;
+
+  // 跳跃 / 重力
+  if (!player.onGround) {
+    player.pos.y += player.jumpVel * dt;
+    player.jumpVel -= 12 * dt;
+    if (player.pos.y <= 1.7) {
+      player.pos.y = 1.7;
+      player.jumpVel = 0;
+      player.onGround = true;
+    }
+  }
+  // 走路时轻微 head bob
+  if (dir.lengthSq() > 0 && player.onGround) {
+    player.pos.y = 1.7 + Math.sin(t * 9) * 0.04;
+  } else if (player.onGround) {
+    player.pos.y = 1.7;
+  }
+
+  clampPosition(player.pos);
+
+  // 应用相机
+  camera.position.copy(player.pos);
+  const lookDir = new THREE.Vector3(
+    Math.sin(player.yaw) * Math.cos(player.pitch),
+    Math.sin(player.pitch),
+    Math.cos(player.yaw) * Math.cos(player.pitch)
+  );
+  // 注意：默认 yaw=0 时向 -Z 看
+  camera.lookAt(
+    player.pos.x - lookDir.x,
+    player.pos.y + lookDir.y,
+    player.pos.z - lookDir.z
+  );
+
+  // 灯笼摇摆
+  lanterns.forEach(l => {
+    l.position.y = l.userData.baseY + Math.sin(t * 1.5 + l.userData.phase) * 0.04;
+    l.rotation.z = Math.sin(t * 1.2 + l.userData.phase) * 0.06;
+  });
+
+  // 项目物体动画
+  projectObjects.forEach(o => {
+    if (o.userData.star) {
+      o.userData.star.rotation.y += dt * 1.5;
+      o.userData.star.position.y = 3.55 + Math.sin(t * 2 + o.position.x) * 0.08;
+    }
+    if (o.userData.glow) {
+      o.userData.glow.material.opacity = 0.18 + Math.sin(t * 1.8 + o.position.x) * 0.1;
+      o.userData.glow.rotation.z += dt * 0.3;
+    }
+  });
+
+  // 接近检测
+  const nearest = findNearest();
+  let proximityOn = false;
+  projectObjects.forEach(o => {
+    const d = Math.hypot(player.pos.x - o.position.x, player.pos.z - o.position.z);
+    if (o.userData.halo) {
+      const targetOp = d < 4.5 ? 0.45 - d/12 : 0;
+      o.userData.halo.material.opacity += (targetOp - o.userData.halo.material.opacity) * 0.1;
+      o.userData.halo.rotation.z += dt * 0.4;
+    }
+  });
+  if (nearest && nearest.dist < 4.5 && !dialogOpen) {
+    proximity.classList.add('show');
+    proximityOn = true;
+  } else {
+    proximity.classList.remove('show');
+  }
 
   renderer.render(scene, camera);
+  requestAnimationFrame(tick);
 }
 
-// 初始相机位置
-camera.position.set(0, 8, 14);
-controls.update();
-
-animate();
-
-// ============ 响应 resize ============
-window.addEventListener('resize', ()=>{
-  camera.aspect = window.innerWidth/window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-});
-</script>
-
-
-<!-- ============ 烟花点击效果（参考 eduardbodak.com） ============ -->
-<style>
-.spark{
-  position:fixed; pointer-events:none; z-index:9998;
-  width:6px; height:6px; border-radius:50%;
-  will-change:transform, opacity;
-}
-@media (hover:none), (pointer:coarse){
-  /* 移动端禁用，避免在滚动时误触 */
-  .spark{display:none}
-}
-</style>
-<script>
-(function(){
-  // 8 方向 + 中式书院 5 色
-  var COLORS = ['#7F2020','#a02828','#869B7E','#C9CAAC','#c9a35a'];
-  function spark(x, y, angle, color){
-    var s = document.createElement('div');
-    s.className = 'spark';
-    s.style.left = x + 'px';
-    s.style.top = y + 'px';
-    s.style.background = color;
-    document.body.appendChild(s);
-    var anim = s.animate([
-      {transform:'translate(-50%,-50%) rotate('+angle+'deg) translate(8px,0) scale(1)', opacity:1},
-      {transform:'translate(-50%,-50%) rotate('+angle+'deg) translate(28px,0) scale(.6,.85)', opacity:.9, offset:.65},
-      {transform:'translate(-50%,-50%) rotate('+angle+'deg) translate(38px,0) scale(0,0)', opacity:0}
-    ], {duration:480, easing:'cubic-bezier(.22,.6,.4,1)', fill:'forwards'});
-    anim.onfinish = function(){ s.remove(); };
+// ============ 加载完成 ============
+const loadBar = document.getElementById('loadBar');
+let loadProg = 0;
+const loadTick = setInterval(() => {
+  loadProg += 8 + Math.random() * 14;
+  if (loadProg >= 100) {
+    loadProg = 100;
+    clearInterval(loadTick);
+    setTimeout(() => {
+      document.getElementById('loader').classList.add('hidden');
+      tick();
+    }, 350);
   }
-  document.addEventListener('click', function(e){
-    // 触屏 / pointer 设备跳过
-    if(!window.matchMedia('(hover:hover) and (pointer:fine)').matches) return;
-    // 主鼠标左键
-    if(e.button !== 0) return;
-    for(var i = 0; i < 8; i++){
-      var ang = i * 45;
-      var col = COLORS[(i + Math.floor(Math.random()*COLORS.length)) % COLORS.length];
-      spark(e.clientX, e.clientY, ang, col);
-    }
-  }, {passive:true});
-})();
-</script>
+  loadBar.style.width = loadProg + '%';
+}, 90);
 
+// ============ 窗口 resize ============
+addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+
+</script>
 </body>
 </html>
