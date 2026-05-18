@@ -181,6 +181,33 @@
     backdrop-filter:blur(6px);
     -webkit-backdrop-filter:blur(6px);
   }
+  /* hover 关键链接（next-bar / btn / back-link）→ 略放大 + 显示中/英文 label */
+  .cursor-ring.text .circle{
+    transform:scale(1.2);
+    background:rgba(127, 32, 32, 0.28);
+    border-color:rgba(127, 32, 32, 0);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+  }
+  .cursor-ring .cr-label{
+    position:absolute; top:50%; left:50%;
+    transform:translate(-50%,-50%) scale(.3);
+    font-family:"Noto Serif SC",serif;
+    font-size:11px; font-weight:500;
+    color:#F6F3EB;
+    letter-spacing:.04em; white-space:nowrap;
+    opacity:0;
+    transition:opacity .25s .15s, transform .4s cubic-bezier(.55,.085,0,.99) .08s;
+    pointer-events:none;
+  }
+  .cursor-ring.text .cr-label{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(1);
+  }
+  .cursor-ring.text .cr-label.en{
+    font-family:"JetBrains Mono",monospace;
+    font-size:9px; letter-spacing:.28em; font-weight:600;
+  }
   .cursor-ring.click .circle{transform:scale(.6)}
   /* magnetic */
   .btn[data-magnet]{
@@ -193,7 +220,7 @@
 
 <div class="container">
   <header class="top">
-    <a href="../hello.html" class="back-link"><span class="arrow">←</span> 回到主页</a>
+    <a href="../hello.html" class="back-link" data-cursor="返回"><span class="arrow">←</span> 回到主页</a>
     <a href="../hello.html" class="logo"><span class="seal">滕</span>Teng Meiming</a>
   </header>
 </div>
@@ -349,8 +376,8 @@
       <div class="stat-item"><div class="num">★</div><div class="lbl">飞书十佳 · 官方收录</div></div>
     </div>
     <div class="cta-row">
-      <a href="https://github.com/Evan-miwillbe/lark-survey-scoreboard" target="_blank" class="btn primary" data-magnet>→ GitHub 仓库</a>
-      <a href="https://bytedance.larkoffice.com/wiki/K6wZw4IYQiJGvmkSrZ8cD5ZznHd" target="_blank" class="btn ghost" data-magnet>→ 官方公示</a>
+      <a href="https://github.com/Evan-miwillbe/lark-survey-scoreboard" target="_blank" class="btn primary" data-magnet data-cursor="OPEN">→ GitHub 仓库</a>
+      <a href="https://bytedance.larkoffice.com/wiki/K6wZw4IYQiJGvmkSrZ8cD5ZznHd" target="_blank" class="btn ghost" data-magnet data-cursor="OPEN">→ 官方公示</a>
     </div>
   </section>
 </div>
@@ -395,8 +422,8 @@
 
 <div class="container">
   <div class="next-bar">
-    <a href="knowledge-healer.html"><span class="nb-lbl">← 上一个项目</span><span class="nb-name">knowledge-healer</span></a>
-    <a href="obsidian-lifeos.html" class="right"><span class="nb-lbl">下一个项目 →</span><span class="nb-name">Obsidian LifeOS</span></a>
+    <a href="knowledge-healer.html" data-cursor="阅读"><span class="nb-lbl">← 上一个项目</span><span class="nb-name">knowledge-healer</span></a>
+    <a href="obsidian-lifeos.html" class="right" data-cursor="阅读"><span class="nb-lbl">下一个项目 →</span><span class="nb-name">Obsidian LifeOS</span></a>
   </div>
 </div>
 
@@ -432,8 +459,23 @@
   document.addEventListener('mousedown',function(){ring.classList.add('click')});
   document.addEventListener('mouseup',function(){ring.classList.remove('click')});
   document.querySelectorAll('a,button,.btn').forEach(function(el){
-    el.addEventListener('mouseenter',function(){ring.classList.add('hover')});
+    el.addEventListener('mouseenter',function(){
+      if(el.hasAttribute('data-cursor')) return;
+      ring.classList.add('hover');
+    });
     el.addEventListener('mouseleave',function(){ring.classList.remove('hover')});
+  });
+  // data-cursor 元素 → .text 状态 + label 跟随（与主页一致）
+  var label=document.getElementById('cursorLabel');
+  document.querySelectorAll('[data-cursor]').forEach(function(el){
+    var text=el.dataset.cursor;
+    var isEnglish=/^[A-Z]+$/.test(text);
+    el.addEventListener('mouseenter',function(){
+      if(label){label.textContent=text;label.classList.toggle('en',isEnglish);}
+      ring.classList.add('text');
+      ring.classList.remove('hover');
+    });
+    el.addEventListener('mouseleave',function(){ring.classList.remove('text')});
   });
   document.addEventListener('mouseleave',function(){ring.style.opacity='0';});
   document.addEventListener('mouseenter',function(){ring.style.opacity='1';});
