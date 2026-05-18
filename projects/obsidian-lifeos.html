@@ -83,8 +83,8 @@
   .case-image-row .case-image{max-height:58vh;width:100%}
   .hero-image .case-image{max-height:84vh;width:100%;max-width:none;border-radius:0;box-shadow:none}
   @media(max-width:680px){.case-image-row{grid-template-columns:1fr}}
-  .case-image-triple{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:48px}
-  @media(max-width:768px){.case-image-triple{grid-template-columns:1fr}}
+  .case-image-triple{display:grid;grid-template-columns:1fr;gap:32px;margin-bottom:48px}
+  .case-image-triple .case-image{max-height:72vh}
   section.chapter{margin-bottom:80px}
   .chapter-label{font-family:var(--mono);font-size:11px;color:var(--orange);letter-spacing:.24em;text-transform:uppercase;font-weight:600;margin-bottom:14px}
   .chapter h2{font-family:var(--serif);font-size:38px;font-weight:600;line-height:1.2;letter-spacing:-.01em;margin-bottom:24px}
@@ -240,10 +240,9 @@
 
 <div class="container wide">
   <figure class="hero-image">
-    <img src="../images/obsidian/lifeos-triple.svg" class="case-image" alt="LifeOS 日 / 周 / 月 三层任务视图全景" style="background:#F6F3EB"/>
-    <figcaption style="font-family:var(--mono);font-size:11.5px;color:var(--ink-mute);letter-spacing:.12em;text-align:center;margin-top:14px;text-transform:uppercase">FIG. 0 · 日 · 周 · 月 三层任务视图 — 持续使用沉淀近 2 万字</figcaption>
+    <img src="../images/obsidian/obsidian-overview.png" class="case-image" alt="Obsidian LifeOS 日常全貌 — 左侧 Knowledge-Vault 文件树 / 中间 LifeOS 月计划 / 右侧 AI Terminal 自写插件"/>
+    <figcaption style="font-family:var(--mono);font-size:11.5px;color:var(--ink-mute);letter-spacing:.12em;text-align:center;margin-top:14px;text-transform:uppercase">FIG. 0 · 每日工作台 — Knowledge-Vault 文件树 · LifeOS 月计划 · AI Terminal 同框</figcaption>
   </figure>
-  <p style="font-family:var(--mono);font-size:10.5px;color:var(--ink-mute);letter-spacing:.12em;text-align:center;margin-top:6px;text-transform:uppercase">※ Schematic visualization · 真实 Obsidian 截图待补充</p>
 </div>
 
 <!-- Chapter 1: 起点 -->
@@ -307,13 +306,21 @@
   </section>
 </div>
 
-<!-- 三层视图截图 -->
-<div class="container">
+<!-- 三层视图真实截图 -->
+<div class="container wide">
   <div class="case-image-triple">
-    <div style="grid-column:1/-1;padding:18px;background:var(--sand-soft);border-left:3px solid var(--accent);font-size:13px;line-height:1.7;color:var(--ink-soft)">
-      <strong style="color:var(--accent)">日 · 周 · 月 三层面板</strong>已在本页顶部 hero 图中展示（schematic 版本）。<br/>
-      真实 Obsidian 截图待补充——这部分需要用本地 Obsidian 软件实拍替换。
-    </div>
+    <figure>
+      <img src="../images/obsidian/lifeos-daily.png" class="case-image" alt="LifeOS 日计划 — 上午/下午/晚上/暂缓 + 精力评分 + 今日习惯 + 晚间复盘"/>
+      <figcaption style="font-family:var(--mono);font-size:10.5px;color:var(--ink-mute);letter-spacing:.1em;text-align:center;margin-top:12px;text-transform:uppercase">FIG. 1a · 日计划 — 30 秒填一次</figcaption>
+    </figure>
+    <figure>
+      <img src="../images/obsidian/lifeos-weekly.png" class="case-image" alt="LifeOS 周计划 — 七天卡片 + 本周分布 + 习惯打卡 + 精力趋势"/>
+      <figcaption style="font-family:var(--mono);font-size:10.5px;color:var(--ink-mute);letter-spacing:.1em;text-align:center;margin-top:12px;text-transform:uppercase">FIG. 1b · 周计划 — 周日复盘 15 分钟</figcaption>
+    </figure>
+    <figure>
+      <img src="../images/obsidian/lifeos-monthly.png" class="case-image" alt="LifeOS 月计划 — 整月日历 · 悬浮预览 · 月度统计 · 习惯月度 · 各维度平衡"/>
+      <figcaption style="font-family:var(--mono);font-size:10.5px;color:var(--ink-mute);letter-spacing:.1em;text-align:center;margin-top:12px;text-transform:uppercase">FIG. 1c · 月计划 — 月底复盘 30 分钟</figcaption>
+    </figure>
   </div>
 </div>
 
@@ -347,12 +354,12 @@
 <div class="container">
   <div class="case-image-row">
     <figure>
-      <img src="../images/obsidian/terminal-plugin.png" class="case-image" alt="Obsidian 内嵌终端插件 · 分屏 + Tab 多页 + AI CLI 集成"/>
-      <figcaption style="font-family:var(--mono);font-size:11.5px;color:var(--ink-mute);letter-spacing:.12em;text-align:center;margin-top:14px;text-transform:uppercase">FIG. 1 · 终端插件运行视图 — 上 markdown · 下 Tab 多页终端 · AI CLI 集成</figcaption>
+      <img src="../images/obsidian/ai-terminal.png" class="case-image" alt="Obsidian 内嵌 AI Terminal 自写插件 · Tab 多页 + PowerShell · 主题色适配"/>
+      <figcaption style="font-family:var(--mono);font-size:11.5px;color:var(--ink-mute);letter-spacing:.12em;text-align:center;margin-top:14px;text-transform:uppercase">FIG. 2 · AI Terminal 运行视图 — Tab 多页 · 主题色适配 · 一键复制 vault 路径</figcaption>
     </figure>
     <figure>
       <img src="../images/github/obsidian-ai-terminal-repo.png" class="case-image" alt="GitHub Evan-miwillbe/obsidian-ai-terminal 仓库 · 韩国开发者开源项目的二次开发"/>
-      <figcaption style="font-family:var(--mono);font-size:11.5px;color:var(--ink-mute);letter-spacing:.12em;text-align:center;margin-top:14px;text-transform:uppercase">FIG. 2 · 二次开发 — Fork 韩国开发者项目 · 已发布 v0.1.0 · TypeScript</figcaption>
+      <figcaption style="font-family:var(--mono);font-size:11.5px;color:var(--ink-mute);letter-spacing:.12em;text-align:center;margin-top:14px;text-transform:uppercase">FIG. 3 · 二次开发 — Fork 韩国开发者项目 · 已发布 v0.1.0 · TypeScript</figcaption>
     </figure>
   </div>
 </div>
