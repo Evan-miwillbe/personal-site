@@ -3043,10 +3043,11 @@ const tempQuat = new THREE.Quaternion();
 const camTarget = new THREE.Vector3();
 const camDesired = new THREE.Vector3();
 
-const MAX_FORCE = 320;
+const MAX_FORCE = 420;
 const MAX_BRAKE = 18;
 const STEER_MAX = 0.6;
 const BOOST_MULT = 1.8;
+const RAMP_LAUNCH_VY_CAP = 4.5;  // 飞跃时垂直初速度上限 (避免飞太远)
 
 function animate() {
   requestAnimationFrame(animate);
@@ -3061,17 +3062,20 @@ function animate() {
   // === input → vehicle ===
   if (vehicle && !inputLocked) {
     const boost = keys.shift ? BOOST_MULT : 1;
+    // 上坡推力补偿: 车头朝上时引擎力放大 (1x ~ 2.4x)
+    const fwdW = new CANNON.Vec3(0, 0, 1);
+    chassisBody.quaternion.vmult(fwdW, fwdW);
+    const climbBoost = 1 + Math.max(0, fwdW.y) * 1.4;
     let force = 0;
-    // Note: in cannon-es RaycastVehicle, positive force drives toward +localForward.
-    // We want W (forward) to drive in WORLD -z (into courtyard from gate at z=14).
-    // So W applies +force (forward in local +z), but we want -z world... actually:
-    // car at z=12 with default quaternion → applyEngineForce > 0 makes it go +z;
-    // we need to flip: W = -force = world -z direction.
-    if (keys.w) force = MAX_FORCE * boost;
+    if (keys.w) force = MAX_FORCE * boost * climbBoost;
     else if (keys.s) force = -MAX_FORCE * 0.5 * boost;
-    // rear-wheel drive
+    // 后驱: 引擎力作用于 index 2/3 (z=-0.7, 物理 RR/RL)
     vehicle.applyEngineForce(force, 2);
     vehicle.applyEngineForce(force, 3);
+    // 飞跃: vy 超阈值则削顶, 防止跳台/坡顶飞太远
+    if (chassisBody.velocity.y > RAMP_LAUNCH_VY_CAP) {
+      chassisBody.velocity.y = RAMP_LAUNCH_VY_CAP;
+    }
 
     let steer = 0;
     if (keys.a) steer = STEER_MAX;
@@ -3187,7 +3191,8 @@ function animate() {
   // === camera follow ===
   if (chassisBody) {
     const q = chassisBody.quaternion;
-    const carFwd = new CANNON.Vec3(0, 0, -1);
+    // 车头朝 local +Z (headlight/天线/index 0-1 前轮 都在 +Z 那侧)
+    const carFwd = new CANNON.Vec3(0, 0, 1);
     q.vmult(carFwd, carFwd);
     const speedMs = Math.hypot(chassisBody.velocity.x, chassisBody.velocity.z);
     const vNorm = Math.min(speedMs / 18, 1);
@@ -3225,7 +3230,8 @@ function animate() {
       );
       camera.lookAt(0, 8, -55);
     } else {
-      const damping = 1 - Math.exp(-THREE.MathUtils.lerp(8, 4.5, vNorm) * dt);
+      // 速度越高 damping 越大 (跟得更紧, 不让车跑远了相机掉队)
+      const damping = 1 - Math.exp(-THREE.MathUtils.lerp(7, 12, vNorm) * dt);
       camera.position.lerp(camDesired, damping);
       camera.lookAt(camTarget);
     }
