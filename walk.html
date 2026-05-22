@@ -2322,11 +2322,10 @@ function updateCharacterMode(dt, time) {
   const targetSpeed = canSprint ? CHARACTER.SPRINT_SPEED
                    : keys.shift ? CHARACTER.RUN_SPEED
                    : CHARACTER.WALK_SPEED;
-  // 持续转向: 约 110°/s, 倒车时反向更直觉
+  // 持续转向: 约 110°/s, A 始终左转 D 始终右转 (与前进/后退无关)
   const TURN_RATE = 1.9;
   if (inputTurn !== 0) {
-    const turnSign = inputForward < 0 ? -1 : 1;
-    characterState.yaw += inputTurn * turnSign * TURN_RATE * dt;
+    characterState.yaw -= inputTurn * TURN_RATE * dt;
   }
   let dirX = 0, dirZ = 0;
   if (hasMove) {
