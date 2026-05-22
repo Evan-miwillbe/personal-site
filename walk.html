@@ -2330,10 +2330,9 @@ function updateCharacterMode(dt, time) {
   }
   let dirX = 0, dirZ = 0;
   if (hasMove) {
-    // 沿角色面朝: mesh.rotation.y = yaw, 默认朝 +Z (披风在 -Z 背后)
-    // 故 forward = (sin(yaw), cos(yaw))
-    dirX = Math.sin(characterState.yaw) * inputForward;
-    dirZ = Math.cos(characterState.yaw) * inputForward;
+    // mesh.rotation.y = yaw 时角色默认朝 -Z, 故 forward = -(sin yaw, cos yaw)
+    dirX = -Math.sin(characterState.yaw) * inputForward;
+    dirZ = -Math.cos(characterState.yaw) * inputForward;
   }
   const desiredX = dirX * targetSpeed;
   const desiredZ = dirZ * targetSpeed;
