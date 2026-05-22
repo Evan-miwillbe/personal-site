@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>滕美名 · Teng Meiming</title>
+<meta name="description" content="AI Skill 与 Multi-Agent 协作框架开发者 / 上海对外经贸大学 / 退役军人 / 飞书 CLI 创作者大赛十佳入选" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&family=Noto+Serif+SC:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="data.js"></script>
+<style>
+  :root{
+    --paper:#F6F3EB;
+    --paper-deep:#f4f1e8;
+    --ink:#2a2520;
+    --ink-soft:#4a4842;
+    --ink-mute:#8a877e;
+    --rule:#d8d4c5;
+    --accent:#7F2020;        /* 墨红——克制，呼应军籍底色 */
+    --accent-soft:rgba(127,32,32,.08);
+    --serif:"Noto Serif SC","Source Han Serif SC","Songti SC","STSong",serif;
+    --serif-en:"EB Garamond",Georgia,"Times New Roman",serif;
+    --sans:"Inter","HarmonyOS Sans SC","PingFang SC","Microsoft YaHei",ui-sans-serif,system-ui,sans-serif;
+    --mono:"JetBrains Mono","IBM Plex Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  ::selection{background:var(--accent);color:var(--paper)}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--serif);
+    font-size:17px;
+    line-height:1.85;
+    font-weight:400;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    overflow-x:hidden;
+  }
+  /* 微纸纹 */
+  body::before{
+    content:"";
+    position:fixed;inset:0;
+    background-image:
+      radial-gradient(circle at 30% 20%, rgba(127,32,32,.015), transparent 40%),
+      radial-gradient(circle at 80% 80%, rgba(0,0,0,.01), transparent 40%);
+    pointer-events:none;z-index:0;
+  }
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--rule);transition:border-color .2s,color .2s}
+  a:hover{color:var(--accent);border-color:var(--accent)}
+
+  /* ---------- 容器 ---------- */
+  .page{
+    max-width:680px;
+    margin:0 auto;
+    padding:120px 32px 64px;
+    position:relative;
+    z-index:1;
+  }
+
+  /* ---------- 顶部铭牌 ---------- */
+  .nameplate{
+    text-align:center;
+    margin-bottom:96px;
+  }
+  .nameplate .surname-cn{
+    font-family:var(--serif);
+    font-size:84px;
+    font-weight:500;
+    letter-spacing:.32em;
+    margin-right:-.32em;
+    line-height:1;
+    color:var(--ink);
+  }
+  .nameplate .name-en{
+    font-family:var(--serif-en);
+    font-style:italic;
+    font-size:22px;
+    color:var(--ink-mute);
+    margin-top:24px;
+    letter-spacing:.04em;
+  }
+  .nameplate .rule{
+    width:48px;height:1px;background:var(--accent);
+    margin:32px auto;
+  }
+  .nameplate .role{
+    font-family:var(--sans);
+    font-size:14px;
+    color:var(--ink-soft);
+    letter-spacing:.06em;
+    line-height:2;
+  }
+  .nameplate .meta{
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--ink-mute);
+    letter-spacing:.24em;
+    text-transform:uppercase;
+    margin-top:18px;
+  }
+  .nameplate .meta span{margin:0 14px}
+
+  /* ---------- 章节小标识 ---------- */
+  section{margin-bottom:88px;scroll-margin-top:32px}
+  .eyebrow{
+    display:flex;align-items:baseline;gap:18px;
+    margin-bottom:36px;
+    padding-bottom:18px;
+    border-bottom:1px solid var(--rule);
+  }
+  .eyebrow .roman{
+    font-family:var(--serif-en);
+    font-style:italic;
+    font-size:18px;
+    color:var(--accent);
+  }
+  .eyebrow .label{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.32em;
+    text-transform:uppercase;
+    color:var(--ink-mute);
+  }
+  .eyebrow .title-cn{
+    font-family:var(--serif);
+    font-size:16px;
+    color:var(--ink-soft);
+    margin-left:auto;
+    letter-spacing:.12em;
+  }
+
+  /* ---------- 摘要引文 ---------- */
+  .lede{
+    font-family:var(--serif);
+    font-size:22px;
+    line-height:1.85;
+    color:var(--ink);
+    font-weight:400;
+    text-indent:2em;
+  }
+  .lede + .lede{margin-top:20px}
+  .lede em{
+    color:var(--accent);
+    font-style:normal;
+    border-bottom:1px solid var(--accent-soft);
+  }
+
+  /* ---------- 索引列表（项目/经历） ---------- */
+  .index-list{list-style:none}
+  .index-row{
+    display:grid;
+    grid-template-columns:90px 1fr auto;
+    gap:24px;
+    padding:18px 0;
+    border-top:1px solid var(--rule);
+    align-items:baseline;
+  }
+  .index-row:last-child{border-bottom:1px solid var(--rule)}
+  .index-row .year{
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--ink-mute);
+    letter-spacing:.08em;
+  }
+  .index-row .body{
+    font-family:var(--serif);
+    font-size:17px;
+    line-height:1.7;
+  }
+  .index-row .body strong{
+    font-weight:500;
+    color:var(--ink);
+  }
+  .index-row .body .desc{
+    display:block;
+    font-size:14.5px;
+    color:var(--ink-soft);
+    margin-top:4px;
+    line-height:1.7;
+  }
+  .index-row .tag{
+    font-family:var(--mono);
+    font-size:10px;
+    color:var(--accent);
+    letter-spacing:.14em;
+    border:1px solid var(--accent);
+    padding:3px 9px;
+    border-radius:99px;
+    white-space:nowrap;
+  }
+
+  /* ---------- 项目详细块 ---------- */
+  .work-entry{
+    padding:48px 0;
+    border-top:1px solid var(--rule);
+  }
+  .work-entry:first-of-type{padding-top:0;border-top:none}
+  .work-entry .work-head{
+    display:flex;
+    align-items:baseline;
+    gap:18px;
+    flex-wrap:wrap;
+    margin-bottom:6px;
+  }
+  .work-entry .work-no{
+    font-family:var(--serif-en);
+    font-style:italic;
+    font-size:14px;
+    color:var(--ink-mute);
+  }
+  .work-entry h3{
+    font-family:var(--serif);
+    font-size:26px;
+    font-weight:500;
+    color:var(--ink);
+    letter-spacing:.02em;
+    line-height:1.35;
+    flex:1;
+  }
+  .work-entry .badge{
+    font-family:var(--mono);
+    font-size:10px;
+    color:var(--accent);
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    border:1px solid var(--accent);
+    padding:3px 10px;
+    border-radius:99px;
+  }
+  .work-entry .work-meta{
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--ink-mute);
+    letter-spacing:.08em;
+    margin-bottom:20px;
+  }
+  .work-entry .work-meta span{margin-right:18px}
+  .work-entry p{
+    margin-bottom:14px;
+    color:var(--ink-soft);
+    line-height:1.85;
+  }
+  .work-entry p strong{color:var(--ink);font-weight:500}
+  .work-entry .quote{
+    font-style:italic;
+    color:var(--ink-soft);
+    border-left:2px solid var(--accent);
+    padding-left:18px;
+    margin:20px 0;
+    font-size:16px;
+  }
+  .work-entry .work-links{
+    margin-top:18px;
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:.06em;
+  }
+  .work-entry .work-links a{margin-right:24px}
+
+  /* ---------- 飞书入选告示 ---------- */
+  .award-card{
+    background:var(--paper-deep);
+    border:1px solid var(--rule);
+    border-left:2px solid var(--accent);
+    padding:36px 40px;
+    margin-bottom:24px;
+    position:relative;
+  }
+  .award-card::before{
+    content:"·";
+    position:absolute;top:14px;right:20px;
+    font-family:var(--mono);font-size:20px;color:var(--accent);
+  }
+  .award-card .award-label{
+    font-family:var(--mono);
+    font-size:10px;
+    color:var(--accent);
+    letter-spacing:.32em;
+    text-transform:uppercase;
+    margin-bottom:14px;
+  }
+  .award-card h4{
+    font-family:var(--serif);
+    font-size:22px;
+    font-weight:500;
+    color:var(--ink);
+    margin-bottom:14px;
+    line-height:1.5;
+  }
+  .award-card p{
+    color:var(--ink-soft);
+    font-size:15.5px;
+    line-height:1.85;
+  }
+  .award-card .meta{
+    display:flex;flex-wrap:wrap;gap:22px;
+    margin-top:18px;
+    padding-top:16px;
+    border-top:1px dashed var(--rule);
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--ink-mute);
+    letter-spacing:.08em;
+  }
+  .other-honors{
+    list-style:none;
+    margin-top:24px;
+  }
+  .other-honors li{
+    padding:10px 0;
+    border-bottom:1px dotted var(--rule);
+    color:var(--ink-soft);
+    font-size:15px;
+    display:flex;justify-content:space-between;gap:18px;
+  }
+  .other-honors li span{
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--ink-mute);
+    letter-spacing:.06em;
+    white-space:nowrap;
+  }
+
+  /* ---------- 经历时间线 ---------- */
+  .timeline .index-row{grid-template-columns:90px 1fr}
+
+  /* ---------- 细节段 ---------- */
+  .detail-block{margin-bottom:36px}
+  .detail-block .detail-label{
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--ink-mute);
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  .detail-block .detail-body{
+    color:var(--ink-soft);
+    font-size:16px;
+    line-height:1.9;
+  }
+  .detail-block code{
+    font-family:var(--mono);
+    font-size:13.5px;
+    color:var(--ink);
+    background:var(--accent-soft);
+    padding:1px 7px;
+    border-radius:2px;
+    border-bottom:none;
+  }
+
+  /* ---------- 联系 ---------- */
+  .contact{text-align:center;padding-top:48px;border-top:1px solid var(--rule);margin-top:48px}
+  .contact .closing{
+    font-family:var(--serif);
+    font-size:22px;
+    color:var(--ink);
+    font-style:italic;
+    margin-bottom:16px;
+  }
+  .contact p{color:var(--ink-soft);max-width:520px;margin:0 auto 36px;font-size:16px}
+  .contact-list{
+    display:flex;justify-content:center;gap:36px;flex-wrap:wrap;
+    font-family:var(--mono);font-size:13px;letter-spacing:.06em;
+  }
+  .contact-list a{
+    color:var(--ink);
+    border-bottom:1px solid var(--rule);
+    padding-bottom:2px;
+  }
+  .contact-list a:hover{color:var(--accent);border-color:var(--accent)}
+
+  /* ---------- 页脚 ---------- */
+  footer.foot{
+    text-align:center;
+    margin-top:80px;
+    padding-top:32px;
+    border-top:1px solid var(--rule);
+    color:var(--ink-mute);
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:.24em;
+    text-transform:uppercase;
+  }
+  footer.foot .seal{
+    display:inline-block;
+    font-family:var(--serif);
+    color:var(--accent);
+    font-size:24px;
+    font-style:normal;
+    border:1px solid var(--accent);
+    padding:2px 6px;
+    margin:0 8px;
+    letter-spacing:0;
+    font-weight:500;
+  }
+
+  /* ---------- 响应式 ---------- */
+  @media(max-width:600px){
+    .page{padding:64px 22px 48px}
+    .nameplate{margin-bottom:64px}
+    .nameplate .surname-cn{font-size:60px}
+    .index-row{grid-template-columns:60px 1fr;gap:14px}
+    .index-row .tag{grid-column:2;margin-top:6px}
+    .work-entry h3{font-size:22px}
+    .lede{font-size:18px}
+    .eyebrow .title-cn{display:none}
+    .award-card{padding:24px 22px}
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ============ 顶部铭牌 ============ -->
+  <header class="nameplate">
+    <div class="surname-cn" data-source="meta.name_cn"></div>
+    <div class="name-en" data-source="meta.name_en_full"></div>
+    <div class="rule"></div>
+    <div class="role" data-source="meta.role"></div>
+    <div class="meta" data-source="meta.tag_strip"></div>
+  </header>
+
+  <!-- ============ 引子 ============ -->
+  <section data-source="lede"></section>
+
+  <!-- ============ I · INDEX ============ -->
+  <section id="index">
+    <div class="eyebrow">
+      <span class="roman">I.</span>
+      <span class="label">Index</span>
+      <span class="title-cn">作品索引</span>
+    </div>
+    <ul class="index-list" data-source="projects"></ul>
+  </section>
+
+  <!-- ============ II · RECOGNITION ============ -->
+  <section id="recognition">
+    <div class="eyebrow">
+      <span class="roman">II.</span>
+      <span class="label">Recognition</span>
+      <span class="title-cn">认证与荣誉</span>
+    </div>
+
+    <div data-source="award_card"></div>
+
+    <ul class="other-honors" data-source="other_honors"></ul>
+  </section>
+
+  <!-- ============ III · WORK ============ -->
+  <section id="work">
+    <div class="eyebrow">
+      <span class="roman">III.</span>
+      <span class="label">Work</span>
+      <span class="title-cn">主要项目</span>
+    </div>
+    <div data-source="work_entries"></div>
+  </section>
+
+  <!-- ============ IV · EXPERIENCE ============ -->
+  <section id="experience">
+    <div class="eyebrow">
+      <span class="roman">IV.</span>
+      <span class="label">Experience</span>
+      <span class="title-cn">经历</span>
+    </div>
+    <ul class="index-list timeline" data-source="experiences"></ul>
+  </section>
+
+  <!-- ============ V · DETAILS ============ -->
+  <section id="details">
+    <div class="eyebrow">
+      <span class="roman">V.</span>
+      <span class="label">Details</span>
+      <span class="title-cn">其它</span>
+    </div>
+
+    <div class="detail-block">
+      <div class="detail-label">Education · 教育</div>
+      <div class="detail-body" data-source="education"></div>
+    </div>
+
+    <div data-source="skill_blocks"></div>
+
+    <div class="detail-block">
+      <div class="detail-label">Off-screen · 屏幕之外</div>
+      <div class="detail-body" data-source="off_screen"></div>
+    </div>
+  </section>
+
+  <!-- ============ VI · CONTACT ============ -->
+  <section id="contact" class="contact">
+    <div class="closing">想聊聊？</div>
+    <p data-source="contact_intro"></p>
+    <div class="contact-list" data-source="contacts"></div>
+  </section>
+
+  <div class="drive-link" style="text-align:center;margin-top:48px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;">
+    <a href="drive.html">开车看 →</a>
+  </div>
+
+  <footer class="foot">
+    Made by · <span class="seal" data-source="meta.surname_cn"></span> · <span data-source="meta.name_en"></span> · 2026 · <span data-source="meta.city_en_upper"></span>
+  </footer>
+
+</div>
+
+
+<!-- ============ 鼠标拖尾粒子（反重力风格） ============ -->
+<canvas id="particleBg" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9997"></canvas>
+<script>
+(function(){
+  var c = document.getElementById('particleBg');
+  var gl = c.getContext('2d');
+  var W, H, dpr;
+  var pool = [];
+  var mx = -9999, my = -9999, pmx = -9999, pmy = -9999;
+  var hue = 0;
+
+  var PALETTE = [
+    [127,32,32],  [160,40,40],  [134,155,126],
+    [201,202,172],[201,163,90], [180,80,60],
+    [100,60,50],  [170,130,80], [90,120,90]
+  ];
+
+  function resize(){
+    dpr = window.devicePixelRatio || 1;
+    W = window.innerWidth; H = window.innerHeight;
+    c.width = W * dpr; c.height = H * dpr;
+    gl.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  function spawn(x, y, vxBase, vyBase){
+    var col = PALETTE[Math.floor(Math.random() * PALETTE.length)];
+    var angle = Math.random() * Math.PI * 2;
+    var speed = 0.5 + Math.random() * 2.5;
+    pool.push({
+      x: x + (Math.random() - 0.5) * 4,
+      y: y + (Math.random() - 0.5) * 4,
+      vx: Math.cos(angle) * speed + vxBase * 0.15,
+      vy: Math.sin(angle) * speed + vyBase * 0.15 - 0.5,
+      r: 1.5 + Math.random() * 3.5,
+      life: 1,
+      decay: 0.008 + Math.random() * 0.012,
+      gravity: -0.02 - Math.random() * 0.03,
+      friction: 0.985 + Math.random() * 0.01,
+      cr: col[0], cg: col[1], cb: col[2],
+      glow: Math.random() < 0.3,
+      spin: (Math.random() - 0.5) * 0.1
+    });
+  }
+
+  var throttle = 0;
+  document.addEventListener('mousemove', function(e){
+    pmx = mx; pmy = my;
+    mx = e.clientX; my = e.clientY;
+    if(pmx === -9999){ pmx = mx; pmy = my; }
+    throttle++;
+    if(throttle % 4 !== 0) return;
+    spawn(mx, my, mx - pmx, my - pmy);
+  }, {passive:true});
+
+  document.addEventListener('mouseleave', function(){
+    mx = -9999; my = -9999; pmx = -9999; pmy = -9999;
+  });
+
+  document.addEventListener('click', function(e){
+    if(e.button !== 0) return;
+    for(var i = 0; i < 30; i++){
+      var angle = (i / 30) * Math.PI * 2;
+      var speed = 2 + Math.random() * 4;
+      var col = PALETTE[Math.floor(Math.random() * PALETTE.length)];
+      pool.push({
+        x: e.clientX, y: e.clientY,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        r: 2 + Math.random() * 4,
+        life: 1,
+        decay: 0.012 + Math.random() * 0.008,
+        gravity: -0.04 - Math.random() * 0.03,
+        friction: 0.97,
+        cr: col[0], cg: col[1], cb: col[2],
+        glow: Math.random() < 0.5,
+        spin: 0
+      });
+    }
+  }, {passive:true});
+
+  function frame(){
+    gl.clearRect(0, 0, W, H);
+    for(var i = pool.length - 1; i >= 0; i--){
+      var p = pool[i];
+      p.life -= p.decay;
+      if(p.life <= 0){ pool.splice(i, 1); continue; }
+      p.vy += p.gravity;
+      p.vx *= p.friction;
+      p.vy *= p.friction;
+      p.vx += p.spin;
+      p.x += p.vx;
+      p.y += p.vy;
+      var alpha = p.life * p.life;
+      var r = p.r * (0.4 + p.life * 0.6);
+      if(p.glow && alpha > 0.15){
+        gl.beginPath();
+        gl.arc(p.x, p.y, r * 3, 0, Math.PI * 2);
+        gl.fillStyle = 'rgba('+p.cr+','+p.cg+','+p.cb+','+(alpha * 0.08)+')';
+        gl.fill();
+      }
+      gl.beginPath();
+      gl.arc(p.x, p.y, r, 0, Math.PI * 2);
+      gl.fillStyle = 'rgba('+p.cr+','+p.cg+','+p.cb+','+alpha+')';
+      gl.fill();
+    }
+    if(pool.length > 600) pool.splice(0, pool.length - 600);
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+</script>
+
+<!-- ============ 烟花点击效果（参考 eduardbodak.com） ============ -->
+<style>
+.spark{
+  position:fixed; pointer-events:none; z-index:9998;
+  width:6px; height:6px; border-radius:50%;
+  will-change:transform, opacity;
+}
+@media (hover:none), (pointer:coarse){
+  /* 移动端禁用，避免在滚动时误触 */
+  .spark{display:none}
+}
+</style>
+<script>
+(function(){
+  // 8 方向 + 中式书院 5 色
+  var COLORS = ['#7F2020','#a02828','#869B7E','#C9CAAC','#c9a35a'];
+  function spark(x, y, angle, color){
+    var s = document.createElement('div');
+    s.className = 'spark';
+    s.style.left = x + 'px';
+    s.style.top = y + 'px';
+    s.style.background = color;
+    document.body.appendChild(s);
+    var anim = s.animate([
+      {transform:'translate(-50%,-50%) rotate('+angle+'deg) translate(8px,0) scale(1)', opacity:1},
+      {transform:'translate(-50%,-50%) rotate('+angle+'deg) translate(28px,0) scale(.6,.85)', opacity:.9, offset:.65},
+      {transform:'translate(-50%,-50%) rotate('+angle+'deg) translate(38px,0) scale(0,0)', opacity:0}
+    ], {duration:480, easing:'cubic-bezier(.22,.6,.4,1)', fill:'forwards'});
+    anim.onfinish = function(){ s.remove(); };
+  }
+  document.addEventListener('click', function(e){
+    // 触屏 / pointer 设备跳过
+    if(!window.matchMedia('(hover:hover) and (pointer:fine)').matches) return;
+    // 主鼠标左键
+    if(e.button !== 0) return;
+    for(var i = 0; i < 8; i++){
+      var ang = i * 45;
+      var col = COLORS[(i + Math.floor(Math.random()*COLORS.length)) % COLORS.length];
+      spark(e.clientX, e.clientY, ang, col);
+    }
+  }, {passive:true});
+})();
+</script>
+
+<!-- ============ 数据注入 · 从 data.js 读 SITE_DATA 渲染 ============ -->
+<script>
+(function(){
+  'use strict';
+
+  var D = window.SITE_DATA || {};
+  var meta = D.meta || {};
+  var contacts = D.contacts || [];
+  var projects = (D.projects || []).slice().sort(function(a,b){ return (a.sort_order||0)-(b.sort_order||0); });
+  var experiences = (D.experiences || []).slice().sort(function(a,b){ return (a.sort_order||0)-(b.sort_order||0); });
+  var awards = (D.awards || []).slice().sort(function(a,b){ return (a.sort_order||0)-(b.sort_order||0); });
+  var skills = (D.skills || []).slice().sort(function(a,b){ return (a.sort_order||0)-(b.sort_order||0); });
+  var offScreen = D.off_screen || [];
+
+  function esc(s){
+    if(s == null) return '';
+    return String(s)
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;')
+      .replace(/'/g,'&#39;');
+  }
+  function $(sel){ return document.querySelector(sel); }
+  function setBySource(key, html){
+    var el = document.querySelector('[data-source="'+key+'"]');
+    if(el) el.innerHTML = html;
+  }
+  function setTextBySource(key, txt){
+    var els = document.querySelectorAll('[data-source="'+key+'"]');
+    for(var i=0;i<els.length;i++){ els[i].textContent = txt == null ? '' : txt; }
+  }
+
+  // ---------- 顶部铭牌 ----------
+  setTextBySource('meta.name_cn', meta.name_cn ?? '');
+  setTextBySource('meta.name_en_full',
+    [meta.name_en, meta.nickname_en].filter(Boolean).join(' · ')
+  );
+  setTextBySource('meta.role', meta.role ?? '');
+  setTextBySource('meta.surname_cn', meta.surname_cn ?? '');
+  setTextBySource('meta.name_en', meta.name_en ?? '');
+  setTextBySource('meta.city_en_upper', (meta.city_en || '').toUpperCase());
+
+  // 铭牌底部 meta 条：CITY · 退役军人 · GRAD_YEAR
+  (function(){
+    var parts = [];
+    if(meta.city_en) parts.push(esc(meta.city_en.toUpperCase()));
+    if(meta.veteran) parts.push(esc(meta.veteran_branch_cn ? (meta.veteran_branch_cn + '退役') : '退役军人'));
+    if(meta.graduation_year) parts.push(esc(String(meta.graduation_year)));
+    var html = parts.map(function(p){ return '<span>'+p+'</span>'; }).join('·');
+    setBySource('meta.tag_strip', html);
+  })();
+
+  // ---------- 引子 lede ----------
+  (function(){
+    var top10 = (awards || []).filter(function(a){ return a.type === 'competition'; })[0];
+    var top10Name = top10 ? '<em>十佳</em>' : '<em>官方认证</em>';
+    var ratio = (top10 && top10.ratio_display) ? top10.ratio_display : (meta.feishu_top10_ratio || '');
+    // 计算入选数与投稿数（projects 中 award_status === undefined 且 featured_award === '飞书十佳'）
+    var entered = projects.filter(function(p){ return p.featured_award === '飞书十佳'; }).length;
+    var submitted = ratio && ratio.indexOf('/') > -1 ? parseInt(ratio.split('/')[1], 10) : null;
+
+    var p1 =
+      '我从 <em>2026 年 1 月</em>开始学 AI，3 月动手写第一个 Skill。'+
+      '到 5 月，做出一套自己的 Multi-Agent 研究框架——'+
+      '其中'+(entered ? esc(String(entered)) : '两')+'个 Skill 被字节飞书官方选入「'+top10Name+'」，'+
+      '将收录至 larksuite 开源库附作者署名。';
+
+    var school = esc(meta.school_cn || '');
+    var p2Parts = [];
+    if(school) p2Parts.push(school + '国际经济与贸易（全英语实验班）应届');
+    if(meta.veteran){
+      p2Parts.push((meta.veteran_branch_cn || '') + '湖南总队长沙支队退役');
+    }
+    var p2 = p2Parts.join('。')+'。<em>慢工的研究型</em>创造者，喜欢和前沿待在一起，自己上手做一个控制得住的版本。';
+
+    setBySource('lede',
+      '<p class="lede">'+p1+'</p>'+
+      '<p class="lede">'+p2+'</p>'
+    );
+  })();
+
+  // ---------- I · INDEX (projects 索引) ----------
+  (function(){
+    if(!projects.length){ setBySource('projects', ''); return; }
+    var html = projects.map(function(p){
+      var year = esc(p.year || '');
+      var nameEn = esc(p.name_en || '');
+      var nameCn = p.name_cn ? ' · ' + esc(p.name_cn) : (p.tagline && p.tagline !== p.name_cn ? ' · ' + esc(p.tagline) : '');
+      var desc = esc(p.activity_meta || p.description_short || '');
+      var isTop10 = p.featured_award === '飞书十佳';
+      var tag = isTop10 ? '<span class="tag">★ 十佳</span>' : '';
+      return ''+
+        '<li class="index-row">'+
+          '<span class="year">'+year+'</span>'+
+          '<span class="body">'+
+            '<strong>'+nameEn+'</strong>'+nameCn+
+            (desc ? '<span class="desc">'+desc+'</span>' : '')+
+          '</span>'+
+          tag+
+        '</li>';
+    }).join('');
+    setBySource('projects', html);
+  })();
+
+  // ---------- II · RECOGNITION ----------
+  (function(){
+    var top10 = awards.filter(function(a){ return a.type === 'competition'; })[0];
+    if(top10){
+      var dateStr = top10.date ? top10.date.replace(/-/g,'.') : '';
+      var ratio = top10.ratio_display || '';
+      var submitted = ratio.indexOf('/') > -1 ? parseInt(ratio.split('/')[1],10) : null;
+      var entered = ratio.indexOf('/') > -1 ? parseInt(ratio.split('/')[0],10) : null;
+      var pct = (submitted && entered) ? Math.round(entered/submitted*100)+'%' : '';
+
+      // 入选项目（飞书十佳）与未入选项目
+      var hitProjects = projects.filter(function(p){ return p.featured_award === '飞书十佳'; });
+      var missProjects = projects.filter(function(p){ return p.award_status === '未入选'; });
+      var hitNames = hitProjects.map(function(p){ return '<strong>'+esc(p.name_en)+'</strong>'; }).join(' 与 ');
+      var missName = missProjects[0] ? '<strong>'+esc(missProjects[0].name_en)+'</strong>' : '';
+
+      var bodyP = '由'+esc(top10.issuer || '主办方')+'官方团队主办的'+esc(top10.issuer_track || '')+'。'+
+        (hitNames ? hitNames + ' 入选，将收录至飞书 CLI 官方开源库并附作者署名。' : '')+
+        (missName ? '另一作品 '+missName+' 定位偏 ToB 企业级未入选——三个作品均为同期独立完成。' : '');
+
+      var html =
+        '<div class="award-card">'+
+          '<div class="award-label">入选 · '+esc(dateStr)+'</div>'+
+          '<h4>'+esc(top10.name)+'<br/>'+esc(ratio ? (submitted+' 项投稿，'+entered+' 项入选 · '+pct) : '')+'</h4>'+
+          '<p>'+bodyP+'</p>'+
+          '<div class="meta">'+
+            '<span>主办 · '+esc(top10.issuer || '')+'</span>'+
+            (top10.issuer_track ? '<span>赛道 · '+esc(top10.issuer_track)+'</span>' : '')+
+          '</div>'+
+        '</div>';
+      setBySource('award_card', html);
+    } else {
+      setBySource('award_card', '');
+    }
+
+    // other-honors：awards 中 type !== 'competition' 的（数据源为准）
+    var others = awards.filter(function(a){ return a.type !== 'competition'; });
+    var ohHtml = others.map(function(a){
+      var when = a.date ? esc(a.date.replace(/-/g,'.')) :
+                 (a.id === 'a-pap-merit' ? '入伍期间' : '—');
+      var label = esc(a.name) + (a.issuer ? ' · ' + esc(a.issuer) : '');
+      return '<li>'+label+'<span>'+when+'</span></li>';
+    }).join('');
+    setBySource('other_honors', ohHtml);
+  })();
+
+  // ---------- III · WORK (详细项目块) ----------
+  (function(){
+    // 仅取 featured === true 的 projects 作详细块；按 sort_order 渲染
+    var featured = projects.filter(function(p){ return p.featured; });
+    var html = featured.map(function(p, idx){
+      var no = 'No. ' + String(idx+1).padStart(2,'0');
+      var nameEn = esc(p.name_en);
+      var nameCn = p.name_cn && p.name_cn !== p.tagline ? p.name_cn : (p.tagline || '');
+      var titleHtml = '<h3>'+nameEn +
+        (nameCn ? '<br/><span style="font-size:.7em;color:var(--ink-mute);font-weight:400;">'+esc(nameCn)+'</span>' : '')+
+        '</h3>';
+
+      var badge = p.featured_award === '飞书十佳' ? '<span class="badge">★ 飞书十佳</span>' : '';
+
+      var metaParts = [];
+      if(p.year) metaParts.push('<span>'+esc(p.year)+'</span>');
+      if(p.tagline && p.tagline !== nameCn) metaParts.push('<span>'+esc(p.tagline)+'</span>');
+      if(p.activity_meta) metaParts.push('<span>'+esc(p.activity_meta)+'</span>');
+      if(p.cost) metaParts.push('<span>'+esc(p.cost)+'</span>');
+      // 关于 license 等附加描述目前 schema 未单列，跳过
+
+      var desc = p.description_short ? '<p>'+esc(p.description_short)+'</p>' : '';
+
+      // 链接块：优先 url_github + url_detail
+      var linkParts = [];
+      if(p.url_github){
+        linkParts.push('<a href="'+esc(p.url_github)+'" target="_blank">→ GitHub</a>');
+      }
+      if(p.url_detail){
+        linkParts.push('<a href="'+esc(p.url_detail)+'">→ 项目详情</a>');
+      }
+      // 官方公示链接（若是飞书十佳，从 award.url 取）
+      if(p.featured_award === '飞书十佳'){
+        var top10 = awards.filter(function(a){ return a.type === 'competition'; })[0];
+        if(top10 && top10.url){
+          linkParts.push('<a href="'+esc(top10.url)+'" target="_blank">→ '+esc(top10.url_label || '官方公示')+'</a>');
+        }
+      }
+      var linksHtml = linkParts.length ? '<div class="work-links">'+linkParts.join('')+'</div>' : '';
+
+      return ''+
+        '<article class="work-entry">'+
+          '<div class="work-head">'+
+            '<span class="work-no">'+no+'</span>'+
+            titleHtml+
+            badge+
+          '</div>'+
+          '<div class="work-meta">'+metaParts.join('')+'</div>'+
+          desc+
+          linksHtml+
+        '</article>';
+    }).join('');
+    setBySource('work_entries', html);
+  })();
+
+  // ---------- IV · EXPERIENCE (经历时间线) ----------
+  (function(){
+    var html = experiences.map(function(e){
+      // date_range 格式化：data.js 是 "2026 · 01—04" / "2022 · 09 — 2024 · 09"
+      // 渲染回 "2026.01—04" 这种紧凑形式
+      var year = (e.date_range || '').replace(/\s/g,'').replace(/·/g,'.');
+      var orgCn = esc(e.org_cn || '');
+      var roleEn = e.role_en ? ' · '+esc(e.role_en) : '';
+      var summary = esc(e.summary || '');
+      var note = e.note ? ' '+esc(e.note) : '';
+      return ''+
+        '<li class="index-row">'+
+          '<span class="year">'+esc(year)+'</span>'+
+          '<span class="body">'+
+            '<strong>'+orgCn+'</strong>'+roleEn+
+            '<span class="desc">'+summary+note+'</span>'+
+          '</span>'+
+        '</li>';
+    }).join('');
+    setBySource('experiences', html);
+  })();
+
+  // ---------- V · DETAILS ----------
+  // Education
+  (function(){
+    var parts = [];
+    if(meta.school_cn) parts.push(esc(meta.school_cn));
+    parts.push('国际经济与贸易（全英语实验班）');
+    parts.push('国家级一流本科专业建设点');
+    parts.push('<code>2021.09 — 2027.06</code>（因服兵役延期 2 年）');
+    parts.push('GPA <code>3.3/4.0（前 20%）</code>');
+    parts.push('团支书');
+    parts.push('代表课程：程序设计基础与应用 91 / 中级微观经济学 88 / 国际商务 91 / 财政学 91');
+    parts.push('英语 CET-6 <code>521</code>');
+    setBySource('education', parts.join(' · ') + '。');
+  })();
+
+  // Skill blocks（按 skills 数组生成 detail-block；前两组用作 AI Stack + Foundation 兼容旧版）
+  (function(){
+    if(!skills.length){ setBySource('skill_blocks', ''); return; }
+    // 与旧版兼容：前两组分别命名 "AI Stack" "Foundation" 以贴近 hello.html 风格
+    // 这里改为按 skills 自身 category_cn / category_en 渲染，多组都展示
+    var html = skills.map(function(s){
+      var label = (s.category_en || '') + (s.category_cn ? ' · ' + s.category_cn : '');
+      var itemsHtml = (s.items || []).map(function(it){
+        return '<code>'+esc(it)+'</code>';
+      }).join(' · ');
+      return ''+
+        '<div class="detail-block">'+
+          '<div class="detail-label">'+esc(label)+'</div>'+
+          '<div class="detail-body">'+itemsHtml+'。</div>'+
+        '</div>';
+    }).join('');
+    setBySource('skill_blocks', html);
+  })();
+
+  // Off-screen
+  (function(){
+    var runItem = offScreen.filter(function(o){ return o.id === 'off-run'; })[0];
+    var writeItem = offScreen.filter(function(o){ return o.id === 'off-write'; })[0];
+
+    var fullPb = '', halfPb = '', essayCount = '', essayReads = '';
+    if(runItem && runItem.stats){
+      runItem.stats.forEach(function(st){
+        if(st.label_en === 'Full Marathon PB') fullPb = st.num;
+        else if(st.label_en === 'Half Marathon PB') halfPb = st.num;
+      });
+    }
+    if(writeItem && writeItem.stats){
+      writeItem.stats.forEach(function(st){
+        if(st.label_en === 'Personal Essays') essayCount = st.num;
+        else if(st.label_en === 'Campus Reads') essayReads = st.num;
+      });
+    }
+    fullPb = fullPb || meta.marathon_full_pb || '';
+    halfPb = halfPb || meta.marathon_half_pb || '';
+    essayCount = essayCount || meta.essay_count || '';
+
+    var html =
+      '全马 PB <code>'+esc(fullPb)+'</code> / 半马 PB <code>'+esc(halfPb)+'</code>。'+
+      esc(essayCount)+' 篇随笔，慢工的写作者。'+
+      '基于 Claude Opus 4.6 协作完成本职 AI 项目——非 CS 科班，'+
+      '贡献是产品 taste 与迭代节奏。';
+    setBySource('off_screen', html);
+  })();
+
+  // ---------- VI · CONTACT ----------
+  (function(){
+    // contact intro 散文（保留风格，只把"找的位置"动态读 meta.looking_for_cn）
+    var lookingFor = meta.looking_for_cn || '';
+    var intro = '<strong>喜欢探索前沿AI项目并落地进入现有工作流</strong>——'+esc(lookingFor)+'。';
+    setBySource('contact_intro', intro);
+
+    // contacts 列表（按 sort_order，过滤掉无 url 的 location）
+    var visible = contacts.slice().sort(function(a,b){ return (a.sort_order||0)-(b.sort_order||0); })
+      .filter(function(c){ return c.url; });
+    var html = visible.map(function(c){
+      var isExternal = /^https?:/i.test(c.url);
+      var target = isExternal ? ' target="_blank"' : '';
+      var text = c.type === 'github' ? 'github.com/' + (c.display || '') : (c.display || c.label_cn || '');
+      return '<a href="'+esc(c.url)+'"'+target+'>'+esc(text)+'</a>';
+    }).join('');
+    setBySource('contacts', html);
+  })();
+
+})();
+</script>
+
+</body>
+</html>

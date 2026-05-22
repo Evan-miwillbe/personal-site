@@ -218,6 +218,33 @@
   }
 
   /* ============ 罗盘 / 项目计数 ============ */
+  /* ============ 体力条 ============ */
+  #stamina-bar{
+    position:fixed;bottom:58px;left:50%;
+    transform:translateX(-50%);
+    width:180px;height:6px;
+    background:rgba(42,37,32,.18);
+    border:1px solid rgba(127,32,32,.25);
+    z-index:12;
+    opacity:0;
+    transition:opacity .4s ease;
+    pointer-events:none;
+  }
+  #stamina-bar.show{opacity:1}
+  #stamina-bar .fill{
+    height:100%;width:100%;
+    background:linear-gradient(90deg,#7F2020,#c04040);
+    transition:width .05s linear;
+    transform-origin:left;
+  }
+  #stamina-bar.low .fill{
+    background:linear-gradient(90deg,#c04040,#e06060);
+    animation:stamina-pulse .5s ease infinite alternate;
+  }
+  @keyframes stamina-pulse{
+    from{opacity:.7} to{opacity:1}
+  }
+
   #compass{
     position:fixed;bottom:24px;right:24px;
     background:rgba(246,243,235,.88);
@@ -375,7 +402,7 @@
   <div class="subtitle">走近卷轴 / 石碑 · 查看作品</div>
   <div class="keys">
     <div><kbd>W A S D</kbd> 行走</div>
-    <div><kbd>Shift</kbd> 奔走 · <kbd>Space</kbd> 轻跃</div>
+    <div><kbd>Shift</kbd> 冲刺(耗体力) · <kbd>Space</kbd> 轻跃</div>
     <div><kbd>鼠标拖拽</kbd> 环顾四周</div>
     <div><kbd>E</kbd> 或 <kbd>Enter</kbd> 查看项目</div>
   </div>
@@ -397,6 +424,9 @@
   <div class="count" id="projCount">0</div>
   <div class="lbl">作 品</div>
 </div>
+
+<!-- ============ 体力条 ============ -->
+<div id="stamina-bar"><div class="fill" id="staminaFill"></div></div>
 
 <!-- ============ Dialog ============ -->
 <div id="dialog">
@@ -1227,6 +1257,136 @@ stepPositions.forEach(([x, z]) => {
   scene.add(s);
 });
 
+// ============ 樱花树（Cherry Blossom） ============
+const trunkMat = new THREE.MeshToonMaterial({ color: 0x5c3a1e });
+const blossomPinks = [0xffb7c5, 0xff91a4, 0xffc0cb, 0xffe0e6, 0xffffff];
+
+function makeCherryBlossom(x, z, opts = {}) {
+  const g = new THREE.Group();
+  const scale = opts.scale || (0.7 + Math.random() * 0.6);
+  const h = (3.5 + Math.random() * 1.5) * scale;
+
+  // -- trunk --
+  const trunk = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.08 * scale, 0.18 * scale, h, 8),
+    trunkMat
+  );
+  trunk.position.y = h / 2;
+  trunk.castShadow = true;
+  g.add(trunk);
+
+  // -- branches (2-4 random) --
+  const branchCount = 2 + Math.floor(Math.random() * 3);
+  for (let i = 0; i < branchCount; i++) {
+    const bLen = (1.0 + Math.random() * 1.2) * scale;
+    const branch = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.03 * scale, 0.06 * scale, bLen, 6),
+      trunkMat
+    );
+    const bY = h * (0.5 + Math.random() * 0.35);
+    const ang = (i / branchCount) * Math.PI * 2 + Math.random() * 0.5;
+    branch.position.set(
+      Math.cos(ang) * bLen * 0.35,
+      bY,
+      Math.sin(ang) * bLen * 0.35
+    );
+    branch.rotation.z = (Math.random() - 0.5) * 0.6 + (Math.cos(ang) > 0 ? -0.5 : 0.5);
+    branch.rotation.x = (Math.random() - 0.5) * 0.4;
+    branch.castShadow = true;
+    g.add(branch);
+
+    // blossom cluster at branch tip
+    const cSize = (0.4 + Math.random() * 0.4) * scale;
+    const cluster = new THREE.Mesh(
+      new THREE.SphereGeometry(cSize, 6, 5),
+      new THREE.MeshToonMaterial({
+        color: blossomPinks[Math.floor(Math.random() * blossomPinks.length)],
+      })
+    );
+    cluster.position.set(
+      Math.cos(ang) * bLen * 0.65,
+      bY + bLen * 0.25,
+      Math.sin(ang) * bLen * 0.65
+    );
+    cluster.scale.y = 0.7 + Math.random() * 0.3;
+    cluster.castShadow = true;
+    g.add(cluster);
+  }
+
+  // -- crown canopy (2-3 overlapping spheres at top) --
+  for (let i = 0; i < 2 + Math.floor(Math.random() * 2); i++) {
+    const r = (0.6 + Math.random() * 0.5) * scale;
+    const canopy = new THREE.Mesh(
+      new THREE.SphereGeometry(r, 7, 6),
+      new THREE.MeshToonMaterial({
+        color: blossomPinks[Math.floor(Math.random() * blossomPinks.length)],
+      })
+    );
+    canopy.position.set(
+      (Math.random() - 0.5) * 0.6 * scale,
+      h - 0.2 + Math.random() * 0.5 * scale,
+      (Math.random() - 0.5) * 0.6 * scale
+    );
+    canopy.scale.y = 0.65 + Math.random() * 0.25;
+    canopy.castShadow = true;
+    g.add(canopy);
+  }
+
+  g.position.set(x, 0, z);
+  g.rotation.y = Math.random() * Math.PI * 2;
+  return g;
+}
+
+// place cherry blossoms around courtyard edges
+const cherrySpots = [
+  [-18, 0], [-17, 8], [-17, -8], [18, 0], [17, 8], [17, -8],
+  [-10, -courtyard + 3], [10, -courtyard + 3],
+  [-8, 16], [8, 16],
+];
+cherrySpots.forEach(([cx, cz]) => {
+  scene.add(makeCherryBlossom(
+    cx + (Math.random() - 0.5) * 2,
+    cz + (Math.random() - 0.5) * 2
+  ));
+});
+
+// -- falling petal particles --
+const PETAL_COUNT = 120;
+const petalGeo = new THREE.BufferGeometry();
+const petalPos = new Float32Array(PETAL_COUNT * 3);
+const petalVel = new Float32Array(PETAL_COUNT * 3);
+for (let i = 0; i < PETAL_COUNT; i++) {
+  petalPos[i * 3]     = (Math.random() - 0.5) * 40;
+  petalPos[i * 3 + 1] = 2 + Math.random() * 8;
+  petalPos[i * 3 + 2] = (Math.random() - 0.5) * 40;
+  petalVel[i * 3]     = (Math.random() - 0.5) * 0.3;
+  petalVel[i * 3 + 1] = -(0.3 + Math.random() * 0.5);
+  petalVel[i * 3 + 2] = (Math.random() - 0.5) * 0.3;
+}
+petalGeo.setAttribute('position', new THREE.BufferAttribute(petalPos, 3));
+const petalMat = new THREE.PointsMaterial({
+  color: 0xffb7c5, size: 0.12, transparent: true, opacity: 0.75,
+  depthWrite: false, sizeAttenuation: true,
+});
+const petals = new THREE.Points(petalGeo, petalMat);
+scene.add(petals);
+
+function updatePetals(dt) {
+  const pos = petals.geometry.attributes.position.array;
+  for (let i = 0; i < PETAL_COUNT; i++) {
+    const i3 = i * 3;
+    pos[i3]     += petalVel[i3]     * dt + Math.sin(Date.now() * 0.001 + i) * 0.003;
+    pos[i3 + 1] += petalVel[i3 + 1] * dt;
+    pos[i3 + 2] += petalVel[i3 + 2] * dt + Math.cos(Date.now() * 0.0012 + i) * 0.003;
+    if (pos[i3 + 1] < 0) {
+      pos[i3]     = (Math.random() - 0.5) * 40;
+      pos[i3 + 1] = 6 + Math.random() * 4;
+      pos[i3 + 2] = (Math.random() - 0.5) * 40;
+    }
+  }
+  petals.geometry.attributes.position.needsUpdate = true;
+}
+
 // ============ 项目展示物（卷轴 / 石碑） ============
 const projectObjects = [];
 function placeProjects() {
@@ -1507,20 +1667,69 @@ dlgGo.addEventListener('click', () => {
   }
 });
 
+// ============ Sprint / Stamina (Genshin-style) ============
+const sprint = {
+  stamina: 100,           // current stamina (0-100)
+  maxStamina: 100,
+  drainRate: 18,          // per second while sprinting
+  regenRate: 25,          // per second while idle
+  regenDelay: 1.5,        // seconds after sprint ends before regen starts
+  idleTimer: 0,           // time since last sprint
+  active: false,          // currently sprinting?
+  walkSpeed: 4.0,
+  sprintSpeed: 4.0 * 1.7, // 6.8
+  fovBase: 55,            // camera resting FOV (matches initial PerspectiveCamera)
+  fovSprint: 65,          // FOV while sprinting
+  fovCurrent: 55,
+};
+
+// ============ Stamina HUD refs ============
+const stBar = document.getElementById('stamina-bar');
+const stFill = document.getElementById('staminaFill');
+
 // ============ 主循环 ============
 const clock = new THREE.Clock();
 function tick() {
   const dt = Math.min(0.05, clock.getDelta());
   const t = clock.elapsedTime;
 
-  // 移动
-  const speed = (keys['ShiftLeft'] || keys['ShiftRight']) ? 7.5 : 4.0;
+  // --- Sprint state machine ---
+  const wantSprint = (keys['ShiftLeft'] || keys['ShiftRight']);
   const dir = new THREE.Vector3();
   if (keys['KeyW'] || keys['ArrowUp']) dir.z -= 1;
   if (keys['KeyS'] || keys['ArrowDown']) dir.z += 1;
   if (keys['KeyA'] || keys['ArrowLeft']) dir.x -= 1;
   if (keys['KeyD'] || keys['ArrowRight']) dir.x += 1;
-  if (dir.lengthSq() > 0) dir.normalize();
+  const moving = dir.lengthSq() > 0;
+  if (moving) dir.normalize();
+
+  // Enter/exit sprint
+  sprint.active = wantSprint && moving && sprint.stamina > 0;
+
+  if (sprint.active) {
+    sprint.stamina = Math.max(0, sprint.stamina - sprint.drainRate * dt);
+    sprint.idleTimer = 0;
+    if (sprint.stamina === 0) sprint.active = false; // exhausted
+  } else {
+    sprint.idleTimer += dt;
+    if (sprint.idleTimer >= sprint.regenDelay) {
+      sprint.stamina = Math.min(sprint.maxStamina, sprint.stamina + sprint.regenRate * dt);
+    }
+  }
+
+  // FOV lerp
+  const targetFov = sprint.active ? sprint.fovSprint : sprint.fovBase;
+  sprint.fovCurrent += (targetFov - sprint.fovCurrent) * Math.min(1, 8 * dt);
+  camera.fov = sprint.fovCurrent;
+  camera.updateProjectionMatrix();
+
+  // Stamina HUD
+  const stPct = sprint.stamina / sprint.maxStamina;
+  stFill.style.width = (stPct * 100) + '%';
+  stBar.classList.toggle('show', sprint.active || sprint.stamina < sprint.maxStamina);
+  stBar.classList.toggle('low', stPct < 0.2);
+
+  const speed = sprint.active ? sprint.sprintSpeed : sprint.walkSpeed;
   // 朝向相机：yaw=0 时朝 -Z，W (dir.z=-1) 应让 z 减小
   const cosY = Math.cos(player.yaw), sinY = Math.sin(player.yaw);
   const moveX = dir.x * cosY + dir.z * sinY;
@@ -1538,9 +1747,11 @@ function tick() {
       player.onGround = true;
     }
   }
-  // 走路时轻微 head bob
-  if (dir.lengthSq() > 0 && player.onGround) {
-    player.pos.y = 1.7 + Math.sin(t * 9) * 0.04;
+  // 走路时轻微 head bob（冲刺时更强烈）
+  if (moving && player.onGround) {
+    const bobFreq = sprint.active ? 13 : 9;
+    const bobAmp  = sprint.active ? 0.065 : 0.04;
+    player.pos.y = 1.7 + Math.sin(t * bobFreq) * bobAmp;
   } else if (player.onGround) {
     player.pos.y = 1.7;
   }
@@ -1598,6 +1809,9 @@ function tick() {
     proximity.classList.remove('show');
     if (window.__cursorRing) window.__cursorRing.clear();
   }
+
+  // falling petals
+  updatePetals(dt);
 
   renderer.render(scene, camera);
   requestAnimationFrame(tick);

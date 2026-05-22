@@ -117,6 +117,7 @@
   .next-bar a.right{text-align:right}
   footer.foot{text-align:center;padding:32px 0 48px;color:var(--ink-mute);font-family:var(--mono);font-size:11px;letter-spacing:.12em;border-top:1px solid var(--line)}
   footer.foot a{color:var(--ink-soft)}
+  figure>figcaption{font-family:var(--mono);font-size:11.5px;color:var(--ink-mute);letter-spacing:.12em;text-align:center;margin-top:14px;text-transform:uppercase}
   .cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
   .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:12px;font-size:14px;font-weight:600;text-decoration:none;transition:all .2s}
   .btn.primary{background:var(--ink);color:#fff}
@@ -222,8 +223,8 @@
 
 <div class="container">
   <header class="top">
-    <a href="../hello.html" class="back-link" data-cursor="返回"><span class="arrow">←</span> 回到主页</a>
-    <a href="../hello.html" class="logo"><span class="seal">滕</span>Teng Meiming</a>
+    <a href="../index.html" class="back-link" data-cursor="返回"><span class="arrow">←</span> 回到主页</a>
+    <a href="../index.html" class="logo"><span class="seal">滕</span>Teng Meiming</a>
   </header>
 </div>
 
@@ -258,7 +259,7 @@
 <div class="container">
   <section class="chapter">
     <div class="chapter-label">01 · The Spark</div>
-    <h2>看了腾讯研究院晓辉博士的多 Agent 分享，<br/>我想做一个可控版本</h2>
+    <h2>看了一场多 Agent 技术分享后，<br/>我想做一个可控版本</h2>
     <p>
       2026 年 4 月。Claude Code 官方的"Deep Research"已经可用，但有一个让我难受的问题：
       <strong>它是黑盒</strong>。AI 在背后做了什么决定、调度了几个 Agent、用了什么搜索策略——
@@ -300,12 +301,123 @@
   </section>
 </div>
 
-<!-- 演化曲线占位 -->
+<!-- 演化曲线 -->
 <div class="container">
   <figure>
     <img src="../images/multi-agent/line-evolution.svg" class="case-image" alt="SKILL.md 行数演化曲线 v1→v9" style="background:#F6F3EB"/>
     <figcaption>FIG. 1 · Line Count Evolution — 200 → 1382 (peak) → 893 → 221 → 453 lines</figcaption>
   </figure>
+</div>
+
+<!-- Chapter 2.5: 架构演变 -->
+<div class="container">
+  <section class="chapter">
+    <div class="chapter-label">02b · Architecture</div>
+    <h2>从 9 角色层级制到 2 角色扁平制</h2>
+    <div class="compare-row">
+      <div class="compare-card bad">
+        <div class="cc-tag">v5.x · 公司层级制 (893 行)</div>
+        <div class="cc-num" style="font-size:28px">9 <small>角色</small></div>
+        <p style="font-family:var(--mono);font-size:12px;line-height:2;margin-top:12px">
+          主CC(董事长)<br/>
+          → PM(总经理)<br/>
+          &nbsp;&nbsp;→ Expert ×N<br/>
+          &nbsp;&nbsp;→ Explorer / FactChecker<br/>
+          &nbsp;&nbsp;→ Critic / Synthesizer<br/>
+          &nbsp;&nbsp;→ CLO(旁听记录员)
+        </p>
+        <p style="margin-top:12px"><strong>问题</strong>：PM→Expert 二级 spawn 在 4 个项目中全部断线。CLO 做完即退出无法持续运行。</p>
+      </div>
+      <div class="compare-card good">
+        <div class="cc-tag">v6.0+ · 工作室扁平制 (221 行)</div>
+        <div class="cc-num" style="font-size:28px">2 <small>角色</small></div>
+        <p style="font-family:var(--mono);font-size:12px;line-height:2;margin-top:12px">
+          主CC(老板兼PM)<br/>
+          ├─ Expert(研究员) ×N<br/>
+          └─ QualityReviewer<br/>
+          <br/>
+          主CC 自己兼任：<br/>
+          记录员 + 关卡检查 + 执笔人
+        </p>
+        <p style="margin-top:12px"><strong>结果</strong>：运行时 token 消耗 -80%，Agent 存活率 100%。</p>
+      </div>
+    </div>
+    <p>
+      裁掉中层（PM）不是为了精简——是 4 个真实项目证明二跳链路不可靠。
+      合并 FactChecker + Critic 不是偷懒——是发现两者工作内容 >50% 重叠。
+      <strong>每一次删减都有数据支撑，不是审美选择。</strong>
+    </p>
+  </section>
+</div>
+
+<!-- Chapter 2.6: 迭代因果链 -->
+<div class="container">
+  <section class="chapter">
+    <div class="chapter-label">02c · Causal Chain</div>
+    <h2>从 R1 到 R6 的多米诺效应</h2>
+    <p>
+      最值得反复读的是这条因果链——每一步改动都是前一步的逻辑推论，
+      像剥洋葱一样一层层发现"原来这一步是多余的"：
+    </p>
+    <div style="background:var(--card);border:1px solid var(--line);border-radius:20px;padding:28px 32px;margin:24px 0;box-shadow:var(--shadow-sm);font-size:15px;line-height:2.2">
+      <div style="font-family:var(--mono);font-size:11px;color:var(--orange);letter-spacing:.12em;margin-bottom:12px">DOMINO CHAIN · R1 → R6</div>
+      <strong>R1</strong> 发现质检员花了 31% 预算却只找到 2 个错误<br/>
+      &nbsp;&nbsp;→ <strong>R2</strong> 让研究员自己检查一遍 → <span style="color:var(--sage);font-weight:600">严重错误直接归零</span><br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;→ <strong>R3</strong> 质检员可以只抽样 + 交班条只写 200 字<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ <strong>R4</strong> 横向分析交给质检员（它本来就要读全文）<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ <strong>R5</strong> 执笔人只需读交班条，不需原文<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ <strong>R6</strong> 主 CC 自己就能写 → <span style="color:var(--sage);font-weight:600">执笔人角色被消灭</span><br/>
+      <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-soft)">
+        从 4 种角色（研究员 + 质检 + 批评 + 执笔）→ 只需 2 种（研究员 + 质检）。不是"想砍而砍"，是"观察到信息根本不需要经过这个人"。
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Chapter 2.7: 水床效应 -->
+<div class="container">
+  <section class="chapter">
+    <div class="chapter-label">02d · Waterbed Effect</div>
+    <h2>压低一个环节，另一个会翘起来</h2>
+    <p>
+      R7 是整个实验中最违反直觉的一轮。假设：让研究员写得更精炼 → 系统省 token。
+    </p>
+    <div class="stat-row" style="grid-template-columns:repeat(3,1fr)">
+      <div class="stat-item"><div class="num">-13%</div><div class="lbl">研究员 token 下降<br/>（结构化确实更精炼）</div></div>
+      <div class="stat-item"><div class="num" style="color:#a02828">+21%</div><div class="lbl">质检 token 反而暴增<br/>（数据密度↑ 验证量↑）</div></div>
+      <div class="stat-item"><div class="num" style="color:var(--ink-mute)">-3%</div><div class="lbl">系统总量几乎没省<br/>（远低于预期 -13%）</div></div>
+    </div>
+    <p>
+      <strong>水床效应</strong>：研究员写得更精炼 → 每句话都是数据点 → 质检需要验证的点从 35 个变成 47 个。
+      数据密度提高了，但验证工作量等比上升。系统级优化不是把每个零件单独优化然后拼起来。
+    </p>
+  </section>
+</div>
+
+<!-- Chapter 2.8: 交叉验证定价 -->
+<div class="container">
+  <section class="chapter">
+    <div class="chapter-label">02e · Cross-Validation Pricing</div>
+    <h2>80/20：用 10% 成本达到 70% 效果</h2>
+    <div class="stat-row" style="grid-template-columns:repeat(3,1fr)">
+      <div class="stat-item">
+        <div class="num" style="font-size:32px">199K</div>
+        <div class="lbl">R8 · 无交叉<br/><strong>基线</strong></div>
+      </div>
+      <div class="stat-item">
+        <div class="num" style="font-size:32px;color:#a02828">329K</div>
+        <div class="lbl">R9 · 全交叉<br/><strong>+65% 成本</strong></div>
+      </div>
+      <div class="stat-item">
+        <div class="num" style="font-size:32px;color:var(--sage)">218K</div>
+        <div class="lbl">R10 · 轻量交叉<br/><strong>+10% 成本 → 70% 效果</strong></div>
+      </div>
+    </div>
+    <p>
+      秘密在于：不让研究员做完整补充搜索（贵），而是让他们在交班条里写下"想问其他板块的 2-3 个问题"，
+      由质检员带着问题做横向分析。<strong>提问比盲搜高效得多</strong>。
+    </p>
+  </section>
 </div>
 
 <!-- Chapter 3: Lost in Middle -->
@@ -367,9 +479,55 @@
       <div class="stat-item"><div class="num">★</div><div class="lbl">落地工具<br/>入选飞书十佳</div></div>
     </div>
     <div class="cta-row">
-      <a href="https://github.com/Evan-miwillbe" target="_blank" class="btn primary" data-magnet data-cursor="OPEN">→ GitHub（仓库整理中）</a>
+      <a href="https://github.com/Evan-miwillbe/multi-agent-research" target="_blank" class="btn primary" data-magnet data-cursor="CLONE">→ GitHub · 下载 Skill</a>
       <a href="knowledge-healer.html" class="btn ghost" data-magnet data-cursor="阅读">→ 落地案例 knowledge-healer</a>
     </div>
+    <div style="background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 24px;margin-top:24px;box-shadow:var(--shadow-sm)">
+      <div style="font-family:var(--mono);font-size:11px;color:var(--ink-mute);letter-spacing:.12em;margin-bottom:10px">QUICK INSTALL</div>
+      <code style="font-family:var(--mono);font-size:13px;background:rgba(28,25,23,.06);padding:8px 14px;border-radius:8px;display:block;color:var(--ink);word-break:break-all">git clone https://github.com/Evan-miwillbe/multi-agent-research.git ~/.claude/skills/multi-agent-research</code>
+      <div style="font-size:13px;color:var(--ink-soft);margin-top:10px">在 Claude Code 中输入 <code style="background:rgba(28,25,23,.06);padding:2px 6px;border-radius:4px;font-size:12px">/multi-agent-research</code> 即可启动。前置要求：Claude Code + web-access skill。</div>
+    </div>
+  </section>
+</div>
+
+<!-- Chapter 4.5: 17 机制清单 -->
+<div class="container">
+  <section class="chapter">
+    <div class="chapter-label">04b · Mechanism Inventory</div>
+    <h2>17 个机制，逐一接受消融测试</h2>
+    <p>
+      每个机制都来自学术论文或实战失败。加入前必须设计触发场景跑完整研究。
+      最终 <strong>2 个被证明有不可替代的因果影响</strong>（KEEP），14 个已被模型内化或仅在特定场景触发（NOISE），1 个有条件保留。
+    </p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0">
+      <div style="background:var(--card);border:1px solid var(--line);border-left:4px solid var(--sage);border-radius:12px;padding:16px 18px">
+        <div style="font-family:var(--mono);font-size:10px;color:var(--sage);letter-spacing:.14em;margin-bottom:6px">KEEP · 因果必要</div>
+        <div style="font-size:14px;line-height:1.8">
+          <strong>Spawn 首尾约束</strong> — Lost in Middle 0%→100%<br/>
+          <strong>自验证 Phase 2.5</strong> — P0 从 2→0 永久消除
+        </div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--line);border-left:4px solid var(--sand);border-radius:12px;padding:16px 18px">
+        <div style="font-family:var(--mono);font-size:10px;color:var(--ink-mute);letter-spacing:.14em;margin-bottom:6px">CONDITIONAL · 有条件保留</div>
+        <div style="font-size:14px;line-height:1.8">
+          <strong>交叉验证 Phase 1c</strong> — 科普可选 / 学术必须<br/>
+          +65% 成本换 5 个独到洞察
+        </div>
+      </div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--line);border-left:4px solid var(--ink-mute);border-radius:12px;padding:16px 18px;margin-bottom:24px">
+      <div style="font-family:var(--mono);font-size:10px;color:var(--ink-mute);letter-spacing:.14em;margin-bottom:8px">NOISE · 14 个已被模型内化或仅特定场景触发</div>
+      <div style="font-size:13px;line-height:1.9;color:var(--ink-soft);columns:2;column-gap:24px">
+        跨授粉注入 · 覆盖审计 Gate · Token 经济学 · Heartbeat 协议 ·
+        异议触发分类 · 评估漏斗 · 共识度检查 · QR 精简抽样 ·
+        Handoff 压缩 · 横向穿透迁移 · Synthesizer 轻量化 ·
+        结构化证据格式 · 选择性投入 · 数据附录
+      </div>
+    </div>
+    <p>
+      "NOISE"不是"没用"——这些机制在特定场景下仍有价值（如异议触发在学术争议主题中发现了 2 个 P0）。
+      但在标准流程中，<strong>Claude 已经内化了这些行为</strong>，显式写在 prompt 里不增加额外收益。
+    </p>
   </section>
 </div>
 
@@ -421,7 +579,7 @@
 
 <div class="container">
   <div class="next-bar">
-    <a href="../hello.html" data-cursor="首页"><span class="nb-lbl">← 主页</span><span class="nb-name">回到所有项目</span></a>
+    <a href="../index.html" data-cursor="首页"><span class="nb-lbl">← 主页</span><span class="nb-name">回到所有项目</span></a>
     <a href="knowledge-healer.html" class="right" data-cursor="阅读"><span class="nb-lbl">下一个项目 →</span><span class="nb-name">knowledge-healer</span></a>
   </div>
 </div>
@@ -429,7 +587,7 @@
 <footer class="foot">
   <div class="container">
     Made by 滕美名 · 2026 · Shanghai &nbsp;|&nbsp;
-    <a href="../hello.html">主页</a> · <a href="../index.html">编辑版</a> · <a href="../play.html">3D 版</a>
+    <a href="../index.html">主页</a> · <a href="../editorial.html">编辑版</a> · <a href="../drive-v4.html">走路</a> · <a href="../drive.html">开车</a>
   </div>
 </footer>
 

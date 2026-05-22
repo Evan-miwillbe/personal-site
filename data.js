@@ -57,7 +57,7 @@ window.SITE_DATA = {
     essay_total_reads: "6w+",
     feishu_top10_ratio: "2/3",
     activity_stats_cn: "13 DAYS · 77 COMMITS · 47 实验轮次",
-    looking_for_cn: "腾讯研究院 / 字节研究院类研究岗 · AI Agent / DevEx PM · AI 创业团队早期员工 · AI 行业研究"
+    looking_for_cn: "大厂研究院类研究岗 · AI Agent / DevEx PM · AI 创业团队早期员工 · AI 行业研究"
   },
 
   // 飞书表 contacts —— 主页 "Find me around" 4 行 + hero/contact 区复用
@@ -210,7 +210,7 @@ window.SITE_DATA = {
       year: "2026.05",
       tagline: "飞书多维表格批量编排",
       activity_meta: "3 投 2 中的\"那一个\"",
-      description_short: "同次大赛野心最大的投稿——5 阶段安全管线 + Dry-Run 预演 + 原子回滚 + 依赖图拓扑排序。诚实交代：未入选。评审更倾向轻量普适，这个定位偏 ToB 重，但工程密度自留底气。",
+      description_short: "飞书CLI大赛（投稿），关注飞书多维表格——5 阶段安全管线 + Dry-Run 预演 + 原子回滚 + 依赖图拓扑排序。参赛情况：未入选。评审更倾向轻量普适，这个定位偏 ToB 重，但工程密度自留底气。",
       description_full: null,
       tags: ["同次大赛投稿", "TOB ENTERPRISE", "未入选"],
       tech_stack: [],

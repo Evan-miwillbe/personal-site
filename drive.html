@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>滕美名 · 书院驾乘 · drive</title>
+<title>滕美名 · 边塞观星 · drive</title>
 <link rel="icon" href="data:," />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -11,27 +11,30 @@
 <script src="data.js"></script>
 <style>
 :root{
-  --bg:#F6F3EB;
+  --bg:#0a0a14;
   --ink:#2a2520;
-  --ink-soft:#6b6358;
+  --ink-soft:#8a877e;
   --accent:#7F2020;
   --sage:#869B7E;
   --sage-deep:#5D7B5D;
   --tile:#524940;
   --slate:#4A6B7C;
   --cinnabar:#C0392B;
-  --hud-bg:rgba(246,243,235,0.35);
+  --hud-bg:rgba(246,243,235,0.32);
   --hud-border:rgba(127,32,32,0.4);
   --hud-blur:blur(14px) saturate(1.1);
   --cinnabar-line:1px solid rgba(127,32,32,0.4);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:'Inter','Noto Serif SC',-apple-system,BlinkMacSystemFont,sans-serif;cursor:none}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:#F6F3EB;font-family:'Inter','Noto Serif SC',-apple-system,BlinkMacSystemFont,sans-serif;cursor:none}
 #scene{position:fixed;inset:0;width:100%;height:100%;display:block}
 
 /* === cursor-ring (sourced from hello.html, scaled for drive scene) === */
-.cursor-ring{position:fixed;top:0;left:0;width:42px;height:42px;margin:-21px 0 0 -21px;pointer-events:none;z-index:10000;will-change:transform;display:flex;align-items:center;justify-content:center;background:transparent;border:0;transform:translate3d(-100px,-100px,0)}
-.cursor-ring .circle{width:100%;height:100%;border-radius:50%;background:rgba(127,32,32,0.18);border:1.5px solid rgba(127,32,32,0.6);backdrop-filter:blur(4px) saturate(1.1);-webkit-backdrop-filter:blur(4px);transform:scale(.22);transition:transform .35s cubic-bezier(.55,.085,0,.99),background-color .25s,border-color .25s,backdrop-filter .25s}
+.cursor-ring{position:fixed;top:0;left:0;width:42px;height:42px;margin:-21px 0 0 -21px;pointer-events:none;z-index:10000;will-change:transform;display:flex;align-items:center;justify-content:center;background:transparent;border:0;transform:translate3d(-100px,-100px,0);--ring-progress:0deg}
+.cursor-ring .circle{width:100%;height:100%;border-radius:50%;background:rgba(127,32,32,0.16);border:1.5px solid rgba(127,32,32,0.5);backdrop-filter:blur(4px) saturate(1.1);-webkit-backdrop-filter:blur(4px);transform:scale(.38);transition:transform .35s cubic-bezier(.55,.085,0,.99),background-color .25s,border-color .25s,box-shadow .25s,backdrop-filter .25s}
+.cursor-ring.far .circle{transform:scale(.43);background:rgba(212,160,80,0.12);border-color:rgba(212,160,80,0.4);box-shadow:0 0 12px rgba(212,160,80,0.16)}
+.cursor-ring.near .circle{transform:scale(.52);background:conic-gradient(from -90deg, rgba(200,160,80,0.7) var(--ring-progress), rgba(200,160,80,0.08) 0),rgba(200,160,80,0.16);border-color:rgba(200,160,80,0.7);box-shadow:0 0 18px rgba(200,160,80,0.25)}
+.cursor-ring.trigger .circle{transform:scale(.67);background:rgba(255,212,128,0.22);border-color:rgba(255,212,128,1);box-shadow:0 0 24px rgba(255,212,128,0.42)}
 .cursor-ring.hover .circle{transform:scale(.95);background:rgba(127,32,32,0.22);border-color:rgba(127,32,32,0.8);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .cursor-ring.text .circle{transform:scale(1.2);background:rgba(127,32,32,0.32);border-color:rgba(127,32,32,0);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .cursor-ring .cr-label{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(.3);font-family:'Noto Serif SC',serif;font-size:11px;font-weight:500;color:#F6F3EB;letter-spacing:.04em;white-space:nowrap;opacity:0;transition:opacity .22s .12s,transform .35s cubic-bezier(.55,.085,0,.99) .06s;pointer-events:none}
@@ -41,16 +44,16 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
 @media (hover:none),(pointer:coarse){.cursor-ring{display:none}}
 
 /* === HUD frames === */
-.hud{position:fixed;background:var(--hud-bg);backdrop-filter:var(--hud-blur);-webkit-backdrop-filter:var(--hud-blur);border-left:var(--cinnabar-line);padding:10px 14px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink);z-index:50;letter-spacing:0.04em;line-height:1.5}
+.hud{position:fixed;background:var(--hud-bg);backdrop-filter:var(--hud-blur);-webkit-backdrop-filter:var(--hud-blur);border-left:var(--cinnabar-line);padding:10px 14px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#F6F3EB;z-index:50;letter-spacing:0.04em;line-height:1.5}
 
 /* === top-left brand === */
-.brand{position:fixed;top:18px;left:24px;z-index:100;font-family:'Noto Serif SC',serif;font-size:14px;color:var(--ink);letter-spacing:0.08em;text-decoration:none;background:transparent}
+.brand{position:fixed;top:18px;left:24px;z-index:100;font-family:'Noto Serif SC',serif;font-size:14px;color:#F6F3EB;letter-spacing:0.08em;text-decoration:none;background:transparent}
 .brand .sep{color:var(--accent);margin:0 0.5em}
 .brand:hover{color:var(--accent)}
 
 /* === top-right links === */
 .toplinks{position:fixed;top:22px;right:24px;z-index:100;display:flex;gap:18px;font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:lowercase;letter-spacing:0.06em}
-.toplinks a{color:var(--ink-soft);text-decoration:none;padding:2px 0;border-bottom:1px solid transparent;transition:color 0.2s,border-color 0.2s}
+.toplinks a{color:#c8c4b8;text-decoration:none;padding:2px 0;border-bottom:1px solid transparent;transition:color 0.2s,border-color 0.2s}
 .toplinks a:hover{color:var(--accent);border-bottom-color:var(--accent)}
 .toplinks a.active{color:var(--accent);border-bottom:1px solid var(--accent)}
 .toplinks .dot{color:var(--ink-soft);opacity:0.4;user-select:none}
@@ -63,7 +66,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
 .status{bottom:22px;left:24px;display:flex;flex-direction:column;gap:3px}
 .status .row{display:flex;justify-content:space-between;gap:18px;min-width:170px}
 .status .label{color:var(--ink-soft);opacity:0.72}
-.status .val{color:var(--ink);font-weight:500}
+.status .val{color:#F6F3EB;font-weight:500}
 
 /* === bottom-right helper === */
 .helper{bottom:22px;right:24px;display:flex;gap:10px;align-items:center}
@@ -81,7 +84,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 
 /* === 中央"疾驰"二字飞字 === */
-.flytext{position:fixed;top:42%;left:50%;transform:translate(-50%,-50%);font-family:'Noto Serif SC',serif;font-weight:700;font-size:96px;color:var(--accent);letter-spacing:0.2em;pointer-events:none;z-index:200;opacity:0;text-shadow:0 0 24px rgba(127,32,32,0.3)}
+.flytext{position:fixed;top:42%;left:50%;transform:translate(-50%,-50%);font-family:'Noto Serif SC',serif;font-weight:700;font-size:96px;color:#c8a050;letter-spacing:0.2em;pointer-events:none;z-index:200;opacity:0;text-shadow:0 0 24px rgba(200,160,80,0.35)}
 .flytext.show{animation:flytext 0.9s cubic-bezier(0.16,1,0.3,1) forwards}
 @keyframes flytext{0%{opacity:0;transform:translate(-50%,-50%) scale(0.7)}30%{opacity:1;transform:translate(-50%,-50%) scale(1.05)}70%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.18)}}
 
@@ -107,14 +110,21 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
 .drawer.award h1{font-size:24px}
 
 /* === intro overlay === */
-.intro{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;font-family:'Noto Serif SC',serif;transition:opacity 0.8s ease}
+.intro{position:fixed;inset:0;background:#0a0a14;z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;font-family:'Noto Serif SC',serif;transition:opacity 0.8s ease;color:#F6F3EB}
 .intro.hide{opacity:0;pointer-events:none}
-.intro h1{font-size:34px;font-weight:500;margin-bottom:12px;color:var(--ink);letter-spacing:0.18em}
-.intro .sub{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);letter-spacing:0.14em;margin-bottom:34px}
+.intro .seal{width:84px;height:84px;background:#7F2020;color:#F6F3EB;display:flex;align-items:center;justify-content:center;flex-direction:column;font-weight:600;letter-spacing:.12em;animation:sealAppear .6s ease-out}
+.intro .seal-char{font-size:20px;line-height:1.12;text-align:center}
+.intro .seal-en{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.18em;margin-top:5px;opacity:.72}
+.intro h1{font-size:24px;font-weight:500;margin:22px 0 10px;color:#F6F3EB;letter-spacing:0.18em}
+.intro .sub{font-family:'JetBrains Mono',monospace;font-size:11px;color:#8a877e;letter-spacing:0.14em;margin-bottom:34px}
 .intro .start{font-family:'Noto Serif SC',serif;font-size:14px;color:var(--accent);padding:10px 28px;border:1px solid var(--accent);background:transparent;cursor:none;letter-spacing:0.12em;transition:background 0.2s}
 .intro .start:hover{background:rgba(127,32,32,0.08)}
-.intro .controls{margin-top:30px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-soft);letter-spacing:0.08em;line-height:1.9;text-align:center}
+.intro .controls{margin-top:30px;font-family:'JetBrains Mono',monospace;font-size:10px;color:#8a877e;letter-spacing:0.08em;line-height:1.9;text-align:center}
 .intro .controls .k{color:var(--accent);font-weight:500}
+.intro.started .start{opacity:0;pointer-events:none}
+.intro.started .seal{animation:sealPulse .45s ease-out}
+@keyframes sealAppear{from{transform:scale(1.8);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes sealPulse{0%{transform:scale(1)}45%{transform:scale(.88)}100%{transform:scale(1)}}
 
 /* === proximity prompt (in-scene small toast) === */
 .prompt{position:fixed;left:50%;bottom:18%;transform:translateX(-50%);background:rgba(246,243,235,0.55);backdrop-filter:var(--hud-blur);border-left:var(--cinnabar-line);padding:8px 14px;font-family:'Noto Serif SC',serif;font-size:13px;color:var(--ink);letter-spacing:0.1em;z-index:80;opacity:0;transition:opacity 0.35s}
@@ -130,12 +140,12 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
 
 <canvas id="scene"></canvas>
 
-<a class="brand" href="hello.html" data-cursor="返回">滕美名<span class="sep">·</span>书院驾乘</a>
+<a class="brand" href="index.html" data-cursor="返回">滕美名<span class="sep">·</span>边塞观星</a>
 
 <nav class="toplinks">
-  <a href="hello.html" data-cursor="切换">home</a><span class="dot">·</span>
-  <a href="index.html" data-cursor="切换">editorial</a><span class="dot">·</span>
-  <a href="play.html" data-cursor="切换">walk</a><span class="dot">·</span>
+  <a href="index.html" data-cursor="切换">home</a><span class="dot">·</span>
+  <a href="editorial.html" data-cursor="切换">editorial</a><span class="dot">·</span>
+  <a href="drive-v4.html" data-cursor="切换">walk</a><span class="dot">·</span>
   <a href="drive.html" class="active" data-cursor="当前">drive</a>
 </nav>
 
@@ -153,7 +163,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
 <div class="scrollHint" id="hint">
   <div class="label">驾乘指引</div>
   <div class="title">W A S D 朝北开</div>
-  <div class="sub">FIND ACADEMY</div>
+  <div class="sub">FIND ASTROLABE</div>
 </div>
 
 <div class="flytext" id="flyText">疾&nbsp;驰</div>
@@ -168,8 +178,12 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
 </div>
 
 <div class="intro" id="intro">
-  <h1>书 · 院 · 驾 · 乘</h1>
-  <div class="sub">DRIVE THROUGH THE JIANGNAN LANDSCAPE</div>
+  <div class="seal">
+    <div class="seal-char">星<br/>槎</div>
+    <div class="seal-en">ASTROLABE</div>
+  </div>
+  <h1>边 · 塞 · 观 · 星</h1>
+  <div class="sub">FRONTIER STARGAZING FIELD</div>
   <button class="start" id="startBtn" data-cursor="入场">入&nbsp;场</button>
   <div class="controls">
     <span class="k">W A S D</span> 行车 &nbsp;·&nbsp; <span class="k">SHIFT</span> 疾驰 &nbsp;·&nbsp; <span class="k">SPACE</span> 跃 &nbsp;·&nbsp; <span class="k">R</span> 复位<br/>
@@ -201,45 +215,66 @@ const D = window.SITE_DATA || { projects: [], contacts: [], awards: [], meta: {}
 
 // ============ CONST / palette ============
 const C = {
-  sky: 0xD8DDD0,
-  bg: 0xE8E2D0,
-  grassNear: 0x8FA268,
-  grassFar: 0x6B7858,
-  sandPath: 0xCBB890,
-  mountainBack: 0x9CA5A8,
-  mountainFront: 0x7A8385,
-  mountainDark: 0x5E6868,
-  hallFar: 0x8B7960,
-  fog: 0xE8E2D0,
-  pondShallow: 0xA8B8AE,
-  pondDeep: 0x6B7A75,
-  bridge: 0xC8B998,
-  bamboo: 0x6B8B5C,
-  pine: 0x4F6347,
-  plum: 0xD2A8B3,
-  peach: 0xEFB8C2,
-  woodLight: 0xC9A86A,
-  woodDark: 0x6B4F38,
-  wallStone: 0xE8DFC9,
-  lantern: 0xC0392B,
-  lanternEmissive: 0.15,
+  paper: 0xF6F3EB,
   ink: 0x2a2520,
   accent: 0x7F2020,
+  sky: 0x0d0e1f,
+  skyMid: 0x1d2238,
+  skyLow: 0x3d3530,
+  fogColor: 0x3d3530,
+  moonBody: 0xe8e4d0,
+  moonGlow: 0xfff5d8,
+  starWhite: 0xd4d9e8,
+  starWarm: 0xe8d4a0,
+  mountainBack: 0x2c2e38,
+  mountainMid: 0x3c3e48,
+  mountainFront: 0x4c4e58,
+  snowCap: 0xc8c4b8,
+  ground: 0x2a2620,
+  groundPath: 0x7a6e58,
+  stone: 0x6a6660,
+  stoneDark: 0x3a3630,
+  woodLight: 0x8b6f47,
+  woodDark: 0x4a3a28,
+  goldRoof: 0x9a7a3a,
+  goldStrong: 0xc8a050,
+  pine: 0x3a4a3a,
+  prayerFlag1: 0xa83838,
+  prayerFlag2: 0x386aa8,
+  prayerFlag3: 0xd8a838,
+  prayerFlag4: 0x3a8a4a,
+  prayerFlag5: 0xe8e2d0,
+  grassDry: 0x7a7048,
+  moss: 0x4a583a,
+  silver: 0xc0c0c0,
+  windowWarm: 0xf0b070,
+  sandPath: 0x7a6e58,
+  grassNear: 0x2a2620,
+  grassFar: 0x2a2620,
+  hallFar: 0x6a6660,
+  fog: 0x3d3530,
+  bridge: 0x6a6660,
+  bamboo: 0x3a4a3a,
+  plum: 0x3a4a3a,
+  peach: 0x3a4a3a,
+  wallStone: 0x6a6660,
+  lantern: 0xd8a838,
+  lanternEmissive: 0.12,
   accentSoft: 0xA84747,
-  cinnabar: 0xC0392B,
+  cinnabar: 0x7F2020,
   sage: 0x869B7E,
   sageDeep: 0x5D7B5D,
   tile: 0x524940,
-  moss: 0x7E8C5D,
   peachPink: 0xEFB8C2,
   peachBranch: 0x6B4F38,
   copperBrown: 0xA88B5E,
   earthBrown: 0x4A3525,
   chairCushionRed: 0x4A6B7C,
   slate: 0x4A6B7C,
-  gold: 0xd4a55a,
-  ivory: 0xefe6d2,
-  cream: 0xf4ead0
+  gold: 0xc8a050,
+  ivory: 0xF6F3EB,
+  cream: 0xF6F3EB,
+  bg: 0x0a0a14
 };
 
 function hexColor(value) {
@@ -257,24 +292,24 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.0;
-renderer.shadowMap.enabled = true;
+renderer.shadowMap.enabled = false;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 // ============ SCENE / CAMERA ============
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(C.bg);
-scene.fog = new THREE.Fog(C.bg, 50, 130);
+scene.background = new THREE.Color(C.sky);
+scene.fog = new THREE.Fog(C.fogColor, 60, 220);
 
-const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 300);
-camera.position.set(0, 8, 60);
-camera.lookAt(0, 2, -45);
+const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 400);
+camera.position.set(0, 8, 66);
+camera.lookAt(0, 6, -55);
 
 // ============ LIGHTING ============
-const hemi = new THREE.HemisphereLight(0xfff2d8, 0xb8a888, 0.55);
+const hemi = new THREE.HemisphereLight(0xd8ddff, 0x2a2620, 0.46);
 scene.add(hemi);
 
-const sun = new THREE.DirectionalLight(0xffeecc, 0.9);
-sun.position.set(14, 22, 10);
+const sun = new THREE.DirectionalLight(0xfff5d8, 0.72);
+sun.position.set(-30, 50, 24);
 sun.castShadow = true;
 sun.shadow.mapSize.set(2048, 2048);
 sun.shadow.camera.left = -80;
@@ -286,8 +321,8 @@ sun.shadow.camera.far = 160;
 sun.shadow.bias = -0.0008;
 scene.add(sun);
 
-const fillLight = new THREE.DirectionalLight(0xc9b89a, 0.25);
-fillLight.position.set(-10, 12, -8);
+const fillLight = new THREE.DirectionalLight(0x8da0c8, 0.22);
+fillLight.position.set(20, 18, -35);
 scene.add(fillLight);
 
 // ============ PHYSICS (cannon-es) ============
@@ -342,14 +377,14 @@ function makeGroundTex() {
   const c = document.createElement('canvas');
   c.width = c.height = s;
   const ctx = c.getContext('2d');
-  const toPxX = x => ((x + 100) / 200) * s;
-  const toPxZ = z => ((100 - z) / 200) * s;
-  const worldW = meters => (meters / 200) * s;
+  const toPxX = x => ((x + 120) / 240) * s;
+  const toPxZ = z => ((120 - z) / 240) * s;
+  const worldW = meters => (meters / 240) * s;
 
   const grad = ctx.createLinearGradient(0, 0, 0, s);
-  grad.addColorStop(0, hexColor(C.grassFar));
-  grad.addColorStop(0.55, hexColor(C.grassNear));
-  grad.addColorStop(1, hexColor(C.grassNear));
+  grad.addColorStop(0, hexColor(C.ground));
+  grad.addColorStop(0.55, '#29241e');
+  grad.addColorStop(1, '#211f1c');
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, s, s);
 
@@ -361,20 +396,21 @@ function makeGroundTex() {
   }
 
   const path = new Path2D();
-  path.moveTo(toPxX(0), toPxZ(45));
-  path.bezierCurveTo(toPxX(-4), toPxZ(31), toPxX(5), toPxZ(18), toPxX(0), toPxZ(5));
-  path.bezierCurveTo(toPxX(-5), toPxZ(-8), toPxX(4), toPxZ(-20), toPxX(0), toPxZ(-30));
+  path.moveTo(toPxX(0), toPxZ(58));
+  path.bezierCurveTo(toPxX(-7), toPxZ(42), toPxX(6), toPxZ(28), toPxX(-3), toPxZ(15));
+  path.bezierCurveTo(toPxX(-13), toPxZ(2), toPxX(15), toPxZ(-10), toPxX(0), toPxZ(-25));
+  path.bezierCurveTo(toPxX(-6), toPxZ(-34), toPxX(5), toPxZ(-39), toPxX(0), toPxZ(-45));
 
   ctx.save();
   ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
-  ctx.strokeStyle = 'rgba(232,226,208,0.52)';
-  ctx.lineWidth = worldW(5.3);
+  ctx.strokeStyle = 'rgba(18,16,14,0.36)';
+  ctx.lineWidth = worldW(6.2);
   ctx.stroke(path);
-  ctx.strokeStyle = hexColor(C.sandPath);
-  ctx.lineWidth = worldW(3.2);
+  ctx.strokeStyle = hexColor(C.groundPath);
+  ctx.lineWidth = worldW(3.4);
   ctx.stroke(path);
-  ctx.strokeStyle = 'rgba(107,79,56,0.16)';
+  ctx.strokeStyle = 'rgba(246,243,235,0.10)';
   ctx.lineWidth = worldW(0.12);
   for (let i = -2; i <= 2; i++) {
     ctx.setLineDash([worldW(0.8), worldW(1.8)]);
@@ -386,7 +422,7 @@ function makeGroundTex() {
   for (let i = 0; i < 2600; i++) {
     const x = toPxX((Math.random() - 0.5) * 160);
     const z = toPxZ((Math.random() - 0.5) * 160);
-    ctx.fillStyle = `rgba(72,92,54,${Math.random() * 0.18})`;
+    ctx.fillStyle = `rgba(122,112,72,${Math.random() * 0.14})`;
     ctx.beginPath();
     ctx.ellipse(x, z, Math.random() * 6 + 1, Math.random() * 2 + 0.5, Math.random() * Math.PI, 0, Math.PI * 2);
     ctx.fill();
@@ -586,8 +622,8 @@ function makeBigChar(char, mirror = false) {
 
 // ============ GROUND ============
 const groundTex = makeGroundTex();
-const groundGeo = new THREE.PlaneGeometry(200, 200);
-const groundMatGl = new THREE.MeshStandardMaterial({ map: groundTex, color: C.grassNear, roughness: 0.92, metalness: 0 });
+const groundGeo = new THREE.PlaneGeometry(240, 240);
+const groundMatGl = new THREE.MeshStandardMaterial({ map: groundTex, color: C.ground, roughness: 0.94, metalness: 0 });
 const ground = new THREE.Mesh(groundGeo, groundMatGl);
 ground.rotation.x = -Math.PI / 2;
 ground.receiveShadow = true;
@@ -645,7 +681,7 @@ function addWallSegment(cx, cz, w, d, h, gateW = 0) {
 // addWallSegment(-15, 0, 0.6, 30, 3.2);
 // addWallSegment(15, 0, 0.6, 30, 3.2);
 
-function buildDistantMountains() {
+function buildDistantMountainsLegacy() {
   const w = 240, h = 50;
   const canvas = document.createElement('canvas');
   canvas.width = 2048; canvas.height = 400;
@@ -692,7 +728,7 @@ function buildDistantMountains() {
   scene.add(mesh);
 }
 
-function buildSkyDome() {
+function buildSkyDomeLegacy() {
   const canvas = document.createElement('canvas');
   canvas.width = 512; canvas.height = 1024;
   const ctx = canvas.getContext('2d');
@@ -795,8 +831,7 @@ function buildDistantHall() {
   // 原 fogPlane 矩形硬边反而成视觉污染。
 }
 
-buildSkyDome();
-buildDistantMountains();
+// v3 scene builds after all frontier functions are declared.
 
 // ============ (1) 牌楼 PAILOU at south ============
 function buildPailou() {
@@ -883,7 +918,7 @@ function buildHall() {
   cbody.position.set(0, 1.6, -10);
   world.addBody(cbody);
 }
-buildDistantHall();
+// buildDistantHall(); // v3 replaces the distant hall with the astrolabe tower.
 
 // ============ (3) 藏书楼 LIBRARY (远景) ============
 function buildLibrary() {
@@ -998,7 +1033,7 @@ function makePlum(x, z) {
   g.position.set(x, 0, z); scene.add(g);
 }
 
-// ===== 桃花树 PEACH (新增) =====
+// ===== legacy flowering tree (unused in v3) =====
 function makePeach(x, z) {
   const g = new THREE.Group();
   // 弯曲的浅褐枝干
@@ -1039,22 +1074,7 @@ function makeMoss(x, z, scale = 1) {
   scene.add(moss);
 }
 
-// ===== 竹林（6 簇 60 株）=====
-[-25, -12, 0, 12, 25].forEach(x => makePeach(x, 50));
-[-42, 42].forEach(x => {
-  [-30, -15, 0, 15, 30, 45].forEach(z => makePeach(x, z));
-});
-
-[-30, -18, -6, 6, 18, 30].forEach(x => makeBamboo(x, -40, 8));
-
-// ===== 松树（6 棵）=====
-[[-35, -20], [35, -20], [-35, 20], [35, 20]].forEach(([x, z]) => makePine(x, z));
-
-// ===== 梅花树（4 棵）=====
-[[-10, 18], [12, 3], [-14, -18]].forEach(([x, z]) => makePlum(x, z));
-
-// ===== 桃花树（3 棵，中区）=====
-// Additional peach trees are defined above as the southern and side boundaries.
+// Legacy plant calls disabled for v3.
 
 // ===== 苔藓 30+ 个（地面边缘）=====
 for (let i = 0; i < 0; i++) {
@@ -1155,7 +1175,7 @@ function buildPond() {
   pondGroup = g;
 }
 let pondGroup;
-buildPond();
+// buildPond(); // v3 highland field has no water scene.
 
 function buildArchBridge() {
   const g = new THREE.Group();
@@ -1207,7 +1227,7 @@ function buildArchBridge() {
     world.addBody(stepBody);
   }
 }
-buildArchBridge();
+// buildArchBridge(); // v3 uses a sand road and hill ramp.
 
 // ============ (13) "格物致知" 立体字 (核心 wow point) ============
 const wordChars = ['格', '物', '致', '知'];
@@ -1242,7 +1262,7 @@ function buildStereoWord() {
     stereoChars.push({ mesh, body });
   }
 }
-buildStereoWord();
+// buildStereoWord(); // v3 uses project shrines instead of loose characters.
 
 // ============ (10) 战鼓 DRUM ============
 let drumMesh;
@@ -1427,8 +1447,8 @@ function buildStoneLantern(x, z) {
   world.addBody(cbody);
 }
 
-buildStoneLantern(-5, -44);
-buildStoneLantern(5, -44);
+// buildStoneLantern(-5, -44);
+// buildStoneLantern(5, -44);
 
 // ============ 项目竹简卷轴 PROJECT SCROLLS (5) ============
 const scrollPositions = [
@@ -1526,7 +1546,7 @@ function buildScrolls() {
     world.addBody(cbody);
   }
 }
-buildScrolls();
+// buildScrolls(); // v3 replaces scrolls with project shrines.
 
 // ============ 联系 FLOOR DECALS (4) ============
 const contactDecals = [];
@@ -1557,7 +1577,7 @@ function buildContactDecals() {
     contactDecals.push({ mesh: decal, contact: c, x: positions[i][0], z: positions[i][2] });
   }
 }
-buildContactDecals();
+// buildContactDecals(); // v3 replaces floor decals with contact pillars.
 
 // ============ 荣誉 TROPHIES (3) ============
 const trophies = [];
@@ -1623,7 +1643,7 @@ function buildTrophies() {
     world.addBody(cbody);
   }
 }
-buildTrophies();
+// buildTrophies(); // v3 replaces trophies with award cauldrons.
 
 function makeWoodSignTex(text, sub, mirror = false) {
   const w = 512, h = 256;
@@ -1707,8 +1727,858 @@ function buildGuideArrow() {
   scene.add(arrow);
 }
 
-buildArrivalSign();
-buildGuideArrow();
+// buildArrivalSign();
+// buildGuideArrow();
+
+// ============ V3 FRONTIER STARGAZING SCENE ============
+const uWind = {
+  direction: new THREE.Vector2(1, 0.3).normalize(),
+  strength: 1.0
+};
+const uWindDirection = uWind.direction;
+const animatables = [];
+const proximityTriggers = [];
+
+class ProximityTrigger {
+  constructor(record) {
+    Object.assign(this, record);
+  }
+}
+
+function stdMat(color, opts = {}) {
+  return new THREE.MeshStandardMaterial({
+    color,
+    roughness: opts.roughness ?? 0.86,
+    metalness: opts.metalness ?? 0,
+    emissive: opts.emissive ?? 0x000000,
+    emissiveIntensity: opts.emissiveIntensity ?? 0,
+    transparent: opts.transparent ?? false,
+    opacity: opts.opacity ?? 1,
+    side: opts.side ?? THREE.FrontSide,
+    flatShading: opts.flatShading ?? false
+  });
+}
+
+function meshBox(w, h, d, color, opts = {}) {
+  const mesh = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), stdMat(color, opts));
+  mesh.castShadow = opts.castShadow ?? true;
+  mesh.receiveShadow = opts.receiveShadow ?? true;
+  return mesh;
+}
+
+function addStaticBox(x, y, z, hx, hy, hz, yaw = 0, pitch = 0) {
+  const body = new CANNON.Body({ mass: 0, material: groundMat });
+  body.addShape(new CANNON.Box(new CANNON.Vec3(hx, hy, hz)));
+  body.position.set(x, y, z);
+  if (yaw || pitch) {
+    const qx = new CANNON.Quaternion();
+    const qy = new CANNON.Quaternion();
+    qx.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), pitch);
+    qy.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), yaw);
+    qy.mult(qx, body.quaternion);
+  }
+  world.addBody(body);
+  return body;
+}
+
+function makeLabelTexture(title, sub = '', mirror = false, opts = {}) {
+  const w = opts.w || 512;
+  const h = opts.h || 256;
+  const c = document.createElement('canvas');
+  c.width = w; c.height = h;
+  const ctx = c.getContext('2d');
+  ctx.fillStyle = hexColor(opts.bg ?? C.woodDark);
+  ctx.fillRect(0, 0, w, h);
+  for (let i = 0; i < 42; i++) {
+    ctx.fillStyle = `rgba(246,243,235,${Math.random() * 0.06})`;
+    ctx.fillRect(0, Math.random() * h, w, 1);
+  }
+  ctx.strokeStyle = hexColor(opts.line ?? C.goldStrong);
+  ctx.lineWidth = 5;
+  ctx.strokeRect(18, 18, w - 36, h - 36);
+  ctx.lineWidth = 1;
+  ctx.strokeRect(30, 30, w - 60, h - 60);
+  if (mirror) {
+    ctx.translate(w, 0);
+    ctx.scale(-1, 1);
+  }
+  ctx.fillStyle = hexColor(opts.fg ?? C.paper);
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  const main = String(title || '').trim();
+  let fontSize = opts.mainSize || 46;
+  do {
+    ctx.font = `600 ${fontSize}px "Noto Serif SC","Songti SC",serif`;
+    if (ctx.measureText(main).width < w - 88) break;
+    fontSize -= 3;
+  } while (fontSize > 18);
+  ctx.fillText(main, w / 2, sub ? h / 2 - 22 : h / 2);
+  if (sub) {
+    ctx.fillStyle = hexColor(opts.subFg ?? C.starWarm);
+    ctx.font = `${opts.subSize || 22}px "JetBrains Mono",monospace`;
+    const subLines = wrapText(ctx, sub, w - 90).slice(0, 2);
+    let y = h / 2 + 34;
+    subLines.forEach(line => {
+      ctx.fillText(line, w / 2, y);
+      y += 26;
+    });
+  }
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+
+function makePlaqueBox(width, height, depth, title, sub = '', opts = {}) {
+  const front = new THREE.MeshStandardMaterial({ map: makeLabelTexture(title, sub, false, opts), roughness: 0.78 });
+  const back = new THREE.MeshStandardMaterial({ map: makeLabelTexture(title, sub, true, opts), roughness: 0.78 });
+  const side = stdMat(opts.sideColor ?? C.woodDark, { roughness: 0.82 });
+  const geo = new THREE.BoxGeometry(width, height, depth);
+  geo.clearGroups();
+  geo.addGroup(0, 24, 0);
+  geo.addGroup(24, 6, 1);
+  geo.addGroup(30, 6, 2);
+  const plaque = new THREE.Mesh(geo, [side, front, back]);
+  plaque.castShadow = true;
+  return plaque;
+}
+
+function buildSkyDome() {
+  const geo = new THREE.SphereGeometry(180, 48, 24);
+  const canvas = document.createElement('canvas');
+  canvas.width = 512; canvas.height = 1024;
+  const ctx = canvas.getContext('2d');
+  const grad = ctx.createLinearGradient(0, 0, 0, 1024);
+  grad.addColorStop(0, hexColor(C.sky));
+  grad.addColorStop(0.45, hexColor(C.skyMid));
+  grad.addColorStop(0.75, '#2c2820');
+  grad.addColorStop(0.92, hexColor(C.skyLow));
+  grad.addColorStop(1, hexColor(C.skyLow));
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, 512, 1024);
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  const mat = new THREE.MeshBasicMaterial({ map: tex, side: THREE.BackSide, fog: false, depthWrite: false });
+  const sky = new THREE.Mesh(geo, mat);
+  sky.renderOrder = -100;
+  scene.add(sky);
+  scene.background = null;
+}
+
+function buildStars() {
+  const starGeo = new THREE.PlaneGeometry(0.42, 0.42);
+  const starMat = new THREE.MeshBasicMaterial({
+    color: C.starWhite,
+    transparent: true,
+    opacity: 0.88,
+    fog: false,
+    depthWrite: false,
+    side: THREE.DoubleSide
+  });
+  const stars = new THREE.InstancedMesh(starGeo, starMat, 500);
+  const dummy = new THREE.Object3D();
+  for (let i = 0; i < 500; i++) {
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(Math.random() * 0.75 + 0.12);
+    const r = 168;
+    dummy.position.set(
+      r * Math.sin(phi) * Math.cos(theta),
+      r * Math.cos(phi),
+      r * Math.sin(phi) * Math.sin(theta)
+    );
+    const s = 0.45 + Math.random() * 1.7;
+    dummy.scale.set(s, s, s);
+    dummy.lookAt(0, 12, 0);
+    dummy.updateMatrix();
+    stars.setMatrixAt(i, dummy.matrix);
+  }
+  stars.renderOrder = -99;
+  scene.add(stars);
+}
+
+function buildMoon() {
+  const moon = new THREE.Mesh(
+    new THREE.CircleGeometry(8, 48),
+    new THREE.MeshBasicMaterial({ color: C.moonGlow, fog: false, depthWrite: false })
+  );
+  moon.position.set(-50, 80, -150);
+  moon.lookAt(0, 30, 0);
+  moon.renderOrder = -98;
+  scene.add(moon);
+
+  const glow = new THREE.Mesh(
+    new THREE.CircleGeometry(15, 48),
+    new THREE.MeshBasicMaterial({ color: C.moonBody, transparent: true, opacity: 0.15, fog: false, depthWrite: false })
+  );
+  glow.position.copy(moon.position);
+  glow.lookAt(0, 30, 0);
+  glow.renderOrder = -99;
+  scene.add(glow);
+}
+
+function makeMountainLayer(z, h, color, alpha, offset) {
+  const shape = new THREE.Shape();
+  shape.moveTo(-170, 0);
+  for (let i = 0; i <= 36; i++) {
+    const x = -170 + i * (340 / 36);
+    const t = i / 36;
+    const ridge = h * (0.34 + 0.18 * Math.sin(t * 17 + offset) + 0.12 * Math.sin(t * 31 + offset * 0.7));
+    shape.lineTo(x, ridge + h * 0.18);
+  }
+  shape.lineTo(170, -h * 0.32);
+  shape.lineTo(-170, -h * 0.32);
+  shape.lineTo(-170, 0);
+  const geo = new THREE.ShapeGeometry(shape);
+  const mat = new THREE.MeshBasicMaterial({ color, transparent: alpha < 1, opacity: alpha, fog: true, side: THREE.DoubleSide });
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.position.set(0, h * 0.18, z);
+  scene.add(mesh);
+  return mesh;
+}
+
+function buildDistantMountains() {
+  makeMountainLayer(-150, 34, C.mountainBack, 0.95, 0.3);
+  makeMountainLayer(-112, 28, C.mountainMid, 1.0, 1.7);
+  makeMountainLayer(-84, 22, C.mountainFront, 1.0, 2.8);
+  for (let i = 0; i < 5; i++) {
+    const cap = new THREE.Mesh(
+      new THREE.ConeGeometry(4.4 + i * 0.4, 2.2, 3),
+      new THREE.MeshBasicMaterial({ color: C.snowCap, transparent: true, opacity: 0.78, fog: true })
+    );
+    cap.position.set(-72 + i * 34, 30 + Math.sin(i) * 3, -148 + i * 4);
+    cap.rotation.z = Math.PI;
+    scene.add(cap);
+  }
+}
+
+function makePrayerFlag(seed = 0) {
+  const colors = [C.prayerFlag1, C.prayerFlag2, C.prayerFlag3, C.prayerFlag4, C.prayerFlag5];
+  const group = new THREE.Group();
+  const flag = new THREE.Mesh(
+    new THREE.PlaneGeometry(0.72, 0.42, 4, 1),
+    new THREE.MeshStandardMaterial({ color: colors[Math.floor(seed * 10) % colors.length], side: THREE.DoubleSide, roughness: 0.86 })
+  );
+  flag.userData.basePos = flag.position.clone();
+  flag.userData.windPhase = seed * Math.PI * 2 + Math.random();
+  flag.userData.uWindDirection = uWindDirection;
+  group.add(flag);
+  animatables.push({ mesh: flag, type: 'prayer', uWind });
+  return group;
+}
+
+function buildAstrolabe() {
+  const group = new THREE.Group();
+  const stoneMat = stdMat(C.stone, { roughness: 0.92 });
+  const woodMat = stdMat(C.woodLight, { roughness: 0.82 });
+  const darkMat = stdMat(C.woodDark, { roughness: 0.84 });
+  const goldMat = stdMat(C.goldRoof, { roughness: 0.62, metalness: 0.15, emissive: 0x3a2810, emissiveIntensity: 0.25 });
+
+  const base = new THREE.Mesh(new THREE.BoxGeometry(12, 4, 12), stoneMat);
+  base.position.y = 2;
+  group.add(base);
+
+  const floor2 = new THREE.Mesh(new THREE.BoxGeometry(10, 3.5, 10), woodMat);
+  floor2.position.y = 5.75;
+  group.add(floor2);
+
+  for (let dir = 0; dir < 4; dir++) {
+    const win = new THREE.Mesh(
+      new THREE.PlaneGeometry(2, 1.35),
+      new THREE.MeshBasicMaterial({ color: C.windowWarm, transparent: true, opacity: 0.72, fog: true })
+    );
+    const angle = dir * Math.PI / 2;
+    win.position.set(Math.sin(angle) * 5.04, 5.75, Math.cos(angle) * 5.04);
+    win.rotation.y = angle;
+    win.userData.baseOpacity = 0.72;
+    group.add(win);
+    animatables.push({ mesh: win, type: 'window', uWind });
+  }
+
+  const floor3 = new THREE.Mesh(new THREE.BoxGeometry(8, 3, 8), woodMat);
+  floor3.position.y = 9;
+  group.add(floor3);
+
+  const eave3 = new THREE.Mesh(new THREE.ConeGeometry(7, 1.5, 4), darkMat);
+  eave3.position.y = 11;
+  eave3.rotation.y = Math.PI / 4;
+  group.add(eave3);
+
+  const floor4 = new THREE.Mesh(new THREE.BoxGeometry(6, 2.5, 6), woodMat);
+  floor4.position.y = 13;
+  group.add(floor4);
+
+  const roof = new THREE.Mesh(new THREE.ConeGeometry(5, 2.5, 4), goldMat);
+  roof.position.y = 15.75;
+  roof.rotation.y = Math.PI / 4;
+  group.add(roof);
+
+  const armillar = new THREE.Group();
+  for (let i = 0; i < 3; i++) {
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(1.25, 0.06, 8, 36), goldMat);
+    ring.rotation.x = (i === 0) ? Math.PI / 2 : 0;
+    ring.rotation.z = (i === 1) ? Math.PI / 2 : (i === 2 ? Math.PI / 4 : 0);
+    armillar.add(ring);
+  }
+  const core = new THREE.Mesh(
+    new THREE.SphereGeometry(0.4, 16, 12),
+    stdMat(C.goldStrong, { emissive: 0x6a4810, emissiveIntensity: 0.55, metalness: 0.2 })
+  );
+  armillar.add(core);
+  armillar.position.y = 18.5;
+  group.add(armillar);
+  animatables.push({ mesh: armillar, type: 'armillar', uWind });
+
+  for (let i = 0; i < 4; i++) {
+    const angle = i * Math.PI / 2 + Math.PI / 4;
+    const flag = makePrayerFlag(0.31 + i * 0.17);
+    flag.position.set(Math.sin(angle) * 3.5, 17, Math.cos(angle) * 3.5);
+    group.add(flag);
+  }
+
+  group.position.set(0, 0, -55);
+  scene.add(group);
+  addStaticBox(0, 8.8, -55, 6.2, 8.8, 6.2);
+  return group;
+}
+
+function buildSecondaryHalls() {
+  [-15, 15].forEach((x, idx) => {
+    const g = new THREE.Group();
+    const base = meshBox(8, 0.5, 6, C.stone);
+    base.position.y = 0.25;
+    g.add(base);
+    const body = meshBox(6.2, 3.1, 4.8, C.woodLight);
+    body.position.y = 2.05;
+    g.add(body);
+    const roof = new THREE.Mesh(new THREE.ConeGeometry(4.8, 1.4, 4), stdMat(C.goldRoof, { roughness: 0.65, emissive: 0x251a08, emissiveIntensity: 0.12 }));
+    roof.position.y = 4.25;
+    roof.rotation.y = Math.PI / 4;
+    g.add(roof);
+    const plaque = makePlaqueBox(2.6, 0.56, 0.1, idx === 0 ? '星历' : '藏简', 'SIDE HALL', { mainSize: 34, subSize: 14, line: C.goldStrong });
+    plaque.position.set(0, 3.18, 2.46);
+    g.add(plaque);
+    g.position.set(x, 0, -55);
+    scene.add(g);
+    addStaticBox(x, 2.2, -55, 3.4, 2.2, 2.8);
+  });
+}
+
+function buildAwardHill() {
+  const angle = Math.atan2(6, 12);
+  const rampLen = Math.sqrt(6 * 6 + 12 * 12);
+  const ramp = new THREE.Mesh(new THREE.BoxGeometry(28, 0.34, rampLen), stdMat(C.groundPath, { roughness: 0.96, flatShading: true }));
+  ramp.position.set(0, 3, -36);
+  ramp.rotation.x = angle;
+  ramp.receiveShadow = true;
+  scene.add(ramp);
+  addStaticBox(0, 3, -36, 14, 0.17, rampLen / 2, 0, angle);
+
+  const plateau = new THREE.Mesh(new THREE.BoxGeometry(30, 0.3, 14), stdMat(C.groundPath, { roughness: 0.95, flatShading: true }));
+  plateau.position.set(0, 5.85, -49);
+  plateau.receiveShadow = true;
+  scene.add(plateau);
+  addStaticBox(0, 5.85, -49, 15, 0.15, 7);
+
+  const rockGeo = new THREE.DodecahedronGeometry(0.5, 0);
+  const rockMat = stdMat(C.stoneDark, { roughness: 0.94, flatShading: true });
+  const rocks = new THREE.InstancedMesh(rockGeo, rockMat, 18);
+  const dummy = new THREE.Object3D();
+  for (let i = 0; i < 18; i++) {
+    dummy.position.set((Math.random() - 0.5) * 28, 5.95, -45 - Math.random() * 10);
+    const s = 0.6 + Math.random() * 0.9;
+    dummy.scale.set(s, 0.45 + Math.random() * 0.5, s);
+    dummy.rotation.set(Math.random(), Math.random(), Math.random());
+    dummy.updateMatrix();
+    rocks.setMatrixAt(i, dummy.matrix);
+  }
+  scene.add(rocks);
+}
+
+function makeMiniArmillary(scale = 1) {
+  const g = new THREE.Group();
+  const mat = stdMat(C.goldStrong, { metalness: 0.18, roughness: 0.48, emissive: 0x4a330a, emissiveIntensity: 0.25 });
+  for (let i = 0; i < 2; i++) {
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.6 * scale, 0.035 * scale, 6, 24), mat);
+    ring.rotation.x = i ? Math.PI / 2 : 0;
+    ring.rotation.z = i ? Math.PI / 5 : 0;
+    g.add(ring);
+  }
+  const core = new THREE.Mesh(new THREE.SphereGeometry(0.16 * scale, 12, 8), mat);
+  g.add(core);
+  animatables.push({ mesh: g, type: 'armillar', uWind });
+  return g;
+}
+
+function addShrineLabel(group, projectData, z = 2.65) {
+  const plaque = makePlaqueBox(
+    3.8,
+    0.82,
+    0.12,
+    projectData.name_en || projectData.name_cn || projectData.slug,
+    projectData.slug || projectData.year || '',
+    { mainSize: 32, subSize: 15, line: C.goldStrong, bg: C.woodDark }
+  );
+  plaque.position.set(0, 2.45, z);
+  group.add(plaque);
+  const stamp = makePlaqueBox(0.76, 0.76, 0.1, projectData.stamp_char || '星', '', {
+    mainSize: 54,
+    bg: C.stoneDark,
+    fg: C.goldStrong,
+    line: C.goldStrong
+  });
+  stamp.position.set(2.28, 2.45, z + 0.04);
+  group.add(stamp);
+}
+
+function buildProjectShrine(projectData, position, style, yaw = 0) {
+  const group = new THREE.Group();
+  const base = meshBox(7.2, 0.42, 6.2, C.stone, { roughness: 0.95 });
+  base.position.y = 0.21;
+  group.add(base);
+
+  if (style === 'astronomy') {
+    for (const x of [-2.5, 2.5]) {
+      for (const z of [-1.9, 1.9]) {
+        const col = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.18, 2.8, 8), stdMat(C.woodLight));
+        col.position.set(x, 1.62, z);
+        group.add(col);
+      }
+    }
+    const roof = new THREE.Mesh(new THREE.ConeGeometry(4.2, 1.1, 4), stdMat(C.goldRoof, { emissive: 0x251a08, emissiveIntensity: 0.1 }));
+    roof.position.y = 3.25;
+    roof.rotation.y = Math.PI / 4;
+    group.add(roof);
+    const arm = makeMiniArmillary(0.9);
+    arm.position.set(0, 1.36, 0);
+    group.add(arm);
+  } else if (style === 'medicine') {
+    const roof = new THREE.Mesh(new THREE.ConeGeometry(4.4, 0.9, 4), stdMat(C.woodDark));
+    roof.position.y = 3.1;
+    roof.rotation.y = Math.PI / 4;
+    group.add(roof);
+    for (const x of [-2.2, 2.2]) {
+      for (const z of [-1.8, 1.8]) {
+        const col = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.16, 2.5, 8), stdMat(C.woodLight));
+        col.position.set(x, 1.5, z);
+        group.add(col);
+      }
+    }
+    const mortar = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 0.62, 0.75, 18), stdMat(C.stone, { roughness: 0.92 }));
+    mortar.position.y = 0.88;
+    group.add(mortar);
+    for (let i = 0; i < 4; i++) {
+      const herb = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.03, 1.0, 5), stdMat(C.grassDry));
+      herb.position.set(-0.8 + i * 0.5, 1.45, -2.1);
+      herb.rotation.z = (i % 2 ? -0.18 : 0.18);
+      group.add(herb);
+    }
+  } else if (style === 'maya') {
+    const platform = new THREE.Mesh(new THREE.CylinderGeometry(4, 4.3, 0.8, 28), stdMat(C.stone, { roughness: 0.94 }));
+    platform.position.y = 0.58;
+    group.add(platform);
+    const pillar = meshBox(0.82, 4.1, 0.82, C.stoneDark);
+    pillar.position.y = 2.85;
+    group.add(pillar);
+    const top = makePlaqueBox(1.1, 1.1, 0.12, '历', 'CAL', { mainSize: 70, bg: C.stoneDark, line: C.goldStrong });
+    top.position.set(0, 4.95, 0.48);
+    group.add(top);
+    for (const x of [-3.15, 3.15]) {
+      for (const z of [-3.15, 3.15]) {
+        const block = meshBox(0.8, 0.8, 0.8, C.stone);
+        block.position.set(x, 0.82, z);
+        group.add(block);
+      }
+    }
+  } else if (style === 'library') {
+    const floor1 = meshBox(5.6, 2.2, 4.6, C.woodLight);
+    floor1.position.y = 1.5;
+    group.add(floor1);
+    const floor2 = meshBox(4.5, 2.0, 3.6, C.woodLight);
+    floor2.position.y = 3.75;
+    group.add(floor2);
+    const roof = new THREE.Mesh(new THREE.ConeGeometry(3.6, 1.1, 4), stdMat(C.goldRoof));
+    roof.position.y = 5.25;
+    roof.rotation.y = Math.PI / 4;
+    group.add(roof);
+    for (let i = 0; i < 3; i++) {
+      const shelf = meshBox(0.18, 1.15, 2.4, C.woodDark);
+      shelf.position.set(-1.6 + i * 1.6, 1.4, 2.36);
+      group.add(shelf);
+    }
+    const roll = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 1.8, 12), stdMat(C.paper));
+    roll.rotation.z = Math.PI / 2;
+    roll.position.set(0, 0.98, 2.62);
+    group.add(roll);
+  } else {
+    const level1 = meshBox(5.8, 2.2, 5.8, C.stone);
+    level1.position.y = 1.45;
+    group.add(level1);
+    const level2 = meshBox(4.6, 1.8, 4.6, C.woodLight);
+    level2.position.y = 3.45;
+    group.add(level2);
+    for (let x of [-1.8, 1.8]) {
+      for (let z of [-1.8, 1.8]) {
+        const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 2.2, 6), stdMat(C.woodDark));
+        beam.position.set(x, 5.0, z);
+        beam.rotation.x = Math.PI / 2;
+        group.add(beam);
+      }
+    }
+    for (let i = 0; i < 6; i++) {
+      const brick = meshBox(0.72, 0.28, 0.42, i % 2 ? C.stone : C.stoneDark);
+      brick.position.set(-3.4 + (i % 3) * 0.82, 0.38 + Math.floor(i / 3) * 0.32, -3.1);
+      group.add(brick);
+    }
+  }
+
+  addShrineLabel(group, projectData);
+  group.position.set(position.x, position.y, position.z);
+  group.rotation.y = yaw;
+  group.userData.projectId = projectData.id;
+  group.userData.projectSlug = projectData.slug;
+  group.userData.proximityRadius = 6;
+  scene.add(group);
+  scrolls.push({ group, project: projectData, x: position.x, z: position.z, yaw });
+  proximityTriggers.push(new ProximityTrigger({ kind: 'project', group, data: projectData, radius: 6 }));
+  addStaticBox(position.x, 1.8, position.z, 3.4, 1.8, 3.0, yaw);
+  return group;
+}
+
+function makeAwardPlaque(name, issuer, mirror = false) {
+  return makePlaqueBox(1.0, 1.28, 0.06, name || '', issuer || '', {
+    w: 384,
+    h: 512,
+    bg: C.stoneDark,
+    fg: C.paper,
+    subFg: C.starWarm,
+    line: C.goldStrong,
+    mainSize: 32,
+    subSize: 18
+  });
+}
+
+function buildAwardCauldron(awardData, position, scaleFactor) {
+  const group = new THREE.Group();
+  const isGold = awardData.id === 'a-feishu-top10';
+  const isSilver = awardData.id === 'a-shanghai-campus-news';
+  const mainColor = isGold ? C.goldStrong : (isSilver ? C.silver : C.stoneDark);
+  const mat = stdMat(mainColor, { metalness: isGold || isSilver ? 0.32 : 0.06, roughness: 0.48, emissive: isGold ? 0x3a2810 : 0x000000, emissiveIntensity: isGold ? 0.18 : 0 });
+
+  const body = new THREE.Mesh(new THREE.CylinderGeometry(0.72 * scaleFactor, 0.52 * scaleFactor, 1.0 * scaleFactor, 18), mat);
+  body.position.y = 0.6 * scaleFactor;
+  group.add(body);
+  for (let i = 0; i < 3; i++) {
+    const angle = i * (Math.PI * 2 / 3);
+    const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.07 * scaleFactor, 0.05 * scaleFactor, 0.45 * scaleFactor, 6), mat);
+    leg.position.set(Math.sin(angle) * 0.52 * scaleFactor, 0.22 * scaleFactor, Math.cos(angle) * 0.52 * scaleFactor);
+    group.add(leg);
+  }
+  for (const side of [-1, 1]) {
+    const ear = new THREE.Mesh(new THREE.TorusGeometry(0.18 * scaleFactor, 0.04 * scaleFactor, 6, 14), mat);
+    ear.position.set(side * 0.72 * scaleFactor, 1.08 * scaleFactor, 0);
+    ear.rotation.x = Math.PI / 2;
+    group.add(ear);
+  }
+  const front = makeAwardPlaque(awardData.name, awardData.issuer, false);
+  front.position.set(0, 0.68 * scaleFactor, 0.73 * scaleFactor);
+  const back = makeAwardPlaque(awardData.name, awardData.issuer, true);
+  back.position.set(0, 0.68 * scaleFactor, -0.73 * scaleFactor);
+  back.rotation.y = Math.PI;
+  group.add(front, back);
+
+  if (awardData.id === 'a-feishu-top10') {
+    for (let i = 0; i < 4; i++) {
+      const flag = makePrayerFlag(0.77 + i * 0.12);
+      flag.position.set(-1.4 + i * 0.95, 1.95, -1.2);
+      group.add(flag);
+    }
+  }
+
+  group.position.set(position.x, position.y, position.z);
+  group.userData.awardId = awardData.id;
+  group.userData.proximityRadius = 5;
+  scene.add(group);
+  trophies.push({ group, award: awardData, x: position.x, z: position.z });
+  proximityTriggers.push(new ProximityTrigger({ kind: 'award', group, data: awardData, radius: 5 }));
+  addStaticBox(position.x, position.y + 0.75 * scaleFactor, position.z, 0.8 * scaleFactor, 0.75 * scaleFactor, 0.8 * scaleFactor);
+  return group;
+}
+
+function makeSymbolTotem(symbol, sub = '') {
+  return makePlaqueBox(0.9, 0.9, 0.12, symbol, sub, {
+    mainSize: symbol.length > 2 ? 42 : 68,
+    subSize: 12,
+    bg: C.stoneDark,
+    fg: C.goldStrong,
+    line: C.goldStrong
+  });
+}
+
+function makeContactLabelMesh(contactData) {
+  return makePlaqueBox(
+    1.35,
+    0.78,
+    0.08,
+    contactData.label_en || contactData.label_cn || contactData.type,
+    contactData.display || '',
+    { mainSize: 28, subSize: 12, bg: C.stoneDark, fg: C.paper, line: C.goldStrong }
+  );
+}
+
+function buildContactPillar(contactData, position) {
+  const group = new THREE.Group();
+  const pillar = meshBox(0.62, 3, 0.62, C.stone, { roughness: 0.92 });
+  pillar.position.y = 1.5;
+  group.add(pillar);
+  const symbolMap = { github: '</>', email: '✉', phone: '铃', location: '罗' };
+  const totem = makeSymbolTotem(symbolMap[contactData.type] || '?');
+  totem.position.y = 3.22;
+  group.add(totem);
+  for (let dir = 0; dir < 4; dir++) {
+    const labelMesh = makeContactLabelMesh(contactData);
+    const angle = dir * Math.PI / 2;
+    labelMesh.position.set(Math.sin(angle) * 0.35, 0.96, Math.cos(angle) * 0.35);
+    labelMesh.rotation.y = angle;
+    group.add(labelMesh);
+  }
+  group.position.set(position.x, position.y, position.z);
+  group.userData.contactId = contactData.id;
+  group.userData.contactUrl = contactData.url;
+  group.userData.proximityRadius = 4;
+  scene.add(group);
+  contactDecals.push({ group, contact: contactData, x: position.x, z: position.z });
+  proximityTriggers.push(new ProximityTrigger({ kind: 'contact', group, data: contactData, radius: 4 }));
+  addStaticBox(position.x, 1.55, position.z, 0.36, 1.55, 0.36);
+  return group;
+}
+
+function buildPrayerFlagArray() {
+  const positions = [
+    { x: -40, z: 10 }, { x: 40, z: 10 }, { x: -30, z: -10 }, { x: 30, z: -10 },
+    { x: -45, z: -35 }, { x: 45, z: -35 }, { x: 0, z: 35 }, { x: 0, z: -65 }
+  ];
+  const poleMesh = new THREE.InstancedMesh(
+    new THREE.CylinderGeometry(0.08, 0.08, 4, 6),
+    stdMat(C.woodDark),
+    positions.length * 2
+  );
+  const flagMesh = new THREE.InstancedMesh(
+    new THREE.PlaneGeometry(0.78, 0.48, 4, 1),
+    new THREE.MeshStandardMaterial({ color: 0xffffff, vertexColors: true, side: THREE.DoubleSide, roughness: 0.86 }),
+    positions.length * 5
+  );
+  const dummy = new THREE.Object3D();
+  const flagColors = [C.prayerFlag1, C.prayerFlag2, C.prayerFlag3, C.prayerFlag4, C.prayerFlag5].map(c => new THREE.Color(c));
+  let poleIndex = 0;
+  let flagIndex = 0;
+  positions.forEach((p, groupIndex) => {
+    for (const s of [-1, 1]) {
+      dummy.position.set(p.x + s * 2.5, 2, p.z);
+      dummy.rotation.set(0, 0, 0);
+      dummy.scale.set(1, 1, 1);
+      dummy.updateMatrix();
+      poleMesh.setMatrixAt(poleIndex++, dummy.matrix);
+    }
+    for (let i = 0; i < 5; i++) {
+      dummy.position.set(p.x - 1.55 + i * 0.78, 3.48 - i * 0.2, p.z);
+      dummy.rotation.set(0, (groupIndex % 2) * 0.12, 0);
+      dummy.scale.set(1, 1, 1);
+      dummy.updateMatrix();
+      flagMesh.setMatrixAt(flagIndex, dummy.matrix);
+      flagMesh.setColorAt(flagIndex, flagColors[i]);
+      flagIndex++;
+    }
+  });
+  flagMesh.instanceMatrix.needsUpdate = true;
+  if (flagMesh.instanceColor) flagMesh.instanceColor.needsUpdate = true;
+  flagMesh.userData.baseRotZ = 0;
+  flagMesh.userData.windPhase = Math.random() * Math.PI * 2;
+  flagMesh.userData.uWindDirection = uWindDirection;
+  scene.add(poleMesh, flagMesh);
+  animatables.push({ mesh: flagMesh, type: 'flagField', uWind });
+}
+
+function buildEntryGate() {
+  const group = new THREE.Group();
+  const mat = stdMat(C.woodDark, { roughness: 0.82 });
+  for (const x of [-3.8, 3.8]) {
+    const post = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.24, 5.8, 10), mat);
+    post.position.set(x, 2.9, 0);
+    group.add(post);
+  }
+  const beam = meshBox(8.6, 0.36, 0.42, C.woodDark);
+  beam.position.y = 4.6;
+  group.add(beam);
+  const roof = new THREE.Mesh(new THREE.ConeGeometry(5.3, 1.1, 4), stdMat(C.goldRoof, { emissive: 0x251a08, emissiveIntensity: 0.12 }));
+  roof.position.y = 5.45;
+  roof.rotation.y = Math.PI / 4;
+  group.add(roof);
+  const sign = makePlaqueBox(3.4, 0.74, 0.1, '星槎山门', 'NORTH', { mainSize: 38, subSize: 16, line: C.goldStrong });
+  sign.position.set(0, 4.58, 0.25);
+  group.add(sign);
+  group.position.set(0, 0, 55);
+  scene.add(group);
+  addStaticBox(-3.8, 2.9, 55, 0.28, 2.9, 0.28);
+  addStaticBox(3.8, 2.9, 55, 0.28, 2.9, 0.28);
+}
+
+function makeFrontierPine() {
+  const g = new THREE.Group();
+  const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.22, 2.4, 8), stdMat(C.woodDark));
+  trunk.position.y = 1.2;
+  g.add(trunk);
+  for (let i = 0; i < 3; i++) {
+    const cone = new THREE.Mesh(new THREE.ConeGeometry(1.05 - i * 0.22, 0.85, 8), stdMat(C.pine));
+    cone.position.y = 1.72 + i * 0.62;
+    g.add(cone);
+  }
+  animatables.push({ mesh: g, type: 'pine', uWind });
+  return g;
+}
+
+function buildPineForest() {
+  const positions = [
+    [-48, 46], [-38, 34], [-53, 18], [-42, -4], [-52, -24],
+    [46, 48], [36, 31], [54, 10], [43, -13], [52, -33],
+    [-27, 42], [28, 42], [-38, -47], [38, -48], [-58, -60],
+    [58, -62], [-66, 5], [66, 5], [-24, -58], [24, -58]
+  ];
+  const forest = new THREE.Group();
+  const dummy = new THREE.Object3D();
+  const trunkMesh = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.13, 0.22, 2.4, 8), stdMat(C.woodDark), positions.length);
+  const coneMeshes = [0, 1, 2].map(i => new THREE.InstancedMesh(
+    new THREE.ConeGeometry(1.05 - i * 0.22, 0.85, 8),
+    stdMat(C.pine),
+    positions.length
+  ));
+  positions.forEach(([x, z], i) => {
+    const s = 0.85 + (i % 5) * 0.08;
+    const yaw = (i * 0.71) % (Math.PI * 2);
+    dummy.position.set(x, 1.2 * s, z);
+    dummy.scale.set(s, s, s);
+    dummy.rotation.set(0, yaw, 0);
+    dummy.updateMatrix();
+    trunkMesh.setMatrixAt(i, dummy.matrix);
+    coneMeshes.forEach((mesh, layer) => {
+      dummy.position.set(x, (1.72 + layer * 0.62) * s, z);
+      dummy.scale.set(s, s, s);
+      dummy.rotation.set(0, yaw, 0);
+      dummy.updateMatrix();
+      mesh.setMatrixAt(i, dummy.matrix);
+    });
+  });
+  forest.add(trunkMesh, ...coneMeshes);
+  scene.add(forest);
+  animatables.push({ mesh: forest, type: 'pine', uWind });
+}
+
+function buildGrassTufts() {
+  const grass = new THREE.InstancedMesh(
+    new THREE.ConeGeometry(0.22, 0.75, 5),
+    stdMat(C.grassDry, { roughness: 0.94 }),
+    44
+  );
+  const dummy = new THREE.Object3D();
+  for (let i = 0; i < 44; i++) {
+    const side = Math.random() < 0.5 ? -1 : 1;
+    const s = 0.7 + Math.random() * 0.8;
+    dummy.position.set(side * (18 + Math.random() * 42), 0.32 * s, 50 - Math.random() * 110);
+    dummy.scale.set(s, s, s);
+    dummy.rotation.set(0, Math.random() * Math.PI, (Math.random() - 0.5) * 0.2);
+    dummy.updateMatrix();
+    grass.setMatrixAt(i, dummy.matrix);
+  }
+  scene.add(grass);
+  animatables.push({ mesh: grass, type: 'grass', uWind });
+}
+
+function buildStonePiles() {
+  const count = 48;
+  const stones = new THREE.InstancedMesh(
+    new THREE.DodecahedronGeometry(0.3, 0),
+    stdMat(C.stone, { roughness: 0.96, flatShading: true }),
+    count
+  );
+  const dummy = new THREE.Object3D();
+  let idx = 0;
+  for (let p = 0; p < 12; p++) {
+    const baseX = (Math.random() < 0.5 ? -1 : 1) * (24 + Math.random() * 42);
+    const baseZ = 45 - Math.random() * 100;
+    for (let i = 0; i < 4; i++) {
+      const s = 0.65 + Math.random() * 1.0;
+      dummy.position.set(baseX + (Math.random() - 0.5) * 1.1, 0.14 + i * 0.08, baseZ + (Math.random() - 0.5) * 1.1);
+      dummy.scale.set(s, 0.45 + Math.random() * 0.7, s);
+      dummy.rotation.set(Math.random(), Math.random(), Math.random());
+      dummy.updateMatrix();
+      stones.setMatrixAt(idx++, dummy.matrix);
+    }
+  }
+  scene.add(stones);
+}
+
+function updateWindAnimation(time) {
+  uWind.direction.x = Math.cos(time * 0.0003) * 0.7 + 0.3;
+  uWind.direction.y = Math.sin(time * 0.0004) * 0.5 + 0.3;
+  uWind.direction.normalize();
+  uWindDirection.copy(uWind.direction);
+  uWind.strength = 0.8 + Math.sin(time * 0.0008) * 0.3;
+
+  animatables.forEach(a => {
+    if (a.type === 'prayer') {
+      const phase = a.mesh.userData.windPhase || 0;
+      const t = time * 0.001 + phase;
+      a.mesh.rotation.z = Math.sin(t * 2) * 0.25 * uWind.strength;
+      a.mesh.position.y = a.mesh.userData.basePos.y + Math.sin(t * 3) * 0.08 * uWind.strength;
+    } else if (a.type === 'pine') {
+      a.mesh.rotation.x = Math.sin(time * 0.0008 + a.mesh.position.x) * 0.035 * uWind.strength;
+      a.mesh.rotation.z = Math.sin(time * 0.0007 + a.mesh.position.z) * 0.025 * uWind.strength;
+    } else if (a.type === 'grass') {
+      a.mesh.rotation.x = Math.sin(time * 0.0012 + a.mesh.position.x) * 0.12 * uWind.strength;
+    } else if (a.type === 'flagField') {
+      a.mesh.rotation.z = Math.sin(time * 0.0018 + (a.mesh.userData.windPhase || 0)) * 0.035 * uWind.strength;
+    } else if (a.type === 'armillar') {
+      a.mesh.rotation.y = time * 0.00022;
+      a.mesh.rotation.x = Math.sin(time * 0.00017) * 0.28;
+    } else if (a.type === 'window') {
+      a.mesh.material.opacity = 0.62 + Math.sin(time * 0.001 + a.mesh.position.x) * 0.14;
+    }
+  });
+}
+
+function buildV3Scene() {
+  buildSkyDome();
+  buildStars();
+  buildMoon();
+  buildDistantMountains();
+  buildAwardHill();
+  buildAstrolabe();
+  buildSecondaryHalls();
+  buildEntryGate();
+
+  const projectsSorted = (D.projects || []).slice().sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
+  if (projectsSorted[0]) buildProjectShrine(projectsSorted[0], { x: -28, y: 0, z: 25 }, 'astronomy', -0.28);
+  if (projectsSorted[1]) buildProjectShrine(projectsSorted[1], { x: 28, y: 0, z: 25 }, 'medicine', 0.28);
+  if (projectsSorted[2]) buildProjectShrine(projectsSorted[2], { x: -30, y: 0, z: 0 }, 'maya', -0.2);
+  if (projectsSorted[3]) buildProjectShrine(projectsSorted[3], { x: 30, y: 0, z: 0 }, 'library', 0.2);
+  if (projectsSorted[4]) buildProjectShrine(projectsSorted[4], { x: 0, y: 0, z: -25 }, 'unfinished', 0);
+
+  const awardsSorted = (D.awards || []).slice().sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
+  if (awardsSorted[0]) buildAwardCauldron(awardsSorted[0], { x: -8, y: 6, z: -42 }, 1.5);
+  if (awardsSorted[1]) buildAwardCauldron(awardsSorted[1], { x: 0, y: 6, z: -45 }, 1.2);
+  if (awardsSorted[2]) buildAwardCauldron(awardsSorted[2], { x: 8, y: 6, z: -42 }, 1.0);
+
+  const contactsSorted = (D.contacts || []).slice().sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
+  if (contactsSorted[0]) buildContactPillar(contactsSorted[0], { x: -12, y: 0, z: 52 });
+  if (contactsSorted[1]) buildContactPillar(contactsSorted[1], { x: -4, y: 0, z: 52 });
+  if (contactsSorted[2]) buildContactPillar(contactsSorted[2], { x: 4, y: 0, z: 52 });
+  if (contactsSorted[3]) buildContactPillar(contactsSorted[3], { x: 12, y: 0, z: 52 });
+
+  buildPrayerFlagArray();
+  buildPineForest();
+  buildGrassTufts();
+  buildStonePiles();
+}
+
+buildV3Scene();
 
 // ============ VEHICLE (RaycastVehicle) ============
 let chassisBody, vehicle, carGroup;
@@ -1719,8 +2589,7 @@ function buildVehicle() {
   const chassisShape = new CANNON.Box(new CANNON.Vec3(0.5, 0.3, 1.0));
   chassisBody = new CANNON.Body({ mass: 40, material: groundMat });
   chassisBody.addShape(chassisShape);
-  chassisBody.position.set(0, 1.5, 45);
-  console.log('[debug] chassisBody just set to', chassisBody.position.x, chassisBody.position.y, chassisBody.position.z);
+  chassisBody.position.set(0, 1.5, 55);
   chassisBody.angularDamping = 0.55;
   chassisBody.allowSleep = false;
   world.addBody(chassisBody);
@@ -1961,10 +2830,12 @@ document.querySelectorAll('[data-cursor]').forEach(el => {
 document.addEventListener('mouseleave', () => { cursor.style.opacity = '0'; });
 document.addEventListener('mouseenter', () => { cursor.style.opacity = '1'; });
 
-// 提供给 3D scene 调用的接口：靠近卷轴/联系/奖项时显示
-function setSceneCursor(text) {
+// 提供给 3D scene 调用的接口：靠近项目站/联系石碑/奖鼎时显示
+function setSceneCursor(text, state = 'idle') {
   if (!isHoverPointer) return;
-  if (text) {
+  cursor.classList.remove('far', 'near', 'trigger');
+  if (state === 'far' || state === 'near' || state === 'trigger') cursor.classList.add(state);
+  if (text && state === 'text') {
     sceneOwnsText = true;
     cursorLabel.textContent = text;
     cursorLabel.classList.toggle('en', /^[A-Z\s]+$/.test(text));
@@ -1990,25 +2861,54 @@ document.getElementById('closeDrawer').addEventListener('click', closeDrawer);
 
 let gameStarted = false;
 let startTime = 0;
+let introDiveStart = 0;
+let introDiveActive = false;
+
+function playBellTone() {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(196, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(98, ctx.currentTime + 0.6);
+    gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.18, ctx.currentTime + 0.04);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 1.0);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 1.05);
+    setTimeout(() => ctx.close(), 1300);
+  } catch (err) {
+    // Audio is optional; browser gesture policies vary.
+  }
+}
 
 function startGame() {
-  introEl.classList.add('hide');
-  setTimeout(() => { introEl.style.display = 'none'; }, 800);
+  introEl.classList.add('started');
   gameStarted = true;
   startTime = performance.now();
+  introDiveStart = startTime;
+  introDiveActive = true;
+  camera.position.set(0, 80, 80);
+  camera.lookAt(0, 8, -55);
+  playBellTone();
   clock.start();
-  setTimeout(() => { inputLocked = false; }, 500);
-  setTimeout(() => { hintEl.classList.add('show'); }, 500);
+  setTimeout(() => { introEl.classList.add('hide'); }, 1700);
+  setTimeout(() => { introEl.style.display = 'none'; }, 2500);
+  setTimeout(() => { inputLocked = false; introDiveActive = false; }, 2500);
+  setTimeout(() => { hintEl.classList.add('show'); }, 2600);
   // 3s no input → shake hint
   setTimeout(() => {
     if (!firstMoveTime) hintEl.classList.add('shake');
   }, 3000);
-  // 5s: after first move, fade hint into icon mode + light lanterns
+  // 5s: after first move, fade hint into a shorter navigation cue
   setTimeout(() => {
     if (firstMoveTime) {
-      lightLanterns();
       hintEl.querySelector('.title').textContent = '\u671d\u5317\u5f00';
-      hintEl.querySelector('.sub').textContent = 'FIND ACADEMY';
+      hintEl.querySelector('.sub').textContent = 'FIND ASTROLABE';
       setTimeout(() => hintEl.classList.remove('show'), 1200);
     }
   }, 5500);
@@ -2022,16 +2922,6 @@ function startGame() {
     }
   }, 8000);
   // 20s near-gate hint - handled in loop
-}
-
-function lightLanterns() {
-  lanterns.forEach((l, i) => {
-    setTimeout(() => {
-      l.on = true;
-      l.light.intensity = 0.7;
-      l.body.material.emissiveIntensity = 0.35;
-    }, i * 150);
-  });
 }
 
 function showFly() {
@@ -2055,7 +2945,7 @@ function openProject(p) {
     <div class="actions">
       ${p.url_detail ? `<a href="${p.url_detail}" target="_blank">阅卷详情 <span class="arrow">→</span></a>` : ''}
       ${p.url_github ? `<a href="${p.url_github}" target="_blank">GitHub <span class="arrow">↗</span></a>` : ''}
-      <a href="hello.html#projects">回主页 <span class="arrow">⤴</span></a>
+      <a href="index.html#projects">回主页 <span class="arrow">⤴</span></a>
     </div>
   `;
   drawerEl.classList.add('show');
@@ -2116,7 +3006,7 @@ function tryInteract() {
 
 // ============ RESET CAR ============
 function resetCar() {
-  chassisBody.position.set(0, 1.5, 45);
+  chassisBody.position.set(0, 1.5, 55);
   chassisBody.velocity.set(0, 0, 0);
   chassisBody.angularVelocity.set(0, 0, 0);
   chassisBody.quaternion.set(0, 0, 0, 1);
@@ -2127,19 +3017,19 @@ document.getElementById('helpIc').addEventListener('click', () => {
   drawerEl.classList.remove('contact', 'award');
   drawerBody.innerHTML = `
     <div class="label">HELP · 操控</div>
-    <h1>书院驾乘指引</h1>
+    <h1>边塞观星指引</h1>
     <div class="divider"></div>
     <div class="desc" style="line-height:2;">
       <strong>W A S D / ↑↓←→</strong> 驾车<br/>
       <strong>SHIFT</strong> 疾驰<br/>
       <strong>SPACE</strong> 跃起<br/>
-      <strong>R</strong> 复位至牌楼<br/>
+      <strong>R</strong> 复位至山门<br/>
       <strong>鼠标拖拽</strong> 观四方<br/>
       <strong>E</strong> 阅卷 / 联系 / 荣誉<br/>
       <strong>ESC</strong> 关闭<br/>
       <br/>
-      <em>沿沙路北行可见 5 个项目卷轴，出生区有 4 个联系地刻。</em><br/>
-      <em>桥北是"格物致知"，东侧小坡陈列 3 座荣誉奖杯。</em>
+      <em>沿沙路北行可见 5 个项目站，山门前有 4 根联系石碑。</em><br/>
+      <em>主塔后方山顶平台陈列 3 座奖鼎。</em>
     </div>
   `;
   drawerEl.classList.add('show');
@@ -2207,6 +3097,7 @@ function animate() {
 
   // === physics step ===
   world.step(1/60, dt, 3);
+  updateWindAnimation(performance.now());
 
   // === sync car visuals ===
   if (carGroup && chassisBody) {
@@ -2227,46 +3118,6 @@ function animate() {
     }
   }
 
-  // === sync stereoChars + drum + coins ===
-  for (const sc of stereoChars) {
-    sc.mesh.position.copy(sc.body.position);
-    sc.mesh.quaternion.copy(sc.body.quaternion);
-  }
-  if (drumMesh && drumBody) {
-    drumMesh.parent.position.set(drumBody.position.x, drumBody.position.y - 0.5, drumBody.position.z);
-    drumMesh.parent.quaternion.copy(drumBody.quaternion);
-  }
-  for (const c of coins) {
-    c.mesh.position.copy(c.body.position);
-    c.mesh.quaternion.copy(c.body.quaternion);
-  }
-
-  // === bells swing ===
-  for (const b of bells) {
-    const t = clock.elapsedTime;
-    b.mesh.rotation.z = Math.sin(t * 1.5 + b.phase) * 0.05 + b.swing * Math.sin(t * 8) * Math.exp(-t * 0.5);
-  }
-  // bells trigger check
-  if (chassisBody) {
-    const dx = chassisBody.position.x - 6;
-    const dz = chassisBody.position.z - 10;
-    if (Math.sqrt(dx*dx + dz*dz) < 1.5) {
-      bells.forEach(b => { if (b.swing < 0.5) b.swing = 1.0; });
-    }
-  }
-  // decay swing
-  bells.forEach(b => { b.swing *= 0.985; });
-
-  // === koi animation ===
-  if (pondGroup && pondGroup.userData.koi) {
-    const t = clock.elapsedTime;
-    for (const koi of pondGroup.userData.koi) {
-      koi.position.x = koi.userData.baseX + Math.sin(t * 0.5 + koi.userData.phase) * 2;
-      koi.position.z = koi.userData.baseZ + Math.cos(t * 0.3 + koi.userData.phase) * 1.5;
-      koi.rotation.y = -t * 0.5 + koi.userData.phase + Math.PI / 2;
-    }
-  }
-
   // === proximity ===
   nearestScroll = null;
   nearestContact = null;
@@ -2274,9 +3125,16 @@ function animate() {
   let promptShown = false;
   let cursorText = null;
   const cp = chassisBody.position;
+  let closestInteractiveDistance = Infinity;
+  const markDistance = (x, z) => {
+    const dx = cp.x - x, dz = cp.z - z;
+    const d = Math.sqrt(dx * dx + dz * dz);
+    if (d < closestInteractiveDistance) closestInteractiveDistance = d;
+    return d;
+  };
   for (const s of scrolls) {
-    const dx = cp.x - s.x, dz = cp.z - s.z;
-    if (Math.sqrt(dx*dx + dz*dz) < 6.0) {
+    const dist = markDistance(s.x, s.z);
+    if (dist < 6.0) {
       nearestScroll = s;
       promptText.textContent = ' 阅卷 · ' + (s.project.name_cn || '').slice(0, 12);
       promptEl.classList.add('show');
@@ -2290,8 +3148,8 @@ function animate() {
   }
   if (!promptShown) {
     for (const c of contactDecals) {
-      const dx = cp.x - c.x, dz = cp.z - c.z;
-      if (Math.sqrt(dx*dx + dz*dz) < 4.0) {
+      const dist = markDistance(c.x, c.z);
+      if (dist < 4.0) {
         nearestContact = c;
         promptText.textContent = ' 联系 · ' + (c.contact.display || '').slice(0, 18);
         promptEl.classList.add('show');
@@ -2303,8 +3161,8 @@ function animate() {
   }
   if (!promptShown) {
     for (const tr of trophies) {
-      const dx = cp.x - tr.x, dz = cp.z - tr.z;
-      if (Math.sqrt(dx*dx + dz*dz) < 5.0) {
+      const dist = markDistance(tr.x, tr.z);
+      if (dist < 5.0) {
         nearestTrophy = tr;
         promptText.textContent = ' 荣誉 · ' + (tr.award.name || '').slice(0, 16);
         promptEl.classList.add('show');
@@ -2316,24 +3174,36 @@ function animate() {
   }
   if (!promptShown) promptEl.classList.remove('show');
   // 3D 场景接管 cursor-ring 显示状态
-  setSceneCursor(cursorText);
+  let ringState = 'idle';
+  if (closestInteractiveDistance < 5) ringState = 'trigger';
+  else if (closestInteractiveDistance < 15) ringState = 'near';
+  else if (closestInteractiveDistance < 45) ringState = 'far';
+  const ringProgress = Number.isFinite(closestInteractiveDistance)
+    ? Math.max(0, Math.min(1, 1 - closestInteractiveDistance / 15)) * 360
+    : 0;
+  cursor.style.setProperty('--ring-progress', `${ringProgress.toFixed(0)}deg`);
+  setSceneCursor(cursorText, ringState);
 
   // === camera follow ===
   if (chassisBody) {
-    // forward dir from chassis quaternion
     const q = chassisBody.quaternion;
     const carFwd = new CANNON.Vec3(0, 0, -1);
     q.vmult(carFwd, carFwd);
-    // lookahead (升高视线高度 + 看更远，避开飞檐遮挡感)
+    const speedMs = Math.hypot(chassisBody.velocity.x, chassisBody.velocity.z);
+    const vNorm = Math.min(speedMs / 18, 1);
+    let targetFov = THREE.MathUtils.lerp(70, 85, vNorm);
+    const steerMag = (keys.a || keys.d) ? 1 : 0;
+    if (steerMag) targetFov -= 4.5;
+    camera.fov = THREE.MathUtils.lerp(camera.fov, targetFov, 0.06);
+    camera.updateProjectionMatrix();
+
+    const dist = THREE.MathUtils.lerp(4.0, 7.0, vNorm);
+    const heightOff = THREE.MathUtils.lerp(2.0, 1.3, vNorm);
     camTarget.set(
-      chassisBody.position.x + carFwd.x * 4,
-      chassisBody.position.y + 2.0,
-      chassisBody.position.z + carFwd.z * 4
+      chassisBody.position.x + carFwd.x * THREE.MathUtils.lerp(5, 12, vNorm),
+      chassisBody.position.y + 1.15,
+      chassisBody.position.z + carFwd.z * THREE.MathUtils.lerp(5, 12, vNorm)
     );
-    // desired = behind car + height
-    const dist = 6;
-    const heightOff = 2.8;
-    // base behind = -carFwd direction, then yaw rotate around target
     const baseBack = -carFwd.x * dist;
     const baseBackZ = -carFwd.z * dist;
     const cosY = Math.cos(camYaw), sinY = Math.sin(camYaw);
@@ -2344,9 +3214,21 @@ function animate() {
       chassisBody.position.y + heightOff,
       chassisBody.position.z + finalBackZ
     );
-    const damping = 1 - Math.exp(-6 * dt);
-    camera.position.lerp(camDesired, damping);
-    camera.lookAt(camTarget);
+
+    const diveElapsed = introDiveActive ? Math.min((performance.now() - introDiveStart) / 1500, 1) : 1;
+    if (introDiveActive && diveElapsed < 1) {
+      const eased = diveElapsed < 0.5 ? 2 * diveElapsed * diveElapsed : 1 - Math.pow(-2 * diveElapsed + 2, 2) / 2;
+      camera.position.set(
+        THREE.MathUtils.lerp(0, camDesired.x, eased),
+        THREE.MathUtils.lerp(80, camDesired.y, eased),
+        THREE.MathUtils.lerp(80, camDesired.z, eased)
+      );
+      camera.lookAt(0, 8, -55);
+    } else {
+      const damping = 1 - Math.exp(-THREE.MathUtils.lerp(8, 4.5, vNorm) * dt);
+      camera.position.lerp(camDesired, damping);
+      camera.lookAt(camTarget);
+    }
   }
 
   // === HUD update ===
@@ -2374,7 +3256,7 @@ function animate() {
 
   // === bounds: keep car inside ===
   if (chassisBody) {
-    const halfBound = 80;
+    const halfBound = 120;
     if (Math.abs(chassisBody.position.x) > halfBound || Math.abs(chassisBody.position.z) > halfBound) {
       // gentle pushback
       if (chassisBody.position.x > halfBound) chassisBody.position.x = halfBound;
@@ -2439,7 +3321,29 @@ window.addEventListener('resize', () => {
 });
 
 // ============ DEBUG hooks (v2) ============
-window.__drive = { scene, camera, world, vehicle, chassisBody, scrolls, trophies, contactDecals, stereoChars, lanterns, D };
+window.__drive = {
+  THREE, scene, camera, renderer, world, vehicle, chassisBody,
+  scrolls, trophies, contactDecals, animatables, proximityTriggers, uWind, D,
+  getState: () => ({
+    gameStarted,
+    inputLocked,
+    introDiveActive,
+    cameraFov: camera.fov,
+    position: {
+      x: chassisBody.position.x,
+      y: chassisBody.position.y,
+      z: chassisBody.position.z
+    },
+    counts: {
+      projects: scrolls.length,
+      awards: trophies.length,
+      contacts: contactDecals.length,
+      animatables: animatables.length,
+      sceneChildren: scene.children.length,
+      bodies: world.bodies.length
+    }
+  })
+};
 
 // audio v2 hooks (no-op for v1)
 window.onCarSpeed = () => {};
