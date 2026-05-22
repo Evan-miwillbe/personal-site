@@ -3043,7 +3043,7 @@ const tempQuat = new THREE.Quaternion();
 const camTarget = new THREE.Vector3();
 const camDesired = new THREE.Vector3();
 
-const MAX_FORCE = 420;
+const MAX_FORCE = 320;
 const MAX_BRAKE = 18;
 const STEER_MAX = 0.6;
 const BOOST_MULT = 1.8;
@@ -3062,26 +3062,27 @@ function animate() {
   // === input → vehicle ===
   if (vehicle && !inputLocked) {
     const boost = keys.shift ? BOOST_MULT : 1;
-    // 上坡推力补偿: 车头朝上时引擎力放大 (1x ~ 2.4x)
-    const fwdW = new CANNON.Vec3(0, 0, 1);
+    // 上坡推力轻度补偿 (车头朝上 -> 推力放大 1x ~ 1.5x), 系数压小避免后驱过推翻车
+    const fwdW = new CANNON.Vec3(0, 0, -1);
     chassisBody.quaternion.vmult(fwdW, fwdW);
-    const climbBoost = 1 + Math.max(0, fwdW.y) * 1.4;
+    const climbBoost = 1 + Math.max(0, fwdW.y) * 0.5;
     let force = 0;
     if (keys.w) force = MAX_FORCE * boost * climbBoost;
     else if (keys.s) force = -MAX_FORCE * 0.5 * boost;
-    // 后驱: 引擎力作用于 index 2/3 (z=-0.7, 物理 RR/RL)
-    vehicle.applyEngineForce(force, 2);
-    vehicle.applyEngineForce(force, 3);
+    // 后驱: 车实际朝 local -Z 开, 故后轮是 z=+0.7 那对 (index 0/1)
+    vehicle.applyEngineForce(force, 0);
+    vehicle.applyEngineForce(force, 1);
     // 飞跃: vy 超阈值则削顶, 防止跳台/坡顶飞太远
     if (chassisBody.velocity.y > RAMP_LAUNCH_VY_CAP) {
       chassisBody.velocity.y = RAMP_LAUNCH_VY_CAP;
     }
 
+    // 前轮转向: 车头朝 -Z, 故前轮是 z=-0.7 那对 (index 2/3)
     let steer = 0;
     if (keys.a) steer = STEER_MAX;
     if (keys.d) steer = -STEER_MAX;
-    vehicle.setSteeringValue(steer, 0);
-    vehicle.setSteeringValue(steer, 1);
+    vehicle.setSteeringValue(steer, 2);
+    vehicle.setSteeringValue(steer, 3);
 
     const brake = (!keys.w && !keys.s) ? 0.6 : 0;
     for (let i = 0; i < 4; i++) vehicle.setBrake(brake, i);
@@ -3191,8 +3192,8 @@ function animate() {
   // === camera follow ===
   if (chassisBody) {
     const q = chassisBody.quaternion;
-    // 车头朝 local +Z (headlight/天线/index 0-1 前轮 都在 +Z 那侧)
-    const carFwd = new CANNON.Vec3(0, 0, 1);
+    // 车头朝 local -Z (车实际朝 -Z 开向场地中心)
+    const carFwd = new CANNON.Vec3(0, 0, -1);
     q.vmult(carFwd, carFwd);
     const speedMs = Math.hypot(chassisBody.velocity.x, chassisBody.velocity.z);
     const vNorm = Math.min(speedMs / 18, 1);
