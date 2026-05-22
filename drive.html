@@ -3026,10 +3026,21 @@ function tryInteract() {
 
 // ============ RESET CAR ============
 function resetCar() {
-  chassisBody.position.set(0, 1.5, 55);
+  const fellOff = chassisBody.position.y < -3;
+  if (fellOff) {
+    // 掉到坑里, 回山门 spawn
+    chassisBody.position.set(0, 1.5, 55);
+    chassisBody.quaternion.set(0, 0, 0, 1);
+  } else {
+    // 就地复位: 保留 x/z, 抬高 1m, 保留 yaw, 把 pitch/roll 归零
+    chassisBody.position.y += 1.0;
+    const fwd = new CANNON.Vec3(0, 0, -1);
+    chassisBody.quaternion.vmult(fwd, fwd);
+    const yaw = Math.atan2(-fwd.x, -fwd.z);
+    chassisBody.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), yaw);
+  }
   chassisBody.velocity.set(0, 0, 0);
   chassisBody.angularVelocity.set(0, 0, 0);
-  chassisBody.quaternion.set(0, 0, 0, 1);
   // 清掉所有按键 + 引擎/转向/刹车残留, 避免"重置后车自动开走再翻"循环
   for (const k in keys) keys[k] = false;
   if (vehicle) {
