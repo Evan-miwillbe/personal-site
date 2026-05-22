@@ -3058,7 +3058,8 @@ const MAX_FORCE = 240;
 const MAX_BRAKE = 18;
 const STEER_MAX = 0.6;
 const BOOST_MULT = 1.8;
-const RAMP_LAUNCH_VY_CAP = 4.5;  // 飞跃时垂直初速度上限 (避免飞太远)
+// 飞跃 vy 上限放宽: 让坡顶能腾空 ~1.5 秒, 飞跃感明显但仍受重力收回
+const RAMP_LAUNCH_VY_CAP = 12;
 
 function animate() {
   requestAnimationFrame(animate);
@@ -3073,10 +3074,10 @@ function animate() {
   // === input → vehicle ===
   if (vehicle && !inputLocked) {
     const boost = keys.shift ? BOOST_MULT : 1;
-    // 上坡推力轻度补偿 (车头朝上 -> 推力放大 1x ~ 1.5x), 系数压小避免后驱过推翻车
+    // 上坡推力强补偿 (车头朝上 -> 推力放大 1x ~ 2.2x), 前驱不会翻车故可大力
     const fwdW = new CANNON.Vec3(0, 0, -1);
     chassisBody.quaternion.vmult(fwdW, fwdW);
-    const climbBoost = 1 + Math.max(0, fwdW.y) * 0.5;
+    const climbBoost = 1 + Math.max(0, fwdW.y) * 1.2;
     let force = 0;
     if (keys.w) force = MAX_FORCE * boost * climbBoost;
     else if (keys.s) force = -MAX_FORCE * 0.5 * boost;
@@ -3243,9 +3244,12 @@ function animate() {
       );
       camera.lookAt(0, 8, -55);
     } else {
-      // 速度越高 damping 越大 (跟得更紧, 不让车跑远了相机掉队)
-      const damping = 1 - Math.exp(-THREE.MathUtils.lerp(7, 12, vNorm) * dt);
+      // 高速时 damping 极高几乎瞬移跟车; 同时硬盾: 距离超过 1.5x dist 直接 snap
+      const damping = 1 - Math.exp(-THREE.MathUtils.lerp(9, 25, vNorm) * dt);
       camera.position.lerp(camDesired, damping);
+      const camDist = camera.position.distanceTo(camDesired);
+      const maxDist = dist * 1.5;
+      if (camDist > maxDist) camera.position.copy(camDesired);
       camera.lookAt(camTarget);
     }
   }
