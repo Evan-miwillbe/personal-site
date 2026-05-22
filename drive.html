@@ -2762,6 +2762,8 @@ window.addEventListener('keyup', e => {
   const m = keyMap[k];
   if (m) keys[m] = false;
 });
+// 失焦清键: 切到别的 tab/窗口或弹对话框时 keyup 可能丢失, 防止 W 卡死自动开
+window.addEventListener('blur', () => { for (const k in keys) keys[k] = false; });
 
 // ============ MOUSE for camera yaw + cursor ring (sourced from hello.html) ============
 const cursor = document.getElementById('cursor');
@@ -3010,6 +3012,15 @@ function resetCar() {
   chassisBody.velocity.set(0, 0, 0);
   chassisBody.angularVelocity.set(0, 0, 0);
   chassisBody.quaternion.set(0, 0, 0, 1);
+  // 清掉所有按键 + 引擎/转向/刹车残留, 避免"重置后车自动开走再翻"循环
+  for (const k in keys) keys[k] = false;
+  if (vehicle) {
+    for (let i = 0; i < 4; i++) {
+      vehicle.applyEngineForce(0, i);
+      vehicle.setBrake(2, i);
+      vehicle.setSteeringValue(0, i);
+    }
+  }
 }
 
 // ============ HELP ============
@@ -3069,9 +3080,8 @@ function animate() {
     let force = 0;
     if (keys.w) force = MAX_FORCE * boost * climbBoost;
     else if (keys.s) force = -MAX_FORCE * 0.5 * boost;
-    // 四驱: 推力平均分到 4 轮, 力矩远离重心的问题减半 -> 不翻车
-    vehicle.applyEngineForce(force, 0);
-    vehicle.applyEngineForce(force, 1);
+    // 前驱: 引擎力只给前轮 (index 2/3, z=-0.7 车头侧)
+    // 加速时前轮拖车头走 -> 车头被压低反而稳 (后驱翘头容易翻)
     vehicle.applyEngineForce(force, 2);
     vehicle.applyEngineForce(force, 3);
     // 飞跃: vy 超阈值则削顶, 防止跳台/坡顶飞太远
