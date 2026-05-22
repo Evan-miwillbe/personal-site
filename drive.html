@@ -2590,7 +2590,7 @@ function buildVehicle() {
   chassisBody = new CANNON.Body({ mass: 40, material: groundMat });
   chassisBody.addShape(chassisShape);
   chassisBody.position.set(0, 1.5, 55);
-  chassisBody.angularDamping = 0.55;
+  chassisBody.angularDamping = 0.78;
   chassisBody.allowSleep = false;
   world.addBody(chassisBody);
 
@@ -3043,7 +3043,7 @@ const tempQuat = new THREE.Quaternion();
 const camTarget = new THREE.Vector3();
 const camDesired = new THREE.Vector3();
 
-const MAX_FORCE = 320;
+const MAX_FORCE = 240;
 const MAX_BRAKE = 18;
 const STEER_MAX = 0.6;
 const BOOST_MULT = 1.8;
@@ -3069,9 +3069,11 @@ function animate() {
     let force = 0;
     if (keys.w) force = MAX_FORCE * boost * climbBoost;
     else if (keys.s) force = -MAX_FORCE * 0.5 * boost;
-    // 后驱: 车实际朝 local -Z 开, 故后轮是 z=+0.7 那对 (index 0/1)
+    // 四驱: 推力平均分到 4 轮, 力矩远离重心的问题减半 -> 不翻车
     vehicle.applyEngineForce(force, 0);
     vehicle.applyEngineForce(force, 1);
+    vehicle.applyEngineForce(force, 2);
+    vehicle.applyEngineForce(force, 3);
     // 飞跃: vy 超阈值则削顶, 防止跳台/坡顶飞太远
     if (chassisBody.velocity.y > RAMP_LAUNCH_VY_CAP) {
       chassisBody.velocity.y = RAMP_LAUNCH_VY_CAP;
