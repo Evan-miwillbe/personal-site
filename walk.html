@@ -164,8 +164,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:#d4cdc0;color:#2a252
 
 <div class="scrollHint" id="hint">
   <div class="label">行游指引</div>
-  <div class="title">WASD 行走</div>
-  <div class="sub">F 上船 · E 阅卷</div>
+  <div class="title">↑↓ 前后 · ←→ 转向</div>
+  <div class="sub">F 上船 · E 阅卷 · Shift 跑</div>
 </div>
 
 <div class="vignette" aria-hidden="true"></div>
@@ -2001,6 +2001,7 @@ let sprintDoubleTapped = false;
 
 const keyMap = {
   KeyW: 'w', KeyA: 'a', KeyS: 's', KeyD: 'd',
+  ArrowUp: 'w', ArrowDown: 's', ArrowLeft: 'a', ArrowRight: 'd',
   ShiftLeft: 'shift', ShiftRight: 'shift', Space: 'space',
 };
 
@@ -2154,10 +2155,8 @@ window.addEventListener('mouseup', () => { cursorEl.classList.remove('click'); }
 // Mouse movement: locked = camera, unlocked = custom cursor
 window.addEventListener('mousemove', e => {
   if (isLocked) {
-    // movementX/Y from pointer lock delta
-    const dx = e.movementX || e.mozMovementX || e.webkitMovementX || 0;
+    // 坦克控制: 鼠标只调俯仰角, 横向方向由角色 A/D 转向决定
     const dy = e.movementY || e.mozMovementY || e.webkitMovementY || 0;
-    camFollow.userYaw += dx * 0.003;
     camFollow.userPitch = Math.max(-0.6, Math.min(0.4, camFollow.userPitch + dy * 0.002));
     camFollow.yawIdleTimer = 0;
   } else {
@@ -2263,7 +2262,7 @@ helpIc.addEventListener('click', () => {
     stampChar: '助',
     name: '行游指引',
     meta: '滕园 · 竹林晨雾',
-    text: 'WASD 行走 · SHIFT 疾驰 · SPACE 跃\nF 切换走 / 船 (需在停泊点附近)\nE 阅卷 · ESC 关闭对话\nR 回到山门\n鼠标拖拽 转视角',
+    text: '↑↓ / W S = 前进后退 (沿角色面朝方向)\n←→ / A D = 持续左右转 (按多久转多少, 松开停)\nSHIFT 疾驰 · SPACE 跃\nF 切换走 / 船 (需在停泊点附近)\nE 阅卷 · ESC 关闭对话 · R 回山门\n鼠标拖拽 = 仅调俯仰角',
     tags: [],
     hub: [{ label: '知道了', action: closeDialog }],
   });
@@ -2309,29 +2308,31 @@ function updateCameraLerp(dt) {
 
 function updateCharacterMode(dt, time) {
   const body = characterState.body;
-  const inputX = (keys.d ? 1 : 0) - (keys.a ? 1 : 0);
-  const inputZ = (keys.s ? 1 : 0) - (keys.w ? 1 : 0);
-  const hasInput = inputX !== 0 || inputZ !== 0;
+  // 古墓丽影现代版坦克控制: A/D 持续转向 (按多久转多少, 松开停)
+  const inputForward = (keys.w ? 1 : 0) - (keys.s ? 1 : 0);
+  const inputTurn = (keys.d ? 1 : 0) - (keys.a ? 1 : 0);
+  const hasMove = inputForward !== 0;
+  const hasInput = hasMove || inputTurn !== 0;
   characterState.timeSinceDrain = keys.shift ? 0 : characterState.timeSinceDrain + dt;
   if (characterState.timeSinceDrain > CHARACTER.STAMINA_REGEN_DELAY)
     characterState.stamina = Math.min(CHARACTER.STAMINA_MAX, characterState.stamina + CHARACTER.STAMINA_REGEN * dt);
   const canSprint = (keys.shift || sprintDoubleTapped) && characterState.stamina > 0;
-  if (canSprint && hasInput)
+  if (canSprint && hasMove)
     characterState.stamina = Math.max(0, characterState.stamina - CHARACTER.SPRINT_COST * dt);
   const targetSpeed = canSprint ? CHARACTER.SPRINT_SPEED
                    : keys.shift ? CHARACTER.RUN_SPEED
                    : CHARACTER.WALK_SPEED;
-  const yawCam = camFollow.userYaw;
+  // 持续转向: 约 110°/s, 倒车时反向更直觉
+  const TURN_RATE = 1.9;
+  if (inputTurn !== 0) {
+    const turnSign = inputForward < 0 ? -1 : 1;
+    characterState.yaw += inputTurn * turnSign * TURN_RATE * dt;
+  }
   let dirX = 0, dirZ = 0;
-  if (hasInput) {
-    const len = Math.hypot(inputX, inputZ);
-    const nx = inputX/len, nz = inputZ/len;
-    const cy = Math.cos(yawCam), sy = Math.sin(yawCam);
-    dirX = nx * cy + nz * sy;
-    dirZ = -nx * sy + nz * cy;
-    // 黑悟空式 strafe 平滑: yaw 渐进追 mv 方向, 不硬切 (0.12s 周期)
-    const targetYaw = Math.atan2(dirX, -dirZ);
-    characterState.yaw = lerpAngle(characterState.yaw, targetYaw, dt * CHARACTER.YAW_LERP_RATE);
+  if (hasMove) {
+    // 沿角色面朝: yaw=0 → -Z (与 atan2(dirX,-dirZ) 约定一致)
+    dirX = Math.sin(characterState.yaw) * inputForward;
+    dirZ = -Math.cos(characterState.yaw) * inputForward;
   }
   const desiredX = dirX * targetSpeed;
   const desiredZ = dirZ * targetSpeed;
