@@ -2724,6 +2724,24 @@ function buildVehicle() {
 }
 buildVehicle();
 
+// 撞前方挡墙时自动腾起 (用户冲坡 = 自动起飞, 不用按 Space)
+let lastBoostTime = 0;
+chassisBody.addEventListener('collide', (e) => {
+  if (performance.now() - lastBoostTime < 600) return;  // 600ms 防抖
+  const speed = Math.hypot(chassisBody.velocity.x, chassisBody.velocity.z);
+  if (speed < 6) return;  // 高速撞才触发
+  if (chassisBody.position.y > 1.5) return;  // 在空中不再连发
+  // 检测撞击是否来自车前方 (normal 与车头方向有较大对齐)
+  const fwd = new CANNON.Vec3(0, 0, -1);
+  chassisBody.quaternion.vmult(fwd, fwd);
+  const n = e.contact.ni;
+  const dot = n.x * fwd.x + n.z * fwd.z;
+  if (Math.abs(dot) > 0.5) {
+    chassisBody.velocity.y = 9;  // 起飞
+    lastBoostTime = performance.now();
+  }
+});
+
 // ============ INPUT ============
 const keys = { w: false, a: false, s: false, d: false, shift: false, space: false, e: false };
 const keyMap = {
@@ -3100,9 +3118,9 @@ function animate() {
     const brake = (!keys.w && !keys.s) ? 0.6 : 0;
     for (let i = 0; i < 4; i++) vehicle.setBrake(brake, i);
 
-    // jump
-    if (keys.space && Math.abs(chassisBody.velocity.y) < 0.2 && chassisBody.position.y < 1.0) {
-      chassisBody.velocity.y = 5;
+    // jump: Space 主动起跳力加大, 可跳过 ~2m 高度
+    if (keys.space && Math.abs(chassisBody.velocity.y) < 0.5 && chassisBody.position.y < 1.5) {
+      chassisBody.velocity.y = 11;
     }
 
     // brake light
