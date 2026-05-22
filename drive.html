@@ -2669,8 +2669,8 @@ function buildVehicle() {
       new THREE.CircleGeometry(0.1, 16),
       new THREE.MeshStandardMaterial({ color: 0xffe689, emissive: 0xffd060, emissiveIntensity: 1.2 })
     );
-    head.position.set(s * 0.3, 0.05, 1.001);
-    head.rotation.y = 0;
+    head.position.set(s * 0.3, 0.05, -1.001);
+    head.rotation.y = Math.PI;
     carGroup.add(head);
   }
   // 刹车灯 (红)
@@ -2679,8 +2679,8 @@ function buildVehicle() {
       new THREE.CircleGeometry(0.08, 12),
       new THREE.MeshStandardMaterial({ color: 0xff3030, emissive: 0xff0000, emissiveIntensity: 0.3, transparent: true, opacity: 0.5 })
     );
-    brake.position.set(s * 0.3, 0.05, -1.001);
-    brake.rotation.y = Math.PI;
+    brake.position.set(s * 0.3, 0.05, 1.001);
+    brake.rotation.y = 0;
     carGroup.add(brake);
     brakeLightMeshes.push(brake);
   }
