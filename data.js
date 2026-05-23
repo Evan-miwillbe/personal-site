@@ -496,7 +496,7 @@ window.SITE_DATA = {
       greek_marker: "α",
       label_cn: "RUN · 跑步",
       title_cn: "有氧是脑子转得最快的时刻",
-      body_cn: "退伍以后保持的习惯——和 AI 项目的\"慢工\"节奏其实是一样的，都得日复一日地累积。",
+      body_cn: "跑步时我给自己留下一点思考时间，让我应对赶路的慌张。",
       stats: [
         { num: "3:35", label_en: "Full Marathon PB" },
         { num: "1:42", label_en: "Half Marathon PB" }
