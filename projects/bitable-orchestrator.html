@@ -180,14 +180,6 @@
   }
   .cursor-ring.click .circle{transform:scale(.6)}
 
-  /* "未入选" 提示 */
-  .note-banner{
-    background:var(--sand-soft);border-left:3px solid var(--sage);
-    padding:18px 24px;margin:0 0 32px;
-    border-radius:0 8px 8px 0;
-  }
-  .note-banner .nt-lbl{font-family:var(--mono);font-size:10px;color:var(--sage);letter-spacing:.2em;text-transform:uppercase;margin-bottom:6px}
-  .note-banner p{font-size:14.5px;color:var(--ink-soft);line-height:1.7;margin:0}
 </style>
 </head>
 <body>
@@ -202,8 +194,9 @@
 <div class="container">
   <div class="case-head">
     <div class="crumbs">
-      <span>飞书 CLI 投稿（未入选）</span>
-      <span>Case Study · 05</span>
+      <span>飞书 CLI 投稿作品</span>
+      <span>ToB Enterprise</span>
+      <span>Case Study · 06</span>
     </div>
     <h1>bitable-orchestrator</h1>
     <div class="subtitle">
@@ -216,17 +209,6 @@
       <div class="meta-item"><div class="lbl">技术栈</div><div class="val">Claude Code + 飞书 CLI</div></div>
       <div class="meta-item"><div class="lbl">License</div><div class="val">MIT</div></div>
     </div>
-  </div>
-</div>
-
-<!-- 诚实交代：未入选 -->
-<div class="container">
-  <div class="note-banner">
-    <div class="nt-lbl">A NOTE</div>
-    <p>这是同期飞书 CLI 创作者大赛的<strong>第三个投稿（未入选）</strong>。
-       knowledge-healer 和 lark-survey-scoreboard 入选了，<em>这个没有</em>。
-       但我把它一并放在这里——它定位更野心、更工程化、更 ToB enterprise，
-       是我至今做过"系统设计最完整"的一个 Skill。</p>
   </div>
 </div>
 
@@ -331,24 +313,27 @@
   </section>
 </div>
 
-<!-- Chapter 4: 为什么没入选 -->
+<!-- Chapter 4: 我从里面学到的 -->
 <div class="container">
   <section class="chapter">
-    <div class="chapter-label">04 · Why It Didn't Win</div>
-    <h2>定位"重"了一档</h2>
+    <div class="chapter-label">04 · What I Learned</div>
+    <h2>三个"第一次"</h2>
     <p>
-      飞书 CLI 创作者大赛"十佳"评审更倾向<strong>普通飞书用户立刻能用上</strong>的轻量 Skill——
-      knowledge-healer 解决普遍的"知识库自愈"、lark-survey-scoreboard 解决任何培训都能用的"实时评分"。
+      做完 knowledge-healer 和 lark-survey-scoreboard 之后，我想刻意挑一个<strong>更偏 ToB / 更工程化</strong>的题目练手——
+      bitable-orchestrator 就是这次刻意练习的产物。它给我的"第一次"比另两个更多：
     </p>
     <p>
-      bitable-orchestrator 定位偏 ToB enterprise——
-      面向中大企业的"复杂业务流编排"，不是个人用户随手能玩的东西。
-      <em>它的目标用户不是评审能立刻代入的"自己的工作场景"。</em>
+      <strong>第一次设计多阶段安全管线</strong>——意图解析 / 计划生成 / Dry-Run 预演 / 用户确认 / 执行 + 回滚，五段全部可暂停、可回滚。
+      在此之前我做的 Skill 都是"输入 → 输出"一条线，不需要考虑中途出错怎么办。
     </p>
     <p>
-      <strong>但项目质量本身没问题。</strong>
-      5 阶段安全管线、原子回滚、依赖图——这是我至今做过"系统设计最完整"的一个 Skill。
-      不为没入选难过——评审做了合理的选择，定位错位不是质量问题。
+      <strong>第一次显式建模事务回滚</strong>——飞书 OpenAPI 没原生事务，那就在 Skill 层模拟一个：
+      每次操作前记录原值，失败时按反向顺序还原。这逼我去理解"事务"这个概念到底在保护什么。
+    </p>
+    <p>
+      <strong>第一次用拓扑排序做依赖管理</strong>——
+      "查库存→扣库存→通知采购"有先后依赖，不能并行。用有向无环图（DAG）建模操作依赖，
+      拓扑排序后串行执行。这是大学课程里讲过的算法，但第一次真的用上是在这里。
     </p>
     <div class="stat-row">
       <div class="stat-item"><div class="num">5</div><div class="lbl">Stage Pipeline</div></div>
@@ -366,25 +351,23 @@
   </section>
 </div>
 
-<!-- Chapter 5: 反思 -->
+<!-- Chapter 5: 这个产品解决了什么 -->
 <div class="container">
   <section class="chapter">
-    <div class="chapter-label">05 · Reflection</div>
-    <h2>"没入选"不是失败信号</h2>
+    <div class="chapter-label">05 · The Problem It Solves</div>
+    <h2>多维表批量编辑里<br/>"<em>误改难撤销</em>"的真实问题</h2>
     <p>
-      我同期投了 3 个 Skill，2 个入选 1 个没入。这种结果在 ToC 评审里很常见——
-      <strong>评审挑的是"用户面最宽"，不是"工程最复杂"</strong>。
+      飞书多维表的批量操作 API 默认是"一旦执行，立即生效"。中大企业的业务表往往跨多张表、几千上万行记录，
+      <strong>一旦改错，撤销极其困难</strong>——飞书没有"全表 undo"，只能靠备份或人工回填。
     </p>
     <p>
-      但对我个人来说，bitable-orchestrator 给我的东西比另两个更多——
-      它是我第一次设计<strong>多阶段安全管线</strong>、第一次显式建模<strong>事务回滚</strong>、
-      第一次用<strong>拓扑排序</strong>做依赖管理。这些都是工程系统设计的基本功，
-      在 ToC 工具里基本用不到，在 ToB 系统里又是必须的。
+      bitable-orchestrator 在用户和 OpenAPI 之间插入一道<strong>缓冲层</strong>：
+      改之前先用 Dry-Run 看清楚"这次操作会动哪些行、改成什么"，确认后再真正执行；
+      执行过程中如果任何一步失败，按记录好的原值反向回滚。
     </p>
     <p>
-      所以这个项目放在这里——<em>未入选，但完整</em>。
-      它证明我能做"评审看不到但工程必要"的事，
-      这种能力比一次入选更重要。
+      对个人用户来说这层缓冲是"多此一举"——所以它没在 ToC 评审里胜出，这是合理的。
+      但<em>对真正在企业里管几千行业务数据的人</em>来说，这层缓冲就是"敢不敢用 AI 改表"的分界线。
     </p>
   </section>
 </div>

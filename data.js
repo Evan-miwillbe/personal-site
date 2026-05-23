@@ -57,7 +57,7 @@ window.SITE_DATA = {
     essay_total_reads: "6w+",
     feishu_top10_ratio: "2/3",
     activity_stats_cn: "13 DAYS · 77 COMMITS · 47 实验轮次",
-    looking_for_cn: "大厂研究院类研究岗 · AI Agent / DevEx PM · AI 创业团队早期员工 · AI 行业研究"
+    looking_for_cn: "偏研究方向 · 大厂研究院 / 研究助理 · AI Agent 工程师 · AI 产品 · AI 创业团队早期员工"
   },
 
   // 飞书表 contacts —— 主页 "Find me around" 4 行 + hero/contact 区复用
@@ -118,7 +118,7 @@ window.SITE_DATA = {
       year: "2026.04 — 05",
       tagline: "13 天 · v1 → v9.0",
       activity_meta: "77 commits · 47 轮实验",
-      description_short: "独立完成 v1→v9 七轮架构重构 + 47 轮控制实验（31 验证 + 16 消融）。实证 Lost in Middle 效应：关键约束放 prompt 中间合规率 0%、放首尾 100%。框架累计调用 65 次 / 跨度 28 天，单次会话最大并行 spawn 216 个 sub-agent。",
+      description_short: "和 Claude Code 协作完成 v1→v9 七轮架构重构 + 47 轮控制实验（31 验证 + 16 消融）。实证 Lost in Middle 效应：关键约束放 prompt 中间合规率 0%、放首尾 100%。框架累计调用 65 次 / 跨度 28 天，单次会话最大并行 spawn 216 个 sub-agent。",
       description_full: null,
       tags: ["RESEARCH", "CLAUDE CODE", "MULTI-AGENT"],
       tech_stack: [],
@@ -131,7 +131,7 @@ window.SITE_DATA = {
       stamp_char: "研",
       role_in_loop: "i · 理论",
       loop_meta: "47 轮实验 · 12 篇论文",
-      pricetag: "大厂研究院级别的实验严谨度，本科生独立完成。",
+      pricetag: "47 轮实验里每一个机制都接受了消融测试，整条因果链都写在 README 里。",
       sort_order: 1
     },
     {
@@ -155,7 +155,7 @@ window.SITE_DATA = {
       stamp_char: "元",
       role_in_loop: "meta · 元层",
       loop_meta: "31 轮自驱动 · 迭代引擎",
-      pricetag: "把'提炼方法论'本身工程化为元工具——Anthropic 研究员的工作模式。",
+      pricetag: "把'提炼方法论'本身工程化为元工具的一次尝试。",
       sort_order: 2
     },
     {
@@ -179,7 +179,7 @@ window.SITE_DATA = {
       stamp_char: "★",
       role_in_loop: "ii · 工程",
       loop_meta: "3+2 Agent · 7 维诊断",
-      pricetag: "Multi-Agent 方法论的第一个工业级落地——证明'多 Agent 框架不是 Demo'。",
+      pricetag: "把 Multi-Agent 方法论用到一个真实场景（飞书知识库），验证它跑得通。",
       sort_order: 3
     },
     {
@@ -203,7 +203,7 @@ window.SITE_DATA = {
       stamp_char: "★",
       role_in_loop: null,
       loop_meta: null,
-      pricetag: "业务一线 → AI 工具落地的完整闭环——AI 产品经理岗最稀缺的能力。",
+      pricetag: "从美动 HR 实习的真实需求长出来的工具——我尝试理解产品的起点。",
       sort_order: 4
     },
     {
@@ -227,7 +227,7 @@ window.SITE_DATA = {
       stamp_char: "私",
       role_in_loop: null,
       loop_meta: null,
-      pricetag: "2 个月 85 会话长程使用的真实证据，不是 Demo。",
+      pricetag: "我自己每天在用——2 个月 85 会话的真实使用记录。",
       sort_order: 5
     },
     {
@@ -237,10 +237,10 @@ window.SITE_DATA = {
       name_cn: "飞书多维表格批量编排",
       year: "2026.05",
       tagline: "飞书多维表格批量编排",
-      activity_meta: "3 投 2 中的\"那一个\"",
-      description_short: "飞书CLI大赛（投稿），关注飞书多维表格——5 阶段安全管线 + Dry-Run 预演 + 原子回滚 + 依赖图拓扑排序。参赛情况：未入选。评审更倾向轻量普适，这个定位偏 ToB 重，但工程密度自留底气。",
+      activity_meta: "5 阶段安全管线",
+      description_short: "飞书 CLI 大赛投稿作品，关注飞书多维表格批量操作的安全性——5 阶段管线 + Dry-Run 预演 + 原子回滚 + 依赖图拓扑排序，让批量改表前能看清楚再决定。",
       description_full: null,
-      tags: ["同次大赛投稿", "TOB ENTERPRISE", "未入选"],
+      tags: ["FEISHU BITABLE", "TOB ENTERPRISE", "SAFETY PIPELINE"],
       tech_stack: [],
       url_detail: "projects/bitable-orchestrator.html",
       url_github: null,
@@ -252,7 +252,7 @@ window.SITE_DATA = {
       stamp_char: "实",
       role_in_loop: null,
       loop_meta: null,
-      pricetag: "未入选，但完整——展示'评审看不到但工程必要'的系统设计能力。",
+      pricetag: "解决多维表批量编辑'误改难撤销'的真实问题。",
       sort_order: 6
     }
   ],
@@ -482,11 +482,11 @@ window.SITE_DATA = {
     { id: "wn-input", marker: "δ", title_cn: "突破 AI 的输入端壁垒", body_cn: "AI 产出端工具已成熟，但输入端还是壁垒：AI 亲近 Markdown，对 PDF / 复杂图文 / 跨领域文献的理解远没到位。/mineru-pdf 解决了一部分（MinerU API 比 OCR 截图更结构化），但只是把 PDF 转 MD，不等于让 AI 读懂。更大的问题是预训练知识不够：某个小众领域 / 新兴学科 / 内部文档预训练里都没有。怎么通过工具 / 主动建知识库 / 辅助搜索，让 AI 真正读懂跨领域内容？方法还在摸索。", source_url: "https://www.bilibili.com/video/BV13BdfBoELd/", source_label: "张小珺对话 Axiom 洪乐潼" }
   ],
 
-  // § Why me —— Contact 段三条"为什么是我"statement
+  // § 三件我比较在意的事 —— Contact 段
   why_me: [
-    { id: "wm-loop", num: "①", title_cn: "从业务一线到 AI 工具落地的完整闭环", body_cn: "美动 HR 实习 → 识别培训反馈痛点 → 三周开发 → lark-survey-scoreboard → 入选飞书十佳 → larksuite 官方开源库。这是 AI 产品经理岗最稀缺的能力。" },
-    { id: "wm-rigor", num: "②", title_cn: "47 轮控制实验 + 16 轮消融的研究级实证", body_cn: "不是'做了一堆 Skill'，是用大厂研究院级别的实验严谨度把每一个机制都做过因果验证。Lost in Middle 0% vs 100%、机制有效 ≠ 必要——这些洞察是研究员的母语。" },
-    { id: "wm-meta", num: "③", title_cn: "把方法论本身工程化为元工具的元认知能力", body_cn: "多数候选人能做一个项目。少数能从项目里提炼出方法论。我做了第三件事——把'提炼方法论'本身工程化为 auto-new。元工具迭代它的母工具——这是 Anthropic 研究员的工作模式。" }
+    { id: "wm-rigor", num: "①", title_cn: "把每一个机制都放到实验里验证", body_cn: "和 Claude Code 协作做了 47 轮控制实验 + 16 轮消融测试。Lost in Middle 关键约束放中间合规率 0% / 放首尾 100%、机制有效 ≠ 必要——这些结论都来自实验本身，不是凭感觉。这是我目前最在意的部分，也是我想继续做研究类工作的原因。" },
+    { id: "wm-meta", num: "②", title_cn: "把方法论工程化为元工具的尝试", body_cn: "做 Multi-Agent 时发现每轮迭代都在用同一套循环——「读经验→诊断瓶颈→选变量→实验→评估→沉淀」。把这套循环工程化成 auto-new，回过头驱动 Multi-Agent 自己的 31 轮迭代。把'提炼方法论'本身工程化是我现在的一个长期方向。" },
+    { id: "wm-loop", num: "③", title_cn: "从真实业务需求长出工具", body_cn: "美动 HR 实习识别培训反馈痛点 → 三周开发 → lark-survey-scoreboard → 入选飞书十佳 → larksuite 官方开源库。一个从真实需求长出来的工具——我尝试理解产品的过程。自己做的产品和大厂一线 PM 做的事不一样，这是我承认的。" }
   ],
 
   // 主页底部 "Off-screen" 两块（屏幕之外）
