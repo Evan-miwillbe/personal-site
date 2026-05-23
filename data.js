@@ -508,7 +508,7 @@ window.SITE_DATA = {
       greek_marker: "β",
       label_cn: "WRITE · 写作",
       title_cn: "在没有 AI 的时刻，用文字思考",
-      body_cn: "退伍后保持的另一种'慢节奏'。AI 帮我把模糊想法摊开看，文字帮我把它收回去。",
+      body_cn: "在关闭电脑的时候，想用文字记录下每一次体验的'慢节奏'。",
       award_badge_cn: "🏆 上海市校报好新闻通讯类一等奖（市级）— 大师剧《汪尧田》通讯稿",
       stats: [
         { num: "18", label_en: "Personal Essays" },
