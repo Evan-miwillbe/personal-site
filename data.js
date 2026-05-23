@@ -49,7 +49,7 @@ window.SITE_DATA = {
     tagline_en: "I make AI things & tools.",
     tagline_supplement_cn: "22 岁 · AI Skill 与 Multi-Agent 协作框架开发者 · 飞书 CLI 创作者大赛十佳入选",
     bio_short_cn: "滕美名，22 岁，上海。上海对外经贸大学应届，退役军人。从 2026 年 3 月动手做 AI Skill，两个被字节飞书官方选入「十佳」。",
-    bio_origin_cn: "从 2026 年 1 月开始学 AI，感谢 Waytoagi 社区。跨过了很多困难，中间多次想过放弃，但知道这是喜欢的事情，所以，在继续。",
+    bio_origin_cn: "从 2026 年 1 月开始学 AI，感谢 Waytoagi 社区。跨过了很多困难，中间多次想过放弃，但知道这是喜欢的事情，所以，还在加油。",
     hero_eyebrow: "Hello · 你好 · A PERSONAL INDEX, 2026",
     marathon_full_pb: "3:35",
     marathon_half_pb: "1:42",
