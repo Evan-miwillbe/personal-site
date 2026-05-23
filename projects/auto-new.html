@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>auto-new · Skill 自迭代框架 · 滕美名</title>
+<meta name="description" content="从 31 轮迭代抽离出通用循环 · 4 范式 + 16 铁律 · 元工具迭代它的母工具" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F6F3EB;
+    --card:#fdfaf3;
+    --ink:#2a2520;
+    --ink-soft:#6b6358;
+    --ink-mute:#a39d8e;
+    --line:#dcd5c1;
+    --line-soft:#ebe5d2;
+    --accent:#7F2020;
+    --accent-hover:#a02828;
+    --accent-soft:#f0e1de;
+    --sage:#869B7E;
+    --sage-soft:#dde2d6;
+    --sand:#C9CAAC;
+    --sand-soft:#e6e3d0;
+    --orange:var(--accent);
+    --orange-soft:var(--accent-soft);
+    --display:"Cormorant Garamond","Noto Serif SC",ui-serif,serif;
+    --serif:"Fraunces","Noto Serif SC",ui-serif,serif;
+    --hanzi:"Noto Serif SC","Songti SC",serif;
+    --sans:"Inter","HarmonyOS Sans SC","PingFang SC",ui-sans-serif,system-ui,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,monospace;
+    --shadow-sm:0 1px 2px rgba(42,37,32,.04), 0 2px 6px rgba(42,37,32,.04);
+    --shadow:0 4px 12px rgba(42,37,32,.06), 0 8px 24px rgba(42,37,32,.04);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  ::selection{background:var(--orange);color:#fff}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.75;-webkit-font-smoothing:antialiased}
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(ellipse 800px 400px at 100% -10%, var(--accent-soft), transparent),
+      radial-gradient(ellipse 600px 400px at 0% 80%, var(--sand-soft), transparent);
+    opacity:.7;
+  }
+  body::after{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='5'/><feColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.08 0 0 0 0 0.05 0 0 0 0.04 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    opacity:.5;mix-blend-mode:multiply;
+  }
+  a{color:var(--ink);transition:color .2s}
+  a:hover{color:var(--orange)}
+  .container{max-width:920px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
+  .container.wide{max-width:1200px}
+  header.top{padding:28px 0;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);margin-bottom:64px}
+  .back-link{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:13px;color:var(--ink-soft);text-decoration:none;padding:8px 14px;border-radius:10px;transition:all .2s}
+  .back-link:hover{background:var(--orange-soft);color:var(--orange)}
+  .back-link .arrow{font-size:16px}
+  .logo{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-size:18px;font-weight:600;text-decoration:none}
+  .logo .seal{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;background:var(--orange);color:#fff;border-radius:4px;font-family:var(--hanzi);font-size:16px;font-weight:600;transform:rotate(-3deg);position:relative}
+  .logo .seal::after{content:"";position:absolute;inset:-3px;border:1px solid var(--accent);border-radius:5px;transform:rotate(2deg);opacity:.4}
+  .case-head{padding-bottom:64px;border-bottom:1px solid var(--line);margin-bottom:64px}
+  .case-head .crumbs{display:flex;gap:8px;font-family:var(--mono);font-size:11px;color:var(--orange);letter-spacing:.18em;text-transform:uppercase;margin-bottom:18px}
+  .case-head .crumbs span:not(:last-child)::after{content:"·";margin-left:8px;color:var(--ink-mute)}
+  .case-head h1{font-family:var(--display);font-style:italic;font-size:64px;font-weight:600;letter-spacing:-.02em;line-height:1.05;margin-bottom:18px}
+  .case-head .subtitle{font-size:22px;color:var(--ink-soft);line-height:1.5;max-width:680px;margin-bottom:32px}
+  .case-meta{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;padding:24px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .case-meta .meta-item .lbl{font-family:var(--mono);font-size:10px;color:var(--ink-mute);letter-spacing:.18em;text-transform:uppercase;margin-bottom:6px}
+  .case-meta .meta-item .val{font-family:var(--serif);font-size:16px;font-weight:500;color:var(--ink)}
+  @media(max-width:768px){.case-head h1{font-size:42px}.case-head .subtitle{font-size:18px}.case-meta{grid-template-columns:repeat(2,1fr);gap:18px}}
+  section.chapter{margin-bottom:80px}
+  .chapter-label{font-family:var(--mono);font-size:11px;color:var(--orange);letter-spacing:.24em;text-transform:uppercase;font-weight:600;margin-bottom:14px}
+  .chapter h2{font-family:var(--display);font-size:38px;font-weight:500;line-height:1.2;letter-spacing:-.01em;margin-bottom:24px}
+  .chapter h2 em{color:var(--accent);font-style:italic}
+  .chapter p{font-size:17px;color:var(--ink-soft);line-height:1.85;margin-bottom:18px}
+  .chapter p strong{color:var(--ink);font-weight:600}
+  .chapter .quote{font-family:var(--serif);font-style:italic;font-size:22px;line-height:1.6;color:var(--ink);border-left:3px solid var(--orange);padding:16px 0 16px 28px;margin:32px 0}
+  .chapter .quote .src{display:block;font-family:var(--mono);font-style:normal;font-size:12px;color:var(--ink-mute);letter-spacing:.06em;margin-top:10px}
+  .stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin:32px 0;padding:32px;background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow-sm)}
+  @media(max-width:768px){.stat-row{grid-template-columns:1fr;padding:24px}}
+  .stat-item{text-align:center}
+  .stat-item .num{font-family:var(--display);font-style:italic;font-size:48px;font-weight:600;color:var(--orange);line-height:1}
+  .stat-item .num small{font-size:18px;color:var(--ink-mute);font-weight:400;font-style:normal}
+  .stat-item .lbl{font-size:13px;color:var(--ink-soft);margin-top:8px;line-height:1.5}
+  /* 4 范式 cards */
+  .paradigm-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin:28px 0}
+  @media(max-width:680px){.paradigm-grid{grid-template-columns:1fr}}
+  .paradigm-card{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:22px 24px;box-shadow:var(--shadow-sm);
+    border-left:4px solid var(--sage);
+  }
+  .paradigm-card:nth-child(2){border-left-color:var(--accent)}
+  .paradigm-card:nth-child(3){border-left-color:var(--sand)}
+  .paradigm-card:nth-child(4){border-left-color:var(--ink-soft)}
+  .paradigm-card .pc-tag{font-family:var(--mono);font-size:10px;color:var(--ink-mute);letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}
+  .paradigm-card h4{font-family:var(--serif);font-size:18px;font-weight:600;margin-bottom:8px;letter-spacing:-.005em}
+  .paradigm-card h4 em{color:var(--accent);font-style:italic;font-family:var(--display)}
+  .paradigm-card p{font-size:14px;color:var(--ink-soft);line-height:1.7;margin:0}
+  /* 16 铁律 list */
+  .iron-list{display:grid;gap:14px;margin:24px 0}
+  .iron-item{
+    background:var(--card);border:1px solid var(--line);border-left:3px solid var(--accent);
+    border-radius:8px;padding:16px 20px;
+  }
+  .iron-item .ii-rule{font-family:var(--serif);font-size:16px;font-weight:600;color:var(--ink);margin-bottom:6px;line-height:1.45}
+  .iron-item .ii-rule em{color:var(--accent);font-style:italic;font-family:var(--display)}
+  .iron-item .ii-body{font-size:14px;color:var(--ink-soft);line-height:1.7}
+  /* 闭环 diagram */
+  .loop-diagram{
+    background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:32px 24px;margin:32px 0;text-align:center;
+    box-shadow:var(--shadow-sm);
+  }
+  .loop-diagram .ld-row{
+    display:flex;justify-content:center;align-items:center;gap:14px;
+    flex-wrap:wrap;font-family:var(--serif);font-size:15px;color:var(--ink);
+  }
+  .loop-diagram .ld-node{
+    padding:10px 16px;background:var(--bg);border:1px solid var(--line);
+    border-radius:99px;font-weight:500;
+  }
+  .loop-diagram .ld-node.meta{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+  .loop-diagram .ld-arrow{color:var(--accent);font-family:var(--display);font-style:italic;font-size:20px}
+  .loop-diagram .ld-caption{
+    margin-top:16px;font-family:var(--mono);font-size:11px;color:var(--ink-mute);
+    letter-spacing:.14em;text-transform:uppercase;
+  }
+  .next-bar{display:flex;justify-content:space-between;align-items:center;padding:48px 0;border-top:1px solid var(--line);margin-top:48px}
+  .next-bar a{display:flex;flex-direction:column;gap:4px;text-decoration:none}
+  .next-bar a .nb-lbl{font-family:var(--mono);font-size:11px;color:var(--ink-mute);letter-spacing:.16em;text-transform:uppercase}
+  .next-bar a .nb-name{font-family:var(--serif);font-size:20px;font-weight:600;color:var(--ink);transition:color .2s}
+  .next-bar a:hover .nb-name{color:var(--orange)}
+  .next-bar a.right{text-align:right}
+  footer.foot{text-align:center;padding:32px 0 48px;color:var(--ink-mute);font-family:var(--mono);font-size:11px;letter-spacing:.12em;border-top:1px solid var(--line)}
+  footer.foot a{color:var(--ink-soft)}
+  .cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:12px;font-size:14px;font-weight:600;text-decoration:none;transition:all .2s}
+  .btn.primary{background:var(--ink);color:#fff}
+  .btn.primary:hover{background:var(--orange)}
+  .btn.ghost{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+  .btn.ghost:hover{border-color:var(--orange);color:var(--orange)}
+  .jd-block{
+    background:var(--accent-soft);border:1px solid var(--accent);border-radius:12px;
+    padding:24px 28px;margin-top:32px;
+  }
+  .jd-block .jd-head{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px;font-weight:600}
+  .jd-block ul{list-style:none;padding:0;margin:0}
+  .jd-block li{padding:8px 0;border-bottom:1px dashed rgba(127,32,32,.2);font-size:14.5px;color:var(--ink);line-height:1.7}
+  .jd-block li:last-child{border-bottom:none}
+  .jd-block li strong{color:var(--accent);font-weight:600}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header class="top">
+    <a href="../index.html" class="back-link"><span class="arrow">←</span> 回到主页</a>
+    <a href="../index.html" class="logo"><span class="seal">滕</span>Teng Meiming</a>
+  </header>
+</div>
+
+<div class="container">
+  <div class="case-head">
+    <div class="crumbs">
+      <span>Skill 自迭代框架</span>
+      <span>Case Study · 02</span>
+    </div>
+    <h1>auto-new</h1>
+    <div class="subtitle">
+      从 31 轮迭代中抽离出通用循环，工程化为独立 Skill。<br/>
+      4 种实验范式 + 16 条工程铁律。<strong style="color:var(--ink)">元工具迭代它的母工具</strong>。
+    </div>
+    <div class="case-meta">
+      <div class="meta-item"><div class="lbl">时间</div><div class="val">2026.05 · v3.5</div></div>
+      <div class="meta-item"><div class="lbl">范式</div><div class="val">iterative / quant / select / verify</div></div>
+      <div class="meta-item"><div class="lbl">驱动</div><div class="val">Multi-Agent 31 轮自迭代</div></div>
+      <div class="meta-item"><div class="lbl">角色</div><div class="val">独立设计 / 开发</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- WIP-HERO: 等待补充真实 iteration log 截图 / GIF。当前用 SVG 抽象图作为成品级占位。 -->
+<div class="container wide">
+  <figure class="hero-image" data-wip="auto-new hero · 等待真实 iteration log 截图 / GIF 替换抽象 SVG">
+    <svg viewBox="0 0 900 380" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:auto;background:#F6F3EB" role="img" aria-label="auto-new meta-iteration loop · 应用层 → 元层 → 应用层 v+1">
+      <defs>
+        <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#7F2020"/>
+        </marker>
+        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#dcd5c1" stroke-width=".5" opacity=".5"/>
+        </pattern>
+      </defs>
+      <rect width="900" height="380" fill="url(#grid)"/>
+
+      <!-- Top labels -->
+      <text x="150" y="50" font-family="JetBrains Mono, monospace" font-size="11" fill="#a39d8e" letter-spacing="2" text-anchor="middle">APPLICATION · v</text>
+      <text x="450" y="50" font-family="JetBrains Mono, monospace" font-size="11" fill="#7F2020" letter-spacing="2" text-anchor="middle">META · AUTO-NEW</text>
+      <text x="750" y="50" font-family="JetBrains Mono, monospace" font-size="11" fill="#a39d8e" letter-spacing="2" text-anchor="middle">APPLICATION · v+1</text>
+
+      <!-- Left block: Multi-Agent v -->
+      <rect x="50" y="80" width="200" height="180" rx="8" fill="#fdfaf3" stroke="#a39d8e" stroke-width="1.5"/>
+      <text x="150" y="135" font-family="Cormorant Garamond, serif" font-style="italic" font-size="28" fill="#2a2520" text-anchor="middle">Multi-Agent</text>
+      <text x="150" y="165" font-family="Cormorant Garamond, serif" font-style="italic" font-size="22" fill="#7F2020" text-anchor="middle">Research</text>
+      <text x="150" y="200" font-family="Inter, sans-serif" font-size="11" fill="#6b6358" text-anchor="middle">v6.4</text>
+      <line x1="80" y1="220" x2="220" y2="220" stroke="#dcd5c1" stroke-width="1"/>
+      <text x="150" y="240" font-family="JetBrains Mono, monospace" font-size="10" fill="#a39d8e" text-anchor="middle" letter-spacing="1">17 hooks · 893 lines</text>
+
+      <!-- Center block: auto-new (highlighted) -->
+      <rect x="350" y="80" width="200" height="180" rx="8" fill="#f0e1de" stroke="#7F2020" stroke-width="2"/>
+      <text x="450" y="135" font-family="Cormorant Garamond, serif" font-style="italic" font-size="28" fill="#7F2020" text-anchor="middle">auto-new</text>
+      <text x="450" y="160" font-family="Inter, sans-serif" font-size="12" fill="#7F2020" text-anchor="middle">v3.5</text>
+      <line x1="380" y1="180" x2="520" y2="180" stroke="#7F2020" stroke-width="1" stroke-dasharray="2 3"/>
+      <text x="450" y="200" font-family="JetBrains Mono, monospace" font-size="10" fill="#7F2020" text-anchor="middle" letter-spacing="1">4 PARADIGMS</text>
+      <text x="450" y="218" font-family="JetBrains Mono, monospace" font-size="10" fill="#7F2020" text-anchor="middle" letter-spacing="1">16 IRON RULES</text>
+      <text x="450" y="245" font-family="Cormorant Garamond, serif" font-style="italic" font-size="14" fill="#7F2020" text-anchor="middle">read · diagnose · iterate</text>
+
+      <!-- Right block: Multi-Agent v+1 -->
+      <rect x="650" y="80" width="200" height="180" rx="8" fill="#fdfaf3" stroke="#a39d8e" stroke-width="1.5"/>
+      <text x="750" y="135" font-family="Cormorant Garamond, serif" font-style="italic" font-size="28" fill="#2a2520" text-anchor="middle">Multi-Agent</text>
+      <text x="750" y="165" font-family="Cormorant Garamond, serif" font-style="italic" font-size="22" fill="#7F2020" text-anchor="middle">Research</text>
+      <text x="750" y="200" font-family="Inter, sans-serif" font-size="11" fill="#6b6358" text-anchor="middle">v9.0</text>
+      <line x1="680" y1="220" x2="820" y2="220" stroke="#dcd5c1" stroke-width="1"/>
+      <text x="750" y="240" font-family="JetBrains Mono, monospace" font-size="10" fill="#a39d8e" text-anchor="middle" letter-spacing="1">2 keep · 453 lines</text>
+
+      <!-- Arrows (forward) -->
+      <line x1="260" y1="170" x2="345" y2="170" stroke="#7F2020" stroke-width="2" marker-end="url(#ah)"/>
+      <line x1="560" y1="170" x2="645" y2="170" stroke="#7F2020" stroke-width="2" marker-end="url(#ah)"/>
+
+      <!-- Bottom feedback loop -->
+      <path d="M750 270 Q450 360 150 270" stroke="#7F2020" stroke-width="1.5" fill="none" stroke-dasharray="6 4" marker-end="url(#ah)"/>
+      <text x="450" y="345" font-family="Cormorant Garamond, serif" font-style="italic" font-size="16" fill="#7F2020" text-anchor="middle">31 rounds · meta-loop reinforces application layer</text>
+    </svg>
+    <figcaption>FIG. 0 · The Meta-Loop — auto-new 驱动 Multi-Agent v6.4 → v9.0 全 31 轮自迭代</figcaption>
+  </figure>
+</div>
+
+<!-- Chapter 1: Meta-shift -->
+<div class="container">
+  <section class="chapter">
+    <div class="chapter-label">01 · The Meta-shift</div>
+    <h2>做完 Multi-Agent 第 7 轮，<br/>我发现一件有趣的事</h2>
+    <p>
+      做 Multi-Agent Research 做到第 7 轮的时候，我注意到一件有趣的事——每一轮做的事其实是同一套循环：
+      <strong>读上轮经验 → 诊断瓶颈 → 选 1–2 个变量 → 跑实验 → 评估 → 决定保留或回退 → 写新经验</strong>。
+    </p>
+    <p>
+      这不是研究框架特有的——这是<strong>任何可编辑资产</strong>的通用迭代模式。
+    </p>
+    <p>
+      更进一步，我发现自己反复踩同一些坑——<strong>水床效应</strong>（压缩 A 组件，B 组件膨胀）、
+      <strong>目标漂移</strong>（从"改进 skill"滑向"跑研究确认内容"）、
+      <strong>验证完成后该转型却继续验证</strong>。
+      这些不是研究框架的 bug，这是<em style="color:var(--accent);font-style:italic">长程自迭代本身的失败模式</em>。
+    </p>
+    <div class="quote">
+      Multi-Agent 是我做的产品。<br/>
+      auto-new 是我做的"<em style="color:var(--accent);font-style:italic;font-family:var(--display)">做产品的方法</em>"。
+      <span class="src">— auto-new 设计动机</span>
+    </div>
+    <p>
+      于是我做了第二件事——把这套迭代方法工程化为独立 Skill，叫 <strong>auto-new</strong>。
+      它接受任何 target 文件、任何 objective、N 轮实验。
+    </p>
+  </section>
+</div>
+
+<!-- Chapter 2: 4 范式 -->
+<div class="container">
+  <section class="chapter">
+    <div class="chapter-label">02 · Four Paradigms</div>
+    <h2>4 种实验范式——<br/><em>不同任务用不同手</em></h2>
+    <p>不同任务需要不同的实验设计。auto-new 提供 4 种范式让你选：</p>
+    <div class="paradigm-grid">
+      <div class="paradigm-card">
+        <div class="pc-tag">i · iterative</div>
+        <h4><em>渐进迭代</em></h4>
+        <p>适合架构演进。每轮改 1–2 个变量，小步快跑。<br/><strong>例</strong>：Multi-Agent v6.4 → v9.0。</p>
+      </div>
+      <div class="paradigm-card">
+        <div class="pc-tag">ii · quantitative</div>
+        <h4><em>参数扫描</em></h4>
+        <p>适合超参数寻优。同一个任务跑不同参数。<br/><strong>例</strong>：MinerU PDF→MD 的 worker 数量寻优（3 worker 最优，11x 加速）。</p>
+      </div>
+      <div class="paradigm-card">
+        <div class="pc-tag">iii · selective</div>
+        <h4><em>候选筛选</em></h4>
+        <p>适合从多个方案中选最优。生成 N 个候选，跑评估，挑最好的。</p>
+      </div>
+      <div class="paradigm-card">
+        <div class="pc-tag">iv · verification</div>
+        <h4><em>假设验证</em></h4>
+        <p>适合证伪假设。<strong>Verifier's Rule</strong>：任务必须可验证才值得做。</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Chapter 3: 16 铁律 -->
+<div class="container">
+  <section class="chapter">
+    <div class="chapter-label">03 · Sixteen Iron Rules</div>
+    <h2>16 条工程铁律——<br/><em>从血泪中沉淀</em></h2>
+    <p>每一条都对应至少一次实战中的失败。挑几条关键的：</p>
+    <div class="iron-list">
+      <div class="iron-item">
+        <div class="ii-rule"><em>架构 vs 参数</em> 10–100x 杠杆差异</div>
+        <div class="ii-body">同样的时间，改架构的收益是改参数的 10–100 倍。<strong>优先改架构</strong>。</div>
+      </div>
+      <div class="iron-item">
+        <div class="ii-rule"><em>水床效应</em> · 全局核算</div>
+        <div class="ii-body">压缩 A 组件，B 组件膨胀。必须做系统级核算，不能只看局部。Multi-Agent R7 数据：Expert 省 13% / QualityReviewer 反增 21% / 系统总量几乎零。</div>
+      </div>
+      <div class="iron-item">
+        <div class="ii-rule"><em>噪声带协议</em></div>
+        <div class="ii-body">区分真实改进 vs 测量噪声。如果实验间差异 < 10%，可能是噪声，不要据此做决策。</div>
+      </div>
+      <div class="iron-item">
+        <div class="ii-rule"><em>Verifier's Rule</em> · 可验证性预检</div>
+        <div class="ii-body">任务开始前，必须先回答"我怎么知道这个改动是改进还是变差?"。</div>
+      </div>
+      <div class="iron-item">
+        <div class="ii-rule"><em>L1 / L2 / L3</em> 改进层级</div>
+        <div class="ii-body">L1 架构 / L2 行为 / L3 参数。先定位问题在哪一层，再改对应的东西。在 L3 改 L1 的问题，永远改不好。</div>
+      </div>
+      <div class="iron-item">
+        <div class="ii-rule"><em>跨 session 状态持久化</em></div>
+        <div class="ii-body">支持"睡前启动、醒来验收"的 batch 自主模式。</div>
+      </div>
+    </div>
+    <p style="font-size:14px;color:var(--ink-mute);font-style:italic;margin-top:16px">
+      （完整 16 条见 GitHub 仓库 README。）
+    </p>
+  </section>
+</div>
+
+<!-- Chapter 4: 闭环 -->
+<div class="container">
+  <section class="chapter">
+    <div class="chapter-label">04 · Closed Loop</div>
+    <h2>元工具迭代它的<br/><em>母工具</em></h2>
+    <p>这是 auto-new 最有意思的一件事。</p>
+    <p>
+      Multi-Agent v6.4 → v9.0 全 <strong>31 轮迭代</strong>由 auto-new 驱动。
+      元工具迭代它的母工具——形成「应用层 → 元层 → 反哺应用层」完整闭环。
+    </p>
+    <div class="loop-diagram">
+      <div class="ld-row">
+        <div class="ld-node">应用层 · Multi-Agent</div>
+        <div class="ld-arrow">→</div>
+        <div class="ld-node meta">元层 · auto-new</div>
+        <div class="ld-arrow">→</div>
+        <div class="ld-node">应用层 · Multi-Agent v+1</div>
+      </div>
+      <div class="ld-caption">META-LOOP · 31 ROUNDS · v6.4 → v9.0</div>
+    </div>
+    <p>
+      同时，我用 auto-new 的 quantitative 模式跑了另一个完全不同领域的任务——
+      <strong>MinerU PDF 转 Markdown</strong>。通过参数扫描确定 3 worker 最优配置（41 篇 / 6.4min，11x 加速）。
+    </p>
+    <div class="stat-row">
+      <div class="stat-item"><div class="num">31<small>轮</small></div><div class="lbl">Multi-Agent 自迭代<br/>v6.4 → v9.0</div></div>
+      <div class="stat-item"><div class="num">11<small>x</small></div><div class="lbl">MinerU PDF→MD<br/>加速倍数</div></div>
+      <div class="stat-item"><div class="num">2<small>领域</small></div><div class="lbl">研究框架 + 工程工具<br/>同一引擎跨领域复用</div></div>
+    </div>
+    <p>
+      这证明了一件事：<strong>auto-new 不是 Multi-Agent 的副产品，它是真正的通用 Skill 自迭代引擎</strong>。
+    </p>
+  </section>
+</div>
+
+<!-- Chapter 5: Reflection -->
+<div class="container">
+  <section class="chapter">
+    <div class="chapter-label">05 · Reflection</div>
+    <h2>为什么这件事<em>重要</em></h2>
+    <div class="quote">
+      多数候选人能做一个项目。少数能从项目里提炼出方法论。<br/>
+      <em style="color:var(--accent);font-style:italic;font-family:var(--display)">我做了第三件事</em>——
+      把"提炼方法论"本身工程化为 auto-new。
+      <span class="src">— auto-new 设计哲学</span>
+    </div>
+    <p>
+      设计哲学融合：
+      <strong>Karpathy autoresearch</strong>（单一可编辑资产 + 固定评估 + git 棘轮）、
+      <strong>TextGrad / GEPA（Nature 2025）</strong>的提示词优化范式、
+      <strong>ClawHub 社区</strong>的 Skill 设计实践。
+    </p>
+    <p>
+      这是 Anthropic 研究员的工作模式——他们做的所有工具最终都会指向"做工具的更好方式"。
+      auto-new 是我第一次独立完成这种<em style="color:var(--accent);font-style:italic">元跃迁</em>的工程实践。
+    </p>
+
+    <div class="jd-block">
+      <div class="jd-head">§ 面向北斗 Auto R&D Agent / 智能体自进化课题的直接价值</div>
+      <ul>
+        <li><strong>i.</strong> "经验提炼 → 策略更新"的具体工程范式（对应 JD 中 online learning / 自反思 / 经验外部记忆机制）</li>
+        <li><strong>ii.</strong> "压缩回模型参数 vs 写入外部记忆"两条路径的早期工程对比</li>
+        <li><strong>iii.</strong> 长 session 状态持久化的 batch 实验设计</li>
+        <li><strong>iv.</strong> 跨任务复用同一套迭代引擎的实证案例</li>
+      </ul>
+    </div>
+
+    <div class="cta-row">
+      <a href="https://github.com/Evan-miwillbe" target="_blank" class="btn primary">→ GitHub · 查看 Skill</a>
+      <a href="multi-agent-research.html" class="btn ghost">← 回到 Multi-Agent Research</a>
+    </div>
+  </section>
+</div>
+
+<div class="container">
+  <div class="next-bar">
+    <a href="multi-agent-research.html"><span class="nb-lbl">← 上一个项目</span><span class="nb-name">Multi-Agent Research</span></a>
+    <a href="knowledge-healer.html" class="right"><span class="nb-lbl">下一个项目 →</span><span class="nb-name">knowledge-healer</span></a>
+  </div>
+</div>
+
+<footer class="foot">
+  <div class="container">
+    Made by 滕美名 · 2026 · Shanghai &nbsp;|&nbsp;
+    <a href="../index.html">主页</a> · <a href="../editorial.html">编辑版</a> · <a href="../walk.html">走路</a> · <a href="../drive.html">开车</a>
+  </div>
+</footer>
+
+<!-- WIP self-marker: 只有作者本人通过 DevTools / ?wip=1 可见 -->
+<script src="../scripts/wip-marker.js" defer></script>
+
+</body>
+</html>
