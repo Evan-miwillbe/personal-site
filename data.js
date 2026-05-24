@@ -476,7 +476,7 @@ window.SITE_DATA = {
 
   // § What's Next —— 2026 下半年要做的（4 个方向）
   whats_next: [
-    { id: "wn-video", marker: "α", title_cn: "开一个视频分享账号，把过程讲出来", body_cn: "过去 4 个月做的东西大部分留在了 README 和 commit 里。下一步想把'怎么和 AI 协作做 Skill''47 轮实验里学到的东西'用视频讲清楚——不是教程，是过程的复盘。文字适合沉淀，视频适合传染。" },
+    { id: "wn-video", marker: "α", title_cn: "开一个视频分享账号，把过程讲出来", body_cn: "过去 3 个月做的东西大部分留在了 README 和 commit 里。下一步想把'怎么和 AI 协作做 Skill''47 轮实验里学到的东西'用视频讲清楚——不是教程，是过程的复盘。文字适合沉淀，视频适合传染。" },
     { id: "wn-iterate", marker: "β", title_cn: "让现有 Skill 进入持续迭代状态", body_cn: "v9.0 是阶段性收敛，不是终点。日常阅读 / 看视频 / 学习里冒出来的新想法和见解，都应该有路径反哺到 Skill 里——让工具跟着我的认知一起长，而不是停在某一版冻起来。" },
     { id: "wn-real", marker: "γ", title_cn: "做立足真实业务的 Skill", body_cn: "lark-survey-scoreboard 是个起点——它从美动 HR 实习的真实痛点长出来，而不是为了'做个 Skill 而做'。下一步继续找真实问题、真实需求、有真实用户的场景，用过往项目经验直接落地，不为技术炫技。" },
     { id: "wn-input", marker: "δ", title_cn: "突破 AI 的输入端壁垒", body_cn: "AI 产出端工具已成熟，但输入端还是壁垒：AI 亲近 Markdown，对 PDF / 复杂图文 / 跨领域文献的理解远没到位。/mineru-pdf 解决了一部分（MinerU API 比 OCR 截图更结构化），但只是把 PDF 转 MD，不等于让 AI 读懂。更大的问题是预训练知识不够：某个小众领域 / 新兴学科 / 内部文档预训练里都没有。怎么通过工具 / 主动建知识库 / 辅助搜索，让 AI 真正读懂跨领域内容？方法还在摸索。", source_url: "https://www.bilibili.com/video/BV13BdfBoELd/", source_label: "张小珺对话 Axiom 洪乐潼" }
