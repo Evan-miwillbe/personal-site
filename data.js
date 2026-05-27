@@ -132,6 +132,7 @@ window.SITE_DATA = {
       role_in_loop: "i · 理论",
       loop_meta: "47 轮实验 · 12 篇论文",
       pricetag: "47 轮实验里每一个机制都接受了消融测试，整条因果链都写在 README 里。",
+      pricetag_link: { keyword: "README", url: "projects/multi-agent-research-readme.html" },
       sort_order: 1
     },
     {
