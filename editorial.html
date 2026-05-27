@@ -8,7 +8,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&family=Noto+Serif+SC:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="data.js"></script>
 <style>
   :root{
     --paper:#F6F3EB;
@@ -397,113 +396,212 @@
     font-weight:500;
   }
 
+  /* ---------- 顶部导航 ---------- */
+  .top-nav{
+    position:fixed;top:0;left:0;right:0;
+    padding:18px 32px;display:flex;justify-content:space-between;align-items:center;
+    font-family:var(--mono);font-size:11px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--ink-mute);
+    background:rgba(246,243,235,.88);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--rule);z-index:50;
+  }
+  .top-nav a{
+    color:var(--ink-soft);border:none;text-decoration:none;
+    transition:color .2s;padding:4px 8px;
+  }
+  .top-nav a:hover{color:var(--accent)}
+  .top-nav .right{display:flex;gap:12px}
+
+  /* ---------- 章节正文 ---------- */
+  .chapter{margin-bottom:88px;scroll-margin-top:80px}
+  .chapter .ch-eyebrow{
+    display:flex;align-items:baseline;gap:18px;
+    margin-bottom:14px;
+  }
+  .chapter .ch-roman{
+    font-family:var(--serif-en);font-style:italic;
+    font-size:18px;color:var(--accent);
+  }
+  .chapter .ch-label{
+    font-family:var(--mono);font-size:11px;
+    letter-spacing:.32em;text-transform:uppercase;
+    color:var(--ink-mute);
+  }
+  .chapter .ch-date{
+    font-family:var(--mono);font-size:11px;
+    color:var(--ink-mute);letter-spacing:.12em;
+    margin-left:auto;
+  }
+  .chapter h2{
+    font-family:var(--serif);font-size:28px;font-weight:500;
+    color:var(--ink);line-height:1.4;letter-spacing:.02em;
+    margin-bottom:24px;padding-bottom:18px;
+    border-bottom:1px solid var(--rule);
+  }
+  .chapter h2 em{
+    color:var(--accent);font-style:normal;
+    border-bottom:2px solid var(--accent-soft);
+  }
+  .chapter p{
+    margin-bottom:18px;
+    color:var(--ink);font-family:var(--serif);
+    font-size:16.5px;line-height:1.95;text-indent:2em;
+  }
+  .chapter p.no-indent{text-indent:0}
+  .chapter p strong{color:var(--ink);font-weight:500}
+  .chapter p em{
+    color:var(--accent);font-style:normal;
+    border-bottom:1px solid var(--accent-soft);padding:0 2px;
+  }
+  .chapter .ch-aside{
+    margin:24px 0;padding:14px 22px;
+    background:var(--paper-deep);border-left:2px solid var(--accent);
+    font-family:var(--serif);font-style:italic;
+    color:var(--ink-soft);font-size:15px;line-height:1.8;
+  }
+  .chapter .ch-aside p{text-indent:0;margin-bottom:0;font-style:italic;color:inherit}
+
+  /* ---------- Prologue / Epilogue ---------- */
+  .prologue, .epilogue{
+    margin-bottom:96px;
+    padding:32px 0;border-top:1px solid var(--accent);border-bottom:1px solid var(--accent);
+  }
+  .prologue p, .epilogue p{
+    font-family:var(--serif);font-size:18px;line-height:2;
+    color:var(--ink);text-indent:2em;
+    margin-bottom:16px;
+  }
+  .prologue p:last-child, .epilogue p:last-child{margin-bottom:0}
+  .prologue p em, .epilogue p em{
+    color:var(--accent);font-style:normal;
+    border-bottom:1px solid var(--accent-soft);
+  }
+  .prologue .pro-label, .epilogue .pro-label{
+    text-align:center;font-family:var(--mono);font-size:11px;
+    letter-spacing:.32em;text-transform:uppercase;
+    color:var(--accent);margin-bottom:22px;
+  }
+
   /* ---------- 响应式 ---------- */
   @media(max-width:600px){
-    .page{padding:64px 22px 48px}
+    .page{padding:80px 22px 48px}
     .nameplate{margin-bottom:64px}
     .nameplate .surname-cn{font-size:60px}
-    .index-row{grid-template-columns:60px 1fr;gap:14px}
-    .index-row .tag{grid-column:2;margin-top:6px}
-    .work-entry h3{font-size:22px}
-    .lede{font-size:18px}
-    .eyebrow .title-cn{display:none}
-    .award-card{padding:24px 22px}
+    .chapter h2{font-size:22px}
+    .chapter p{font-size:15.5px}
+    .prologue p, .epilogue p{font-size:16px}
+    .top-nav{padding:14px 20px;font-size:10px;letter-spacing:.12em}
+    .top-nav .right a:nth-child(n+2){display:none}
   }
 </style>
 </head>
 <body>
 
+<!-- ============ 顶部导航 ============ -->
+<nav class="top-nav">
+  <a href="index.html">← Home · 主页</a>
+  <div class="right">
+    <a href="editorial.html">editorial</a>
+    <a href="walk.html">walk</a>
+    <a href="drive.html">drive</a>
+  </div>
+</nav>
+
 <div class="page">
 
   <!-- ============ 顶部铭牌 ============ -->
   <header class="nameplate">
-    <div class="surname-cn" data-source="meta.name_cn"></div>
-    <div class="name-en" data-source="meta.name_en_full"></div>
+    <div class="surname-cn">滕</div>
+    <div class="name-en">Teng Meiming</div>
     <div class="rule"></div>
-    <div class="role" data-source="meta.role"></div>
-    <div class="meta" data-source="meta.tag_strip"></div>
+    <div class="role">一份成长经历的陈述</div>
+    <div class="meta">
+      <span>Editorial</span>
+      <span>· 2026 ·</span>
+      <span>Shanghai</span>
+    </div>
   </header>
 
-  <!-- ============ 引子 ============ -->
-  <section data-source="lede"></section>
-
-  <!-- ============ I · INDEX ============ -->
-  <section id="index">
-    <div class="eyebrow">
-      <span class="roman">I.</span>
-      <span class="label">Index</span>
-      <span class="title-cn">作品索引</span>
-    </div>
-    <ul class="index-list" data-source="projects"></ul>
+  <!-- ============ 引子 / Prologue ============ -->
+  <section class="prologue">
+    <div class="pro-label">Prologue · 引子</div>
+    <p>22 岁之前我做过武警；22 岁这一年，我开始<em>做 AI</em>。</p>
   </section>
 
-  <!-- ============ II · RECOGNITION ============ -->
-  <section id="recognition">
-    <div class="eyebrow">
-      <span class="roman">II.</span>
-      <span class="label">Recognition</span>
-      <span class="title-cn">认证与荣誉</span>
+  <!-- ============ I · 两年武警 ============ -->
+  <section class="chapter" id="ch-1">
+    <div class="ch-eyebrow">
+      <span class="ch-roman">I.</span>
+      <span class="ch-label">Two years in uniform</span>
+      <span class="ch-date">2022 — 2024</span>
     </div>
-
-    <div data-source="award_card"></div>
-
-    <ul class="other-honors" data-source="other_honors"></ul>
+    <h2>两年<em>武警</em></h2>
+    <p>湖南总队长沙支队。代理文书时整理过 90+ 份基层表格——第一次接触 SOP。回头看，「<em>把现状看清楚再拆解成可复用</em>」这件事，是后来做 Skill 一脉相承的逻辑。</p>
   </section>
 
-  <!-- ============ III · WORK ============ -->
-  <section id="work">
-    <div class="eyebrow">
-      <span class="roman">III.</span>
-      <span class="label">Work</span>
-      <span class="title-cn">主要项目</span>
+  <!-- ============ II · 回校找方向 ============ -->
+  <section class="chapter" id="ch-2">
+    <div class="ch-eyebrow">
+      <span class="ch-roman">II.</span>
+      <span class="ch-label">Back to campus</span>
+      <span class="ch-date">2024 — 2025</span>
     </div>
-    <div data-source="work_entries"></div>
+    <h2>回校 · <em>找方向</em></h2>
+    <p>退伍回到 SUIBE。开始跑步，全马 PB 3:35。在天风证券实习时独立写过 40 页+ 半导体研报，把 REITs 周报流程 SOP 化为飞书模板。</p>
   </section>
 
-  <!-- ============ IV · EXPERIENCE ============ -->
-  <section id="experience">
-    <div class="eyebrow">
-      <span class="roman">IV.</span>
-      <span class="label">Experience</span>
-      <span class="title-cn">经历</span>
+  <!-- ============ III · 一月遇见 AI ============ -->
+  <section class="chapter" id="ch-3">
+    <div class="ch-eyebrow">
+      <span class="ch-roman">III.</span>
+      <span class="ch-label">January · meeting AI</span>
+      <span class="ch-date">2026 · 01</span>
     </div>
-    <ul class="index-list timeline" data-source="experiences"></ul>
+    <h2>一月 · <em>遇见 AI</em></h2>
+    <p>起点是 <strong>Waytoagi 社区</strong>。中间多次想过放弃——很多概念在我之前的世界里没有对应物。但过去 22 年里，这是<em>第一次</em>让我觉得能从零开始接触一件喜欢的、且看起来真能动手的事情。</p>
   </section>
 
-  <!-- ============ V · DETAILS ============ -->
-  <section id="details">
-    <div class="eyebrow">
-      <span class="roman">V.</span>
-      <span class="label">Details</span>
-      <span class="title-cn">其它</span>
+  <!-- ============ IV · 做 Skill ============ -->
+  <section class="chapter" id="ch-4">
+    <div class="ch-eyebrow">
+      <span class="ch-roman">IV.</span>
+      <span class="ch-label">March → May · making things</span>
+      <span class="ch-date">2026 · 03 — 05</span>
     </div>
-
-    <div class="detail-block">
-      <div class="detail-label">Education · 教育</div>
-      <div class="detail-body" data-source="education"></div>
-    </div>
-
-    <div data-source="skill_blocks"></div>
-
-    <div class="detail-block">
-      <div class="detail-label">Off-screen · 屏幕之外</div>
-      <div class="detail-body" data-source="off_screen"></div>
-    </div>
+    <h2>三月到五月 · <em>做 Skill</em></h2>
+    <p>和 Claude Code 协作做出 12+ 个 Skill，其中 2 个被字节飞书 larksuite 官方收录至开源库（<strong>飞书 CLI 十佳</strong>）。同期跑了 Multi-Agent Research <em>47 轮控制实验</em>，实证 Lost in Middle 效应——这是我第一次理解「研究」是怎么回事。</p>
   </section>
 
-  <!-- ============ VI · CONTACT ============ -->
+  <!-- ============ V · 接下来 ============ -->
+  <section class="chapter" id="ch-5">
+    <div class="ch-eyebrow">
+      <span class="ch-roman">V.</span>
+      <span class="ch-label">What's next</span>
+      <span class="ch-date">2026 · 下半年 →</span>
+    </div>
+    <h2>接下来<em>想做的事</em></h2>
+    <p>开个视频账号把过程讲出来；让现有 Skill 持续迭代；继续从真实业务长工具；做 <em>AI 输入端</em>的事——产出端工具已成熟，但 AI 还不擅长读复杂 PDF 和跨领域文献。</p>
+  </section>
+
+  <!-- ============ Epilogue ============ -->
+  <section class="epilogue">
+    <div class="pro-label">Epilogue · 写到这里</div>
+    <p><em>还在加油</em>。</p>
+  </section>
+
+  <!-- ============ Contact ============ -->
   <section id="contact" class="contact">
     <div class="closing">想聊聊？</div>
-    <p data-source="contact_intro"></p>
-    <div class="contact-list" data-source="contacts"></div>
+    <p>研究方向 / AI Agent 工程师 / AI 产品 / 创业团队早期员工——都欢迎。</p>
+    <div class="contact-list">
+      <a href="mailto:Tengmeiming@163.com">Tengmeiming@163.com</a>
+      <a href="https://github.com/Evan-miwillbe" target="_blank">GitHub · Evan-miwillbe</a>
+      <a href="files/滕美名-简历.pdf" download>简历 PDF ↓</a>
+    </div>
   </section>
 
-  <div class="drive-link" style="text-align:center;margin-top:48px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;">
-    <a href="drive.html">开车看 →</a>
-  </div>
-
   <footer class="foot">
-    Made by · <span class="seal" data-source="meta.surname_cn"></span> · <span data-source="meta.name_en"></span> · 2026 · <span data-source="meta.city_en_upper"></span>
+    Made by · <span class="seal">滕</span> · Teng Meiming · 2026 · SHANGHAI
   </footer>
 
 </div>
@@ -667,319 +765,6 @@
 })();
 </script>
 
-<!-- ============ 数据注入 · 从 data.js 读 SITE_DATA 渲染 ============ -->
-<script>
-(function(){
-  'use strict';
-
-  var D = window.SITE_DATA || {};
-  var meta = D.meta || {};
-  var contacts = D.contacts || [];
-  var projects = (D.projects || []).slice().sort(function(a,b){ return (a.sort_order||0)-(b.sort_order||0); });
-  var experiences = (D.experiences || []).slice().sort(function(a,b){ return (a.sort_order||0)-(b.sort_order||0); });
-  var awards = (D.awards || []).slice().sort(function(a,b){ return (a.sort_order||0)-(b.sort_order||0); });
-  var skills = (D.skills || []).slice().sort(function(a,b){ return (a.sort_order||0)-(b.sort_order||0); });
-  var offScreen = D.off_screen || [];
-
-  function esc(s){
-    if(s == null) return '';
-    return String(s)
-      .replace(/&/g,'&amp;')
-      .replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;')
-      .replace(/"/g,'&quot;')
-      .replace(/'/g,'&#39;');
-  }
-  function $(sel){ return document.querySelector(sel); }
-  function setBySource(key, html){
-    var el = document.querySelector('[data-source="'+key+'"]');
-    if(el) el.innerHTML = html;
-  }
-  function setTextBySource(key, txt){
-    var els = document.querySelectorAll('[data-source="'+key+'"]');
-    for(var i=0;i<els.length;i++){ els[i].textContent = txt == null ? '' : txt; }
-  }
-
-  // ---------- 顶部铭牌 ----------
-  setTextBySource('meta.name_cn', meta.name_cn ?? '');
-  setTextBySource('meta.name_en_full',
-    [meta.name_en, meta.nickname_en].filter(Boolean).join(' · ')
-  );
-  setTextBySource('meta.role', meta.role ?? '');
-  setTextBySource('meta.surname_cn', meta.surname_cn ?? '');
-  setTextBySource('meta.name_en', meta.name_en ?? '');
-  setTextBySource('meta.city_en_upper', (meta.city_en || '').toUpperCase());
-
-  // 铭牌底部 meta 条：CITY · 退役军人 · GRAD_YEAR
-  (function(){
-    var parts = [];
-    if(meta.city_en) parts.push(esc(meta.city_en.toUpperCase()));
-    if(meta.veteran) parts.push(esc(meta.veteran_branch_cn ? (meta.veteran_branch_cn + '退役') : '退役军人'));
-    if(meta.graduation_year) parts.push(esc(String(meta.graduation_year)));
-    var html = parts.map(function(p){ return '<span>'+p+'</span>'; }).join('·');
-    setBySource('meta.tag_strip', html);
-  })();
-
-  // ---------- 引子 lede ----------
-  (function(){
-    var top10 = (awards || []).filter(function(a){ return a.type === 'competition'; })[0];
-    var top10Name = top10 ? '<em>十佳</em>' : '<em>官方认证</em>';
-    var ratio = (top10 && top10.ratio_display) ? top10.ratio_display : (meta.feishu_top10_ratio || '');
-    // 计算入选数与投稿数（projects 中 award_status === undefined 且 featured_award === '飞书十佳'）
-    var entered = projects.filter(function(p){ return p.featured_award === '飞书十佳'; }).length;
-    var submitted = ratio && ratio.indexOf('/') > -1 ? parseInt(ratio.split('/')[1], 10) : null;
-
-    var p1 =
-      '我从 <em>2026 年 1 月</em>开始学 AI，3 月动手写第一个 Skill。'+
-      '到 5 月，做出一套自己的 Multi-Agent 研究框架——'+
-      '其中'+(entered ? esc(String(entered)) : '两')+'个 Skill 被字节飞书官方选入「'+top10Name+'」，'+
-      '将收录至 larksuite 开源库附作者署名。';
-
-    var school = esc(meta.school_cn || '');
-    var p2Parts = [];
-    if(school) p2Parts.push(school + '国际经济与贸易（全英语实验班）应届');
-    if(meta.veteran){
-      p2Parts.push((meta.veteran_branch_cn || '') + '湖南总队长沙支队退役');
-    }
-    var p2 = p2Parts.join('。')+'。<em>慢工的研究型</em>创造者，喜欢和前沿待在一起，自己上手做一个控制得住的版本。';
-
-    setBySource('lede',
-      '<p class="lede">'+p1+'</p>'+
-      '<p class="lede">'+p2+'</p>'
-    );
-  })();
-
-  // ---------- I · INDEX (projects 索引) ----------
-  (function(){
-    if(!projects.length){ setBySource('projects', ''); return; }
-    var html = projects.map(function(p){
-      var year = esc(p.year || '');
-      var nameEn = esc(p.name_en || '');
-      var nameCn = p.name_cn ? ' · ' + esc(p.name_cn) : (p.tagline && p.tagline !== p.name_cn ? ' · ' + esc(p.tagline) : '');
-      var desc = esc(p.activity_meta || p.description_short || '');
-      var isTop10 = p.featured_award === '飞书十佳';
-      var tag = isTop10 ? '<span class="tag">★ 十佳</span>' : '';
-      return ''+
-        '<li class="index-row">'+
-          '<span class="year">'+year+'</span>'+
-          '<span class="body">'+
-            '<strong>'+nameEn+'</strong>'+nameCn+
-            (desc ? '<span class="desc">'+desc+'</span>' : '')+
-          '</span>'+
-          tag+
-        '</li>';
-    }).join('');
-    setBySource('projects', html);
-  })();
-
-  // ---------- II · RECOGNITION ----------
-  (function(){
-    var top10 = awards.filter(function(a){ return a.type === 'competition'; })[0];
-    if(top10){
-      var dateStr = top10.date ? top10.date.replace(/-/g,'.') : '';
-      var ratio = top10.ratio_display || '';
-      var submitted = ratio.indexOf('/') > -1 ? parseInt(ratio.split('/')[1],10) : null;
-      var entered = ratio.indexOf('/') > -1 ? parseInt(ratio.split('/')[0],10) : null;
-      var pct = (submitted && entered) ? Math.round(entered/submitted*100)+'%' : '';
-
-      // 入选项目（飞书十佳）与未入选项目
-      var hitProjects = projects.filter(function(p){ return p.featured_award === '飞书十佳'; });
-      var missProjects = projects.filter(function(p){ return p.award_status === '未入选'; });
-      var hitNames = hitProjects.map(function(p){ return '<strong>'+esc(p.name_en)+'</strong>'; }).join(' 与 ');
-      var missName = missProjects[0] ? '<strong>'+esc(missProjects[0].name_en)+'</strong>' : '';
-
-      var bodyP = '由'+esc(top10.issuer || '主办方')+'官方团队主办的'+esc(top10.issuer_track || '')+'。'+
-        (hitNames ? hitNames + ' 入选，将收录至飞书 CLI 官方开源库并附作者署名。' : '')+
-        (missName ? '另一作品 '+missName+' 定位偏 ToB 企业级未入选——三个作品均为同期独立完成。' : '');
-
-      var html =
-        '<div class="award-card">'+
-          '<div class="award-label">入选 · '+esc(dateStr)+'</div>'+
-          '<h4>'+esc(top10.name)+'<br/>'+esc(ratio ? (submitted+' 项投稿，'+entered+' 项入选 · '+pct) : '')+'</h4>'+
-          '<p>'+bodyP+'</p>'+
-          '<div class="meta">'+
-            '<span>主办 · '+esc(top10.issuer || '')+'</span>'+
-            (top10.issuer_track ? '<span>赛道 · '+esc(top10.issuer_track)+'</span>' : '')+
-          '</div>'+
-        '</div>';
-      setBySource('award_card', html);
-    } else {
-      setBySource('award_card', '');
-    }
-
-    // other-honors：awards 中 type !== 'competition' 的（数据源为准）
-    var others = awards.filter(function(a){ return a.type !== 'competition'; });
-    var ohHtml = others.map(function(a){
-      var when = a.date ? esc(a.date.replace(/-/g,'.')) :
-                 (a.id === 'a-pap-merit' ? '入伍期间' : '—');
-      var label = esc(a.name) + (a.issuer ? ' · ' + esc(a.issuer) : '');
-      return '<li>'+label+'<span>'+when+'</span></li>';
-    }).join('');
-    setBySource('other_honors', ohHtml);
-  })();
-
-  // ---------- III · WORK (详细项目块) ----------
-  (function(){
-    // 仅取 featured === true 的 projects 作详细块；按 sort_order 渲染
-    var featured = projects.filter(function(p){ return p.featured; });
-    var html = featured.map(function(p, idx){
-      var no = 'No. ' + String(idx+1).padStart(2,'0');
-      var nameEn = esc(p.name_en);
-      var nameCn = p.name_cn && p.name_cn !== p.tagline ? p.name_cn : (p.tagline || '');
-      var titleHtml = '<h3>'+nameEn +
-        (nameCn ? '<br/><span style="font-size:.7em;color:var(--ink-mute);font-weight:400;">'+esc(nameCn)+'</span>' : '')+
-        '</h3>';
-
-      var badge = p.featured_award === '飞书十佳' ? '<span class="badge">★ 飞书十佳</span>' : '';
-
-      var metaParts = [];
-      if(p.year) metaParts.push('<span>'+esc(p.year)+'</span>');
-      if(p.tagline && p.tagline !== nameCn) metaParts.push('<span>'+esc(p.tagline)+'</span>');
-      if(p.activity_meta) metaParts.push('<span>'+esc(p.activity_meta)+'</span>');
-      if(p.cost) metaParts.push('<span>'+esc(p.cost)+'</span>');
-      // 关于 license 等附加描述目前 schema 未单列，跳过
-
-      var desc = p.description_short ? '<p>'+esc(p.description_short)+'</p>' : '';
-
-      // 链接块：优先 url_github + url_detail
-      var linkParts = [];
-      if(p.url_github){
-        linkParts.push('<a href="'+esc(p.url_github)+'" target="_blank">→ GitHub</a>');
-      }
-      if(p.url_detail){
-        linkParts.push('<a href="'+esc(p.url_detail)+'">→ 项目详情</a>');
-      }
-      // 官方公示链接（若是飞书十佳，从 award.url 取）
-      if(p.featured_award === '飞书十佳'){
-        var top10 = awards.filter(function(a){ return a.type === 'competition'; })[0];
-        if(top10 && top10.url){
-          linkParts.push('<a href="'+esc(top10.url)+'" target="_blank">→ '+esc(top10.url_label || '官方公示')+'</a>');
-        }
-      }
-      var linksHtml = linkParts.length ? '<div class="work-links">'+linkParts.join('')+'</div>' : '';
-
-      return ''+
-        '<article class="work-entry">'+
-          '<div class="work-head">'+
-            '<span class="work-no">'+no+'</span>'+
-            titleHtml+
-            badge+
-          '</div>'+
-          '<div class="work-meta">'+metaParts.join('')+'</div>'+
-          desc+
-          linksHtml+
-        '</article>';
-    }).join('');
-    setBySource('work_entries', html);
-  })();
-
-  // ---------- IV · EXPERIENCE (经历时间线) ----------
-  (function(){
-    var html = experiences.map(function(e){
-      // date_range 格式化：data.js 是 "2026 · 01—04" / "2022 · 09 — 2024 · 09"
-      // 渲染回 "2026.01—04" 这种紧凑形式
-      var year = (e.date_range || '').replace(/\s/g,'').replace(/·/g,'.');
-      var orgCn = esc(e.org_cn || '');
-      var roleEn = e.role_en ? ' · '+esc(e.role_en) : '';
-      var summary = esc(e.summary || '');
-      var note = e.note ? ' '+esc(e.note) : '';
-      return ''+
-        '<li class="index-row">'+
-          '<span class="year">'+esc(year)+'</span>'+
-          '<span class="body">'+
-            '<strong>'+orgCn+'</strong>'+roleEn+
-            '<span class="desc">'+summary+note+'</span>'+
-          '</span>'+
-        '</li>';
-    }).join('');
-    setBySource('experiences', html);
-  })();
-
-  // ---------- V · DETAILS ----------
-  // Education
-  (function(){
-    var parts = [];
-    if(meta.school_cn) parts.push(esc(meta.school_cn));
-    parts.push('国际经济与贸易（全英语实验班）');
-    parts.push('国家级一流本科专业建设点');
-    parts.push('<code>2021.09 — 2027.06</code>（因服兵役延期 2 年）');
-    parts.push('GPA <code>3.3/4.0（前 20%）</code>');
-    parts.push('团支书');
-    parts.push('代表课程：程序设计基础与应用 91 / 中级微观经济学 88 / 国际商务 91 / 财政学 91');
-    parts.push('英语 CET-6 <code>521</code>');
-    setBySource('education', parts.join(' · ') + '。');
-  })();
-
-  // Skill blocks（按 skills 数组生成 detail-block；前两组用作 AI Stack + Foundation 兼容旧版）
-  (function(){
-    if(!skills.length){ setBySource('skill_blocks', ''); return; }
-    // 与旧版兼容：前两组分别命名 "AI Stack" "Foundation" 以贴近 hello.html 风格
-    // 这里改为按 skills 自身 category_cn / category_en 渲染，多组都展示
-    var html = skills.map(function(s){
-      var label = (s.category_en || '') + (s.category_cn ? ' · ' + s.category_cn : '');
-      var itemsHtml = (s.items || []).map(function(it){
-        return '<code>'+esc(it)+'</code>';
-      }).join(' · ');
-      return ''+
-        '<div class="detail-block">'+
-          '<div class="detail-label">'+esc(label)+'</div>'+
-          '<div class="detail-body">'+itemsHtml+'。</div>'+
-        '</div>';
-    }).join('');
-    setBySource('skill_blocks', html);
-  })();
-
-  // Off-screen
-  (function(){
-    var runItem = offScreen.filter(function(o){ return o.id === 'off-run'; })[0];
-    var writeItem = offScreen.filter(function(o){ return o.id === 'off-write'; })[0];
-
-    var fullPb = '', halfPb = '', essayCount = '', essayReads = '';
-    if(runItem && runItem.stats){
-      runItem.stats.forEach(function(st){
-        if(st.label_en === 'Full Marathon PB') fullPb = st.num;
-        else if(st.label_en === 'Half Marathon PB') halfPb = st.num;
-      });
-    }
-    if(writeItem && writeItem.stats){
-      writeItem.stats.forEach(function(st){
-        if(st.label_en === 'Personal Essays') essayCount = st.num;
-        else if(st.label_en === 'Campus Reads') essayReads = st.num;
-      });
-    }
-    fullPb = fullPb || meta.marathon_full_pb || '';
-    halfPb = halfPb || meta.marathon_half_pb || '';
-    essayCount = essayCount || meta.essay_count || '';
-
-    var html =
-      '全马 PB <code>'+esc(fullPb)+'</code> / 半马 PB <code>'+esc(halfPb)+'</code>。'+
-      esc(essayCount)+' 篇随笔，慢工的写作者。'+
-      '基于 Claude Opus 4.6 协作完成本职 AI 项目——非 CS 科班，'+
-      '贡献是产品 taste 与迭代节奏。';
-    setBySource('off_screen', html);
-  })();
-
-  // ---------- VI · CONTACT ----------
-  (function(){
-    // contact intro 散文（保留风格，只把"找的位置"动态读 meta.looking_for_cn）
-    var lookingFor = meta.looking_for_cn || '';
-    var intro = '<strong>喜欢探索前沿AI项目并落地进入现有工作流</strong>——'+esc(lookingFor)+'。';
-    setBySource('contact_intro', intro);
-
-    // contacts 列表（按 sort_order，过滤掉无 url 的 location）
-    var visible = contacts.slice().sort(function(a,b){ return (a.sort_order||0)-(b.sort_order||0); })
-      .filter(function(c){ return c.url; });
-    var html = visible.map(function(c){
-      var isExternal = /^https?:/i.test(c.url);
-      var target = isExternal ? ' target="_blank"' : '';
-      var text = c.type === 'github' ? 'github.com/' + (c.display || '') : (c.display || c.label_cn || '');
-      return '<a href="'+esc(c.url)+'"'+target+'>'+esc(text)+'</a>';
-    }).join('');
-    setBySource('contacts', html);
-  })();
-
-})();
-</script>
 
 </body>
 </html>
