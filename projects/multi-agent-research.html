@@ -282,21 +282,20 @@
     <div class="chapter-label">02 · The Evolution</div>
     <h2>v1 → v9.0 经历 7 次架构重写</h2>
     <p>
-      最初的 v1 是 200 行的"主 Agent 调度 5 个子 Agent"的朴素架构。
-      到 v4.3 时膨胀到 <strong>1382 行</strong>，加了 PM 中心制、覆盖率审计、共识度投票、记忆衰减……
-      看起来全面，但实测时发现：<strong>很多"机制"是写在 prompt 里的</strong>，AI 并不真的执行它们，只是"看起来在执行"。
+      最初的 v1 是约 <strong>1000 行</strong>的"PM 中心制 + 7 个子 Agent"架构。
+      到 v4.3 膨胀到 <strong>1382 行</strong>（峰值），加了 PM 中心制、覆盖率审计、共识度投票、记忆衰减……
+      看起来全面，但实测时发现：<strong>很多"机制"只是写在 prompt 里</strong>，AI 并不真的执行，只是"看起来在执行"。
     </p>
     <p>
-      v5.4 第一次大规模精简到 893 行，砍掉了 PM 层。
-      v6.0 继续重构到 221 行——<strong>v5.4 → v6.0 行数下降约 80%</strong>（893 → 221），
-      但同样的研究题目，输出质量反而上升。这逼我承认一件事：
+      v5.0 第一次大规模精简到 <strong>647 行</strong>（−53%）。真正的转折是 v6.0 的<strong>扁平化重构</strong>——砍掉 PM 中间层、改星型直连、角色从 9 类压到 4 类；
+      到 v6.3 进一步自包含压缩到 <strong>213 行</strong>（−72% context）。但同样的研究题目，输出质量反而更好——说明一件事：
     </p>
     <div class="quote">
       不是越多机制越好。是<em>能被验证有效的</em>机制才值得保留。
-      <span class="src">— v6.0 重构后的核心 learning</span>
+      <span class="src">— v6.x 重构后的核心 learning</span>
     </div>
     <p>
-      最终 v9.0 收敛到 453 行，是把 v6.0 的精简结构 + 6 个"被消融实验证明必要"的机制重新加回来。
+      最终 v8.0 把 17 个被实验验证的钩子分层整合（420 行），v9.0 收敛到 <strong>453 行</strong>稳定版——精简结构 + 被消融证明必要的机制。
     </p>
   </section>
 </div>
@@ -305,7 +304,7 @@
 <div class="container">
   <figure>
     <img src="../images/multi-agent/line-evolution.svg" class="case-image" alt="SKILL.md 行数演化曲线 v1→v9" style="background:#F6F3EB"/>
-    <figcaption>FIG. 1 · Line Count Evolution — 200 → 1382 (peak) → 893 → 221 → 453 lines</figcaption>
+    <figcaption>FIG. 1 · Line Count Evolution — ~1000 → 1382 (peak) → 647 → 213 → 453 lines</figcaption>
   </figure>
 </div>
 
@@ -316,7 +315,7 @@
     <h2>从 9 角色层级制到 2 角色扁平制</h2>
     <div class="compare-row">
       <div class="compare-card bad">
-        <div class="cc-tag">v5.x · 公司层级制 (893 行)</div>
+        <div class="cc-tag">v1–v5.x · 公司层级制（PM 中枢）</div>
         <div class="cc-num" style="font-size:28px">9 <small>角色</small></div>
         <p style="font-family:var(--mono);font-size:12px;line-height:2;margin-top:12px">
           主CC(董事长)<br/>
@@ -329,7 +328,7 @@
         <p style="margin-top:12px"><strong>问题</strong>：PM→Expert 二级 spawn 在 4 个项目中全部断线。CLO 做完即退出无法持续运行。</p>
       </div>
       <div class="compare-card good">
-        <div class="cc-tag">v6.0+ · 工作室扁平制 (221 行)</div>
+        <div class="cc-tag">v6.0+ · 工作室扁平制（213 行）</div>
         <div class="cc-num" style="font-size:28px">2 <small>角色</small></div>
         <p style="font-family:var(--mono);font-size:12px;line-height:2;margin-top:12px">
           主CC(老板兼PM)<br/>
@@ -426,7 +425,7 @@
     <div class="chapter-label">03 · Key Finding</div>
     <h2>实证 "Lost in Middle" 效应</h2>
     <p>
-      47 轮控制实验里最有冲击力的一组数据：把<strong>同一条关键约束</strong>分别放在 prompt 不同位置，
+      47 轮控制实验里最直观的一组数据：把<strong>同一条关键约束</strong>分别放在 prompt 不同位置，
       看 AI 的合规率（是否真的执行了这条约束）。
     </p>
     <div class="compare-row">
