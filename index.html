@@ -827,6 +827,7 @@
     </a>
     <nav class="top">
       <a href="index.html" class="active">home</a><span class="sep"></span>
+      <a href="notes.html">notes</a><span class="sep"></span>
       <a href="walk.html">walk</a><span class="sep"></span>
       <a href="drive.html">drive</a>
     </nav>
@@ -865,7 +866,7 @@
 
         <div class="open-for" style="display:flex;align-items:center;gap:12px;margin-bottom:28px;padding:12px 18px;background:var(--sage-soft);border-left:3px solid var(--sage);border-radius:4px;font-family:var(--mono);font-size:12px;color:var(--ink);letter-spacing:.02em;flex-wrap:wrap;line-height:1.6">
           <span style="display:inline-flex;align-items:center;gap:6px;color:var(--sage);font-weight:600"><span style="width:8px;height:8px;background:var(--sage);border-radius:50%;display:inline-block;box-shadow:0 0 0 4px rgba(134,155,126,.25);animation:pulse 2s infinite"></span>OPEN FOR 2026 实习</span>
-          <span style="color:var(--ink-soft)">偏研究方向 · 大厂研究院 / 研究助理 · AI Agent 工程师 · AI 产品 · 创业团队</span>
+          <span style="color:var(--ink-soft)">AI Agent / Harness 工程 · 偏研究方向（大厂研究院 / 研究助理）· AI 产品 · 创业团队</span>
         </div>
         <style>@keyframes pulse{0%,100%{box-shadow:0 0 0 4px rgba(134,155,126,.25)}50%{box-shadow:0 0 0 8px rgba(134,155,126,.05)}}</style>
 
@@ -1133,6 +1134,100 @@
     </p>
   </section>
 
+  <!-- ============ §观点 / Notes（teaser，全文见 notes.html） ============ -->
+  <style>
+    .notes-lede{
+      padding:20px 26px;background:var(--card);border-left:3px solid var(--accent);
+      font-family:var(--serif);font-size:17px;color:var(--ink);line-height:1.75;
+      max-width:780px;margin-bottom:40px;border-radius:0 4px 4px 0;
+    }
+    .notes-lede em{color:var(--accent);font-style:italic;font-weight:500}
+    .notes-lede .nl-tag{
+      display:block;font-family:var(--mono);font-size:10.5px;color:var(--ink-mute);
+      letter-spacing:.18em;text-transform:uppercase;margin-bottom:12px;
+    }
+    .opinion-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    @media(max-width:760px){.opinion-grid{grid-template-columns:1fr}}
+    .op-card{
+      background:var(--card);border:1px solid var(--line);border-radius:6px;
+      padding:22px 22px 20px;position:relative;
+      display:flex;flex-direction:column;gap:10px;
+      transition:border-color .3s, transform .3s, box-shadow .3s;
+    }
+    .op-card:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 8px 22px rgba(127,32,32,.08)}
+    .op-card .op-num{
+      font-family:var(--mono);font-size:10px;color:var(--accent);
+      letter-spacing:.18em;font-weight:500;text-transform:uppercase;
+    }
+    .op-card h3{
+      font-family:var(--serif);font-size:19px;font-weight:600;
+      color:var(--ink);line-height:1.4;letter-spacing:-.01em;
+    }
+    .op-card h3 em{color:var(--accent);font-style:italic;font-weight:600}
+    .op-card .op-gist{font-size:13.5px;color:var(--ink-soft);line-height:1.7}
+    .op-card .op-but{
+      font-family:var(--serif);font-style:italic;font-size:13px;
+      color:var(--ink-mute);line-height:1.65;
+      padding-top:11px;margin-top:2px;border-top:1px dashed var(--line);
+    }
+    .op-card .op-but::before{content:"但 ";font-style:normal;color:var(--sage);font-weight:600}
+    .notes-cta{margin-top:38px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+    .notes-cta .nc-note{
+      font-family:var(--mono);font-size:11px;color:var(--ink-mute);letter-spacing:.04em;
+    }
+  </style>
+  <section id="notes-preview">
+    <div class="chapter-num">03</div>
+    <div class="section-head">
+      <div class="sh-left">
+        <div class="eyebrow">§ 观点 · Notes</div>
+        <h2>从原理层面<br/><em>锐评</em></h2>
+      </div>
+      <div class="sh-right">
+        简历里写了「能从原理层面锐评主流大模型与 Agent 产品的瓶颈」——这里是兑现。<br/>
+        强观点、<em>弱持有</em>（Strong opinions, weakly held），而且都是<em>此刻</em>的判断：这行变得太快，我点到的瓶颈各家都在补，半年后大概率有几条要划掉重写。
+      </div>
+    </div>
+
+    <div class="notes-lede">
+      <span class="nl-tag">Multi-Agent Research 做到 v9.4，最想说的一句</span>
+      多 Agent 的价值不在「<em>并行</em>」，在「<em>综合层</em>」；框架真正对抗的，是「<em>AI 自欺太容易</em>」——<br/>
+      而逼近真相，从来是一个「<em>下降</em>」的过程，不是「过滤」的过程。
+    </div>
+
+    <div class="opinion-grid">
+      <div class="op-card">
+        <div class="op-num">01 · Lost in Middle</div>
+        <h3>关键约束的<em>位置</em>，比措辞更重要</h3>
+        <div class="op-gist">同一条硬约束放 prompt 中段，合规率 0%；移到首尾，100%。换措辞没用，换位置才有用。</div>
+        <div class="op-but">这是我那套 harness、那个长度区间测出来的，换模型临界点会变——当先验，不当定律。</div>
+      </div>
+      <div class="op-card">
+        <div class="op-num">02 · 综合层 &gt; 并行</div>
+        <h3>多 Agent 的价值在<em>综合层</em>，不在并行</h3>
+        <div class="op-gist">斯坦福 DPI 定理证明：等算力下单 agent 并不输多 agent。多 agent 真正不可替代的，是把零碎产出<em>熔合</em>出跨板块的新洞察——效率只是副产品。</div>
+        <div class="op-but">这对「要综合判断」的任务成立；天然可切分的批量活，并行本身就是收益。</div>
+      </div>
+      <div class="op-card">
+        <div class="op-num">03 · 独立性逐层递进</div>
+        <h3>不让任何角色，<em>既当运动员又当裁判</em></h3>
+        <div class="op-gist">专家自验证 → QR 独立审查并修复 → Evaluator 只评不改的终裁，每一层都比上一层更「局外」，专治 AI 的「自评偏差」。</div>
+        <div class="op-but">既评又改的人会对结果有「所有权」，所以终裁必须只评不改、对历史规范盲。</div>
+      </div>
+      <div class="op-card">
+        <div class="op-num">04 · 像管理一家公司</div>
+        <h3>带 AI 团队，撞见<em>组织设计</em>的难</h3>
+        <div class="op-gist">给子 agent 分工、让一个角色质疑另一个——和带真人团队是同一件事。对照 Block／红杉「裁掉中层」的赌注，我走的是「多角色独立质疑」的另一条路。</div>
+        <div class="op-but">AI 让「自己造」变得可能，可什么都自己造未必合理——有些事本来就该放心交出去。</div>
+      </div>
+    </div>
+
+    <div class="notes-cta">
+      <a href="notes.html" class="btn primary" data-magnet>读完整的六节反思 <svg class="icon"><use href="#i-arrow-right"/></svg></a>
+      <span class="nc-note">从 prompt、架构、质检、输入端，一路谈到组织与个人——每条都带我自己的实验和边界</span>
+    </div>
+  </section>
+
   <!-- ============ Skill Garden ============ -->
   <style>
     .skill-garden-grid{
@@ -1181,7 +1276,7 @@
     .skill-garden-lede em{color:var(--accent);font-style:italic;font-weight:500}
   </style>
   <section id="skill-garden">
-    <div class="chapter-num">03</div>
+    <div class="chapter-num">04</div>
     <div class="section-head">
       <div class="sh-left">
         <div class="eyebrow">§ Skill Garden · 自研 Skill 矩阵</div>
@@ -1273,7 +1368,7 @@
 
   <!-- ============ Timeline ============ -->
   <section id="timeline">
-    <div class="chapter-num">04</div>
+    <div class="chapter-num">05</div>
     <div class="section-head">
       <div class="sh-left">
         <div class="eyebrow">§ A timeline</div>
@@ -1353,7 +1448,7 @@
 
   <!-- ============ Toolkit / Stack ============ -->
   <section id="toolkit">
-    <div class="chapter-num">05</div>
+    <div class="chapter-num">06</div>
     <div class="section-head">
       <div class="sh-left">
         <div class="eyebrow">§ Stack</div>
@@ -1390,7 +1485,7 @@
         <div class="tg-num">iv.</div>
         <h4>建站 / 视觉</h4>
         <div class="chips">
-          <span>HTML / CSS</span><span>Three.js（学习中）</span>
+          <span>HTML / CSS</span><span>Three.js · 交互 3D</span>
           <span>PowerPoint</span><span>秀米</span>
         </div>
       </div>
@@ -1399,7 +1494,7 @@
 
   <!-- ============ Off-screen ============ -->
   <section>
-    <div class="chapter-num">06</div>
+    <div class="chapter-num">07</div>
     <div class="section-head">
       <div class="sh-left">
         <div class="eyebrow">§ Off-screen</div>
@@ -1480,7 +1575,7 @@
     .next-item .src-note a{color:var(--accent);text-decoration:underline;text-underline-offset:2px;text-decoration-color:rgba(127,32,32,.4)}
   </style>
   <section id="whats-next">
-    <div class="chapter-num">07</div>
+    <div class="chapter-num">08</div>
     <div class="section-head">
       <div class="sh-left">
         <div class="eyebrow">§ What's Next · 接下来</div>
@@ -1519,7 +1614,7 @@
 
   <!-- ============ Find me（从 § 01 移到这里成为 § 08） ============ -->
   <section>
-    <div class="chapter-num">08</div>
+    <div class="chapter-num">09</div>
     <div class="section-head">
       <div class="sh-left">
         <div class="eyebrow">§ Find me around</div>

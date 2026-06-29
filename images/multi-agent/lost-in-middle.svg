@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 372" role="img" aria-label="Lost in Middle 折线图：检索准确率随相关信息在上下文中的位置呈 U 型，首位 75%、中段第 10 位最低 52%、末位回到 71%">
+  <rect width="720" height="372" fill="#fdfaf3"/>
+  <!-- y 网格线 -->
+  <g stroke="#ebe5d2" stroke-width="1">
+    <line x1="56" y1="20" x2="700" y2="20"/>
+    <line x1="56" y1="95" x2="700" y2="95"/>
+    <line x1="56" y1="170" x2="700" y2="170"/>
+    <line x1="56" y1="245" x2="700" y2="245"/>
+    <line x1="56" y1="320" x2="700" y2="320"/>
+  </g>
+  <!-- y 轴标签 -->
+  <g fill="#a39d8e" font-family="'JetBrains Mono',monospace" font-size="11" text-anchor="end">
+    <text x="48" y="24">80%</text>
+    <text x="48" y="99">70%</text>
+    <text x="48" y="174">60%</text>
+    <text x="48" y="249">50%</text>
+    <text x="48" y="324">40%</text>
+  </g>
+  <!-- 区域填充 -->
+  <path d="M56,57.5 L136.5,110 L217,170 L297.5,207.5 L378,230 L458.5,215 L539,170 L619.5,117.5 L700,87.5 L700,320 L56,320 Z"
+        fill="#f0e1de" opacity="0.55"/>
+  <!-- 折线 -->
+  <polyline points="56,57.5 136.5,110 217,170 297.5,207.5 378,230 458.5,215 539,170 619.5,117.5 700,87.5"
+        fill="none" stroke="#7F2020" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+  <!-- 数据点 -->
+  <g fill="#7F2020">
+    <circle cx="56" cy="57.5" r="3.5"/>
+    <circle cx="136.5" cy="110" r="3"/>
+    <circle cx="217" cy="170" r="3"/>
+    <circle cx="297.5" cy="207.5" r="3"/>
+    <circle cx="378" cy="230" r="4.5" stroke="#fdfaf3" stroke-width="1.5"/>
+    <circle cx="458.5" cy="215" r="3"/>
+    <circle cx="539" cy="170" r="3"/>
+    <circle cx="619.5" cy="117.5" r="3"/>
+    <circle cx="700" cy="87.5" r="3.5"/>
+  </g>
+  <!-- 关键点标注：首 75% / 中段最低 52% / 末 71% -->
+  <g font-family="'JetBrains Mono',monospace" font-size="11.5" fill="#7F2020" font-weight="600">
+    <text x="60" y="48">75%</text>
+    <text x="700" y="78" text-anchor="end">71%</text>
+    <text x="378" y="252" text-anchor="middle">52%</text>
+  </g>
+  <text x="378" y="269" text-anchor="middle" font-family="'Noto Serif SC',serif" font-size="11.5" fill="#a39d8e">中段系统性被忽略</text>
+  <!-- x 轴标签 -->
+  <g fill="#a39d8e" font-family="'JetBrains Mono',monospace" font-size="10.5" text-anchor="middle">
+    <text x="56" y="338">1st</text>
+    <text x="136.5" y="338">3rd</text>
+    <text x="217" y="338">5th</text>
+    <text x="297.5" y="338">7th</text>
+    <text x="378" y="338">10th</text>
+    <text x="458.5" y="338">13th</text>
+    <text x="539" y="338">15th</text>
+    <text x="619.5" y="338">18th</text>
+    <text x="700" y="338">20th</text>
+  </g>
+  <text x="378" y="362" text-anchor="middle" font-family="'Noto Serif SC',serif" font-size="12" fill="#6b6358">相关信息在上下文中的位置</text>
+</svg>
