@@ -918,17 +918,17 @@
 <!-- ============ MARQUEE (moved down: 在 Banner 之后) ============ -->
 <div class="marquee">
   <div class="marquee-track">
-    <span>LOST IN MIDDLE 0% vs 100%</span>
-    <span>17 机制 · 16 轮消融</span>
-    <span>AGENT SWARM × 216</span>
-    <span>CONTEXT COMPRESSION 893→221</span>
-    <span>META-ITERATION FRAMEWORK</span>
+    <span>LOST IN MIDDLE 0% → 100%</span>
+    <span>综合层 ＞ 并行</span>
+    <span>2-AGENT 省 38% 算力</span>
+    <span>运行成本累计 −80%</span>
+    <span>17 机制 · 仅 2 个因果必要</span>
     <span>元工具迭代母工具</span>
-    <span>LOST IN MIDDLE 0% vs 100%</span>
-    <span>17 机制 · 16 轮消融</span>
-    <span>AGENT SWARM × 216</span>
-    <span>CONTEXT COMPRESSION 893→221</span>
-    <span>META-ITERATION FRAMEWORK</span>
+    <span>LOST IN MIDDLE 0% → 100%</span>
+    <span>综合层 ＞ 并行</span>
+    <span>2-AGENT 省 38% 算力</span>
+    <span>运行成本累计 −80%</span>
+    <span>17 机制 · 仅 2 个因果必要</span>
     <span>元工具迭代母工具</span>
   </div>
 </div>
@@ -957,6 +957,13 @@
         color:var(--accent);letter-spacing:.01em;line-height:1.55;
       }
       .p-pricetag::before{content:"↗ ";font-style:normal;font-weight:600;margin-right:4px}
+      .readme-sublink{
+        display:inline-flex;align-items:center;gap:7px;align-self:flex-start;
+        margin:2px 0 14px 0;padding:9px 17px;border:1px solid var(--accent);border-radius:999px;
+        font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.03em;
+        background:transparent;transition:background .25s,color .25s;
+      }
+      .readme-sublink:hover{background:var(--accent);color:var(--bg)}
     </style>
     <div class="projects-list">
       <a class="project-row" href="projects/multi-agent-research.html" data-cursor="阅读" data-hl-trigger>
@@ -965,14 +972,15 @@
           <div class="p-tags-mini"><span>RESEARCH</span><span class="sep">/</span><span>CLAUDE CODE</span><span class="sep">/</span><span>MULTI-AGENT</span></div>
           <h3><span class="hl-text">Multi-Agent Research</span></h3>
           <div class="p-meta"><span>2026.04 — 05</span><span>13 天 · v1 → v9.0</span><span>77 commits · 47 轮实验</span></div>
-          <p>和 Claude Code 协作完成 v1→v9 七轮架构重构 + 47 轮控制实验（31 验证 + 16 消融）。实证 <em>Lost in Middle</em> 效应：关键约束放 prompt 中间合规率 <strong>0%</strong>、放首尾 <strong>100%</strong>。框架累计调用 65 次 / 跨度 28 天，单次会话最大并行 spawn <strong>216 个 sub-agent</strong>（69 小时 / 40MB 日志）。</p>
-          <span class="p-pricetag">47 轮实验里每一个机制都接受了消融测试，整条因果链都写在 <span class="readme-inline" onclick="event.stopPropagation();event.preventDefault();window.open('projects/multi-agent-research-readme.html','_blank');" style="cursor:pointer;color:var(--accent);font-weight:600;border-bottom:1px solid var(--accent);font-style:normal" title="点击查看完整 README">README ↗</span> 里。</span>
+          <p>和 Claude Code 协作完成 v1→v9 架构重构 + 47 轮控制实验（31 验证 + 16 消融）。主导把以协调中枢为核心的层级式架构精简为<em>扁平直连</em>；实证 <em>Lost in Middle</em>——关键约束放 prompt 中段合规率 <strong>0%</strong>、放首尾 <strong>100%</strong>。最终把“Agent 越多越好”修正为<em>按 ROI 投入</em>：多数任务 2-Agent 即可在质量不降下省约 <strong>38%</strong> 算力，运行成本累计下降约 <strong>80%</strong>。</p>
+          <span class="p-pricetag">每一个机制都接受了消融测试，整条因果链都写在完整 README 里。</span>
         </div>
         <div class="p-right">
           <div class="p-arrow" data-magnet><svg class="icon"><use href="#i-arrow-right"/></svg></div>
           <div class="p-stamp-mini">研</div>
         </div>
       </a>
+      <a class="readme-sublink" href="projects/multi-agent-research-readme.html" data-cursor="阅读">→ 读完整 README · v1→v9 设计决策叙事</a>
 
       <a class="project-row" href="projects/auto-new.html" data-cursor="阅读" data-hl-trigger>
         <div class="p-num">02</div>
