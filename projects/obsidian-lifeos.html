@@ -86,16 +86,16 @@
   @media(max-width:680px){.case-image-row{grid-template-columns:1fr}}
   .case-image-triple{
     display:flex;
-    gap:22px;
+    gap:18px;
     overflow-x:auto;
     scroll-snap-type:x mandatory;
     overscroll-behavior-x:contain;
-    padding:0 24px 18px;
-    margin:0 -24px 48px;
+    padding:0 0 18px;
+    margin:0 0 48px;
     -webkit-overflow-scrolling:touch;
   }
   .case-image-triple figure{
-    flex:0 0 min(100%,920px);
+    flex:0 0 100%;
     margin:0;
     scroll-snap-align:center;
   }
@@ -466,7 +466,7 @@
 </div>
 
 <!-- LifeOS three-layer screenshots -->
-<div class="container wide">
+<div class="container">
   <div class="case-image-triple">
     <figure>
       <img src="../images/obsidian/lifeos-daily.png" class="case-image" alt="LifeOS 日计划 — 上午/下午/晚上/暂缓 + 精力评分 + 今日习惯 + 晚间复盘"/>
