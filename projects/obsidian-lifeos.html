@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Obsidian LifeOS · 个人知识与精力管理系统 · 滕美名</title>
-<meta name="description" content="日 / 周 / 月三层任务视图 + 近 2 万字知识库 · 基于 Claude Code Superpowers · 灵感来自 Karpathy LLM-as-Wiki" />
+<title>Personal Context System · 可维护个人 Context 系统 · 滕美名</title>
+<meta name="description" content="把经历变成证据，把证据变成 context，把 context 变成更清晰的行动。" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -70,6 +70,7 @@
   .case-meta .meta-item .val{font-family:var(--serif);font-size:16px;font-weight:500;color:var(--ink)}
   @media(max-width:768px){.case-head h1{font-size:42px}.case-head .subtitle{font-size:18px}.case-meta{grid-template-columns:repeat(2,1fr);gap:18px}}
   .hero-image{margin:0 -40px 64px;border-radius:24px;overflow:hidden;background:var(--card);box-shadow:var(--shadow)}
+  .context-hero-image{max-width:920px;margin:0 auto 64px}
   @media(max-width:760px){.hero-image{margin:0 0 48px}}
   .img-placeholder{background:linear-gradient(135deg, var(--orange-soft), var(--indigo-soft));border:2px dashed var(--orange);aspect-ratio:16/9;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--ink-soft);text-align:center;padding:32px;border-radius:24px}
   .img-placeholder .ph-icon{font-size:40px;margin-bottom:14px}
@@ -83,8 +84,38 @@
   .case-image-row .case-image{max-height:58vh;width:100%}
   .hero-image .case-image{max-height:72vh;max-width:100%;width:auto;height:auto;margin:0 auto;border-radius:0;box-shadow:none}
   @media(max-width:680px){.case-image-row{grid-template-columns:1fr}}
-  .case-image-triple{display:grid;grid-template-columns:1fr;gap:32px;margin-bottom:48px}
-  .case-image-triple .case-image{max-height:72vh}
+  .case-image-triple{
+    display:flex;
+    gap:22px;
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    overscroll-behavior-x:contain;
+    padding:0 24px 18px;
+    margin:0 -24px 48px;
+    -webkit-overflow-scrolling:touch;
+  }
+  .case-image-triple figure{
+    flex:0 0 min(100%,920px);
+    margin:0;
+    scroll-snap-align:center;
+  }
+  .case-image-triple .case-image{
+    width:100%;
+    height:min(68vh,640px);
+    object-fit:contain;
+    object-position:top center;
+  }
+  .case-image-triple::-webkit-scrollbar{height:8px}
+  .case-image-triple::-webkit-scrollbar-track{background:rgba(28,25,23,.05);border-radius:999px}
+  .case-image-triple::-webkit-scrollbar-thumb{background:rgba(127,32,32,.28);border-radius:999px}
+  @media(max-width:760px){
+    .case-image-triple figure{
+      flex-basis:88vw;
+    }
+    .case-image-triple .case-image{
+      height:min(62vh,520px);
+    }
+  }
   section.chapter{margin-bottom:80px}
   .chapter-label{font-family:var(--mono);font-size:11px;color:var(--orange);letter-spacing:.24em;text-transform:uppercase;font-weight:600;margin-bottom:14px}
   .chapter h2{font-family:var(--serif);font-size:38px;font-weight:600;line-height:1.2;letter-spacing:-.01em;margin-bottom:24px}
@@ -106,6 +137,103 @@
   .layer-card .lc-emoji{font-size:30px;margin-bottom:10px}
   .layer-card h4{font-family:var(--serif);font-size:18px;font-weight:600;margin-bottom:8px}
   .layer-card p{font-size:13.5px;color:var(--ink-soft);line-height:1.6;margin:0}
+  .context-lead{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:24px;
+    padding:34px 38px;
+    box-shadow:var(--shadow-sm);
+    margin-bottom:34px;
+  }
+  .context-lead p{
+    font-size:18px;
+    color:var(--ink-soft);
+    line-height:1.9;
+    margin-bottom:18px;
+  }
+  .context-lead p:last-child{margin-bottom:0}
+  .context-lead code,
+  .skill-chip{
+    font-family:var(--mono);
+    font-size:.9em;
+    color:var(--accent);
+    background:var(--accent-soft);
+    padding:2px 7px;
+    border-radius:7px;
+  }
+  .context-flow{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:10px;
+    margin:28px 0 10px;
+  }
+  .flow-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:18px 16px;
+    min-height:132px;
+    position:relative;
+  }
+  .flow-card:not(:last-child)::after{
+    content:"→";
+    position:absolute;
+    right:-13px;
+    top:50%;
+    transform:translateY(-50%);
+    color:var(--accent);
+    font-family:var(--mono);
+    font-size:18px;
+    z-index:2;
+  }
+  .flow-card .flow-num{
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:.16em;
+    color:var(--accent);
+    margin-bottom:8px;
+  }
+  .flow-card h4{
+    font-family:var(--serif);
+    font-size:17px;
+    line-height:1.35;
+    margin-bottom:8px;
+  }
+  .flow-card p{
+    font-size:13px;
+    line-height:1.55;
+    color:var(--ink-soft);
+    margin:0;
+  }
+  .skill-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:16px;
+    margin:24px 0 34px;
+  }
+  .skill-note{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:22px;
+  }
+  .skill-note h4{
+    font-family:var(--serif);
+    font-size:19px;
+    margin-bottom:8px;
+    color:var(--ink);
+  }
+  .skill-note p{
+    font-size:14.5px;
+    line-height:1.75;
+    margin:0;
+  }
+  @media(max-width:860px){
+    .context-flow{grid-template-columns:1fr}
+    .flow-card:not(:last-child)::after{content:"↓";right:auto;left:24px;top:auto;bottom:-18px;transform:none}
+    .skill-grid{grid-template-columns:1fr}
+    .context-lead{padding:24px}
+  }
   .next-bar{display:flex;justify-content:space-between;align-items:center;padding:48px 0;border-top:1px solid var(--line);margin-top:48px}
   .next-bar a{display:flex;flex-direction:column;gap:4px;text-decoration:none}
   .next-bar a .nb-lbl{font-family:var(--mono);font-size:11px;color:var(--ink-mute);letter-spacing:.16em;text-transform:uppercase}
@@ -221,192 +349,165 @@
 <div class="container">
   <div class="case-head">
     <div class="crumbs">
-      <span>个人系统</span>
+      <span>Personal Context</span>
       <span>Case Study · 04</span>
     </div>
-    <h1>Obsidian LifeOS</h1>
+    <h1>Personal Context System</h1>
     <div class="subtitle">
-      日 / 周 / 月三层任务视图 + 知识库管理面板。
-      高频日常使用，沉淀近 2 万字。一个真正用得起来的个人系统，比任何"生产力工具"都重要。
+      可维护个人 Context 系统。把经历变成证据，把证据变成 context，把 context 变成更清晰的行动。
     </div>
     <div class="case-meta">
-      <div class="meta-item"><div class="lbl">时间</div><div class="val">2026.03 — 至今</div></div>
-      <div class="meta-item"><div class="lbl">基础</div><div class="val">Claude Code Superpowers</div></div>
-      <div class="meta-item"><div class="lbl">灵感</div><div class="val">Karpathy LLM-as-Wiki</div></div>
-      <div class="meta-item"><div class="lbl">使用频率</div><div class="val">每日 · 持续 2 个月</div></div>
+      <div class="meta-item"><div class="lbl">时间</div><div class="val">2026.03 — 2026.06</div></div>
+      <div class="meta-item"><div class="lbl">核心</div><div class="val">Context / Memory</div></div>
+      <div class="meta-item"><div class="lbl">工具</div><div class="val">Obsidian + Skills</div></div>
+      <div class="meta-item"><div class="lbl">边界</div><div class="val">Human-in-the-loop</div></div>
     </div>
   </div>
 </div>
 
 <div class="container wide">
-  <figure class="hero-image">
-    <img src="../images/obsidian/obsidian-overview.png" class="case-image" alt="Obsidian LifeOS 日常全貌 — 左侧 Knowledge-Vault 文件树 / 中间 LifeOS 月计划 / 右侧 AI Terminal 自写插件"/>
-    <figcaption style="font-family:var(--mono);font-size:11.5px;color:var(--ink-mute);letter-spacing:.12em;text-align:center;margin-top:14px;text-transform:uppercase">FIG. 0 · 每日工作台 — Knowledge-Vault 文件树 · LifeOS 月计划 · AI Terminal 同框</figcaption>
+  <figure class="hero-image context-hero-image">
+    <img src="../images/personal-context/personal-context-pipeline.svg" class="case-image" alt="Personal Context System — 散落材料汇入知识库，再输出为清晰行动"/>
+    <figcaption style="font-family:var(--mono);font-size:11.5px;color:var(--ink-mute);letter-spacing:.12em;text-align:center;margin-top:14px;text-transform:uppercase">FIG. 0 · Personal Context Pipeline — evidence → context → action</figcaption>
   </figure>
 </div>
 
-<!-- Chapter 1: 起点 -->
+<!-- Chapter 1: 开头文案 -->
 <div class="container">
   <section class="chapter">
-    <div class="chapter-label">01 · The Pain</div>
-    <h2>Excel 做日程没有连续性，<br/>周总结流于形式</h2>
-    <p>
-      退伍回来读大三那年，我试过很多生产力工具。Excel 做日程——每周一张表，每周都从零开始；
-      Notion 模板——好看但用一个月就懒得维护；付费插件——评估了几款 Obsidian 商业模板，
-      ROI 不够高。
-    </p>
-    <div class="quote">
-      所有这些工具的共同问题是——它们不属于我。
-      模板是别人的逻辑，付费插件是别人的开发节奏，
-      我永远在迁就工具，而不是工具迁就我。
-      <span class="src">— Obsidian LifeOS 设计动机</span>
+    <div class="chapter-label">01 · Context</div>
+    <h2>让 AI 不再从空白 prompt 开始</h2>
+    <div class="context-lead">
+      <p>我一直在尝试解决一个很具体的问题：当我和 AI 协作时，怎样让它不再从空白 prompt 开始？</p>
+      <p>许多经历、项目、复盘和知识笔记分散在很多地方。为了让 AI 理解我，每次需要将过往的经历重复性地输入，只是这样 AI 很容易遗漏真正重要的背景，也存在背景信息的 context 提供不够，AI 无法分辨我真实的需求，混淆我和 AI 协作过程中能力的边界。</p>
+      <p>所以我开始维护一个自己 context 系统：把个人画像、经历证据、项目时间线、录音复盘和 AI 协作记录沉淀进知识库，再用一组真实使用的 skill 把它们串起来。</p>
+      <p>在日常复盘里，<code>luying</code> 会把录音转成文本，<code>start-my-day</code> 帮我每日把反思整理成下一步任务；在资料处理里，<code>mineru-pdf</code> 和 <code>html-to-pptx</code> 帮我处理 PDF、Markdown、HTML、PPT 之间的信息转换。</p>
+      <p>系统的核心不是让 AI 替我做决定，而是让 AI 先处理噪音、召回材料、发现遗漏。最终什么能公开、什么应该保留、什么应该删掉，仍然由我来判断。</p>
+      <p>而这个项目最重要的意义是：就是把经历变成证据，把证据变成 context，把 context 变成更清晰的行动。</p>
     </div>
-    <p>
-      2026 年 3 月，Claude Code Superpowers 功能上线后，
-      我意识到一件事：<strong>我自己就能写一套</strong>——
-      用自然语言描述我想要的结构，让 Claude 生成 Dataview / Templater 代码，
-      不满意就再迭代一遍。
-    </p>
   </section>
 </div>
 
-<!-- Chapter 2: 三层视图 -->
+<!-- Chapter 2: 流程 -->
 <div class="container">
   <section class="chapter">
-    <div class="chapter-label">02 · The Design</div>
-    <h2>日 / 周 / 月三层视图</h2>
-    <p>
-      核心设计是"<strong>时间粒度的镜头</strong>"——你今天关注什么、本周要推进什么、
-      本月的方向，是三个不同尺度的问题。一张表无法同时回答它们。
-    </p>
-    <div class="layer-grid">
-      <div class="layer-card">
-        <div class="lc-tag">Daily View</div>
-        <div class="lc-emoji">☀️</div>
-        <h4>日计划面板</h4>
-        <p>早起冥想 / 番茄钟任务 / 晚间复盘 / 精力评分 / 各维度平衡分析（工作/学习/休息/运动）。每天填一次，30 秒。</p>
+    <div class="chapter-label">02 · Workflow</div>
+    <h2>从散落材料，到可调用的 context</h2>
+    <div class="context-flow">
+      <div class="flow-card">
+        <div class="flow-num">01</div>
+        <h4>个人输入</h4>
+        <p>经历、项目、复盘、知识笔记、录音和 AI 协作记录。</p>
       </div>
-      <div class="layer-card">
-        <div class="lc-tag">Weekly View</div>
-        <div class="lc-emoji">📅</div>
-        <h4>周计划面板</h4>
-        <p>任务跨日流转 / 周完成率 / 周目标对齐 / "5/6 模式"（如简历投递在哪天推进了多少）。周日复盘 15 分钟。</p>
+      <div class="flow-card">
+        <div class="flow-num">02</div>
+        <h4>沉淀为证据</h4>
+        <p>个人画像、项目时间线、经历材料和过程记录进入知识库。</p>
       </div>
-      <div class="layer-card">
-        <div class="lc-tag">Monthly View</div>
-        <div class="lc-emoji">🌙</div>
-        <h4>月计划面板</h4>
-        <p>悬浮预览本月所有进行中项目 / 阶段性目标 / 习惯打卡曲线 / 各维度平衡总分。月底复盘 30 分钟。</p>
+      <div class="flow-card">
+        <div class="flow-num">03</div>
+        <h4>形成 context</h4>
+        <p>不再依赖一次性 prompt，而是长期维护可复用背景。</p>
+      </div>
+      <div class="flow-card">
+        <div class="flow-num">04</div>
+        <h4>AI 预处理</h4>
+        <p>处理噪音、召回材料、整理结构、发现遗漏。</p>
+      </div>
+      <div class="flow-card">
+        <div class="flow-num">05</div>
+        <h4>人来判断</h4>
+        <p>公开边界、取舍、修改和最终行动仍由我负责。</p>
       </div>
     </div>
-    <p>
-      支持任务拖拽 / 跨周流转 / 月计划悬浮预览。
-      <strong>所有逻辑都用 Dataview + Templater 实现</strong>，没用任何付费插件。
-    </p>
   </section>
 </div>
 
-<!-- 三层视图真实截图 -->
+<!-- Chapter 3: 真实 skill -->
+<div class="container">
+  <section class="chapter">
+    <div class="chapter-label">03 · Skills in Use</div>
+    <h2>不是概念图，而是真实使用的工具链</h2>
+    <div class="skill-grid">
+      <div class="skill-note">
+        <h4><span class="skill-chip">luying</span> + start-my-day</h4>
+        <p>把每日口播复盘转成文本，再整理成任务、复盘和下一步行动。它的意义不是“自动转写”，而是让模糊想法进入可检索、可反复加工的知识库。</p>
+      </div>
+      <div class="skill-note">
+        <h4><span class="skill-chip">mineru-pdf</span> + html-to-pptx</h4>
+        <p>处理 PDF、Markdown、HTML、PPT 之间的信息转换。它们解决的是 AI 输入和输出两端的损失：资料怎样进入 AI，AI 的产物又怎样回到人类可编辑的工作流。</p>
+      </div>
+      <div class="skill-note">
+        <h4><span class="skill-chip">Obsidian LifeOS</span></h4>
+        <p>用日 / 周 / 月三层视图承接任务和复盘，把个人知识库从“资料仓库”变成每天都能打开、能推动行动的工作台。</p>
+      </div>
+      <div class="skill-note">
+        <h4><span class="skill-chip">AI Terminal</span></h4>
+        <p>二次开发 Obsidian 终端插件，加入 Tab 多页、上下分屏、主题色适配和一键复制路径，让知识库、shell 和 AI 工具链贴近同一个工作界面。</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Evidence screenshots: restored original LifeOS image rhythm -->
+<div class="container wide">
+  <figure class="hero-image context-hero-image">
+    <img src="../images/obsidian/obsidian-overview.png" class="case-image" alt="Obsidian 工作台 — Knowledge-Vault 文件树 / LifeOS 月计划 / AI Terminal"/>
+    <figcaption style="font-family:var(--mono);font-size:11.5px;color:var(--ink-mute);letter-spacing:.12em;text-align:center;margin-top:14px;text-transform:uppercase">FIG. 1 - Knowledge-Vault + LifeOS + AI Terminal</figcaption>
+  </figure>
+</div>
+
+<div class="container">
+  <section class="chapter" style="margin-bottom:34px">
+    <div class="chapter-label">04 ? Evidence</div>
+    <h2>LifeOS 是这个 context 系统的日常入口</h2>
+    <p>这套系统不是只停留在概念图里。日 / 周 / 月三层 LifeOS 视图，承接了我的日常任务、复盘和计划；AI Terminal 则把知识库、shell 和 AI 工具链放到同一个工作界面里。</p>
+  </section>
+</div>
+
+<!-- LifeOS three-layer screenshots -->
 <div class="container wide">
   <div class="case-image-triple">
     <figure>
       <img src="../images/obsidian/lifeos-daily.png" class="case-image" alt="LifeOS 日计划 — 上午/下午/晚上/暂缓 + 精力评分 + 今日习惯 + 晚间复盘"/>
-      <figcaption style="font-family:var(--mono);font-size:10.5px;color:var(--ink-mute);letter-spacing:.1em;text-align:center;margin-top:12px;text-transform:uppercase">FIG. 1a · 日计划 — 30 秒填一次</figcaption>
+      <figcaption style="font-family:var(--mono);font-size:10.5px;color:var(--ink-mute);letter-spacing:.1em;text-align:center;margin-top:12px;text-transform:uppercase">FIG. 2A - LifeOS Daily - task / energy / reflection</figcaption>
     </figure>
     <figure>
       <img src="../images/obsidian/lifeos-weekly.png" class="case-image" alt="LifeOS 周计划 — 七天卡片 + 本周分布 + 习惯打卡 + 精力趋势"/>
-      <figcaption style="font-family:var(--mono);font-size:10.5px;color:var(--ink-mute);letter-spacing:.1em;text-align:center;margin-top:12px;text-transform:uppercase">FIG. 1b · 周计划 — 周日复盘 15 分钟</figcaption>
+      <figcaption style="font-family:var(--mono);font-size:10.5px;color:var(--ink-mute);letter-spacing:.1em;text-align:center;margin-top:12px;text-transform:uppercase">FIG. 2B - LifeOS Weekly - weekly review and task flow</figcaption>
     </figure>
     <figure>
-      <img src="../images/obsidian/lifeos-monthly.png" class="case-image" alt="LifeOS 月计划 — 整月日历 · 悬浮预览 · 月度统计 · 习惯月度 · 各维度平衡"/>
-      <figcaption style="font-family:var(--mono);font-size:10.5px;color:var(--ink-mute);letter-spacing:.1em;text-align:center;margin-top:12px;text-transform:uppercase">FIG. 1c · 月计划 — 月底复盘 30 分钟</figcaption>
+      <img src="../images/obsidian/lifeos-monthly.png" class="case-image" alt="LifeOS 月计划 — 整月日历 ? 悬浮预览 ? 月度统计 ? 习惯月度 ? 各维度平衡"/>
+      <figcaption style="font-family:var(--mono);font-size:10.5px;color:var(--ink-mute);letter-spacing:.1em;text-align:center;margin-top:12px;text-transform:uppercase">FIG. 2C - LifeOS Monthly - month map and habit traces</figcaption>
     </figure>
   </div>
 </div>
 
-<!-- Chapter 3: Terminal Plugin -->
-<div class="container">
-  <section class="chapter">
-    <div class="chapter-label">03 · The Plugin</div>
-    <h2>顺手做了一个终端插件二开</h2>
-    <p>
-      做 LifeOS 的过程中，我需要在 Obsidian 里直接运行 shell 命令（同步 GitHub、跑 skill、查文件）。
-      Obsidian 原生没有终端，社区有一个韩国开发者开源的插件，但 UX 不够好——
-      没有主题色适配、不支持 Tab 多页、不能分屏、复制路径要手动操作。
-    </p>
-    <p>
-      所以我把它<strong>二次开发</strong>了：
-    </p>
-    <ul style="font-size:17px;color:var(--ink-soft);line-height:2;margin:0 0 18px 24px;list-style:none;">
-      <li>✓ 主题色适配 Obsidian 的 light/dark 主题</li>
-      <li>✓ 新增 Tab 多页（多个并行的终端会话）</li>
-      <li>✓ 上下分屏（一边跑命令一边看输出）</li>
-      <li>✓ 一键复制当前 vault 路径（写脚本时不再手敲）</li>
-    </ul>
-    <p>
-      这个细节我经常拿出来讲——<strong>它最能说明"我不是 CS 科班，但能读懂 + 修改别人的代码"</strong>。
-      二开开源项目这一步对非科班来说是有门槛的，跨过去才能从"AI 工具的使用者"变成"AI 工具的延展者"。
-    </p>
-  </section>
-</div>
-
-<!-- 终端插件截图 二联：左 portrait 终端 + 右 landscape GitHub repo -->
+<!-- AI Terminal two-column pair -->
 <div class="container">
   <div class="case-image-row" style="grid-template-columns:1fr 1.7fr;align-items:center;gap:32px">
     <figure>
-      <img src="../images/obsidian/ai-terminal.png" class="case-image" alt="Obsidian 内嵌 AI Terminal 自写插件 · Tab 多页 + PowerShell · 主题色适配" style="max-height:62vh"/>
-      <figcaption style="font-family:var(--mono);font-size:11.5px;color:var(--ink-mute);letter-spacing:.12em;text-align:center;margin-top:14px;text-transform:uppercase">FIG. 2 · AI Terminal 运行视图 — Tab 多页 · 主题色适配 · 一键复制 vault 路径</figcaption>
+      <img src="../images/obsidian/ai-terminal.png" class="case-image" alt="Obsidian 内嵌 AI Terminal 自写插件 ? Tab 多页 + PowerShell ? 主题色适配" style="max-height:62vh"/>
+      <figcaption style="font-family:var(--mono);font-size:11.5px;color:var(--ink-mute);letter-spacing:.12em;text-align:center;margin-top:14px;text-transform:uppercase">FIG. 3 - AI Terminal - tabs / split view / vault path shortcut</figcaption>
     </figure>
     <figure>
-      <img src="../images/github/obsidian-ai-terminal-repo.png" class="case-image" alt="GitHub Evan-miwillbe/obsidian-ai-terminal 仓库 · 韩国开发者开源项目的二次开发" style="max-height:48vh"/>
-      <figcaption style="font-family:var(--mono);font-size:11.5px;color:var(--ink-mute);letter-spacing:.12em;text-align:center;margin-top:14px;text-transform:uppercase">FIG. 3 · 二次开发 — Fork 韩国开发者项目 · 已发布 v0.1.0 · TypeScript</figcaption>
+      <img src="../images/github/obsidian-ai-terminal-repo.png" class="case-image" alt="GitHub Evan-miwillbe/obsidian-ai-terminal 仓库 ? 韩国开发者开源项目的二次开发" style="max-height:48vh"/>
+      <figcaption style="font-family:var(--mono);font-size:11.5px;color:var(--ink-mute);letter-spacing:.12em;text-align:center;margin-top:14px;text-transform:uppercase">FIG. 4 - AI Terminal fork - TypeScript</figcaption>
     </figure>
   </div>
 </div>
-
-<!-- Chapter 4: 真实使用 -->
+<!-- Chapter 4: 边界 -->
 <div class="container">
   <section class="chapter">
-    <div class="chapter-label">04 · Daily Use</div>
-    <h2>2 个月，近 2 万字沉淀</h2>
-    <p>
-      LifeOS 不是 demo——是<strong>我每天打开 8 小时以上的工具</strong>。
-      过去 2 个月，知识库累积了将近 20,000 字的内容：
-      读书笔记、项目复盘、日常思考、随笔草稿。
-    </p>
-    <div class="stat-row">
-      <div class="stat-item"><div class="num">2<small>个月</small></div><div class="lbl">每日使用</div></div>
-      <div class="stat-item"><div class="num">19,789<small>字</small></div><div class="lbl">知识库沉淀</div></div>
-      <div class="stat-item"><div class="num">30%<small>+</small></div><div class="lbl">周计划完成率</div></div>
+    <div class="chapter-label">05 · Boundary</div>
+    <h2>AI 先处理噪音，判断仍然留给人</h2>
+    <p>这个系统让我更清楚地区分了 AI 和人的边界。AI 适合召回材料、初步归类、提取结构、发现遗漏，也适合把重复流程工具化。</p>
+    <p>但什么是真实重要的，什么可以公开，什么应该保留，什么应该删掉，仍然必须由我来判断。对我来说，这比“自动化程度”更重要。</p>
+    <div class="quote">
+      我不想把 AI 用成一个替我做决定的东西。<br/>
+      我更希望它成为一个能处理噪音、维护 context、提示盲点、协助表达的工作台。
+      <span class="src">— Personal Context System 设计边界</span>
     </div>
-    <p>
-      日计划完成率不是 100%——也不应该是。<strong>30% 的完成率配合"5/6 模式"（简历投递这种关键任务持续推进）</strong>，
-      比 100% 的待办列表更接近"真实生活的样子"。
-    </p>
-    <p>
-      Multi-Agent Research 的用户只有我，但是是"研究的我"。
-      LifeOS 的用户也只有我，但是<strong>"过日子的我"</strong>。
-      两个项目都没有外部用户，但前者是工具，后者是生活——这是不同的两件事。
-    </p>
-  </section>
-</div>
-
-<!-- Chapter 5: 反思 -->
-<div class="container">
-  <section class="chapter">
-    <div class="chapter-label">05 · Reflection</div>
-    <h2>"AI 让我做出来"，不是"AI 替我做"</h2>
-    <p>
-      整套 LifeOS 没有一行代码是我"完全独立"写的——
-      每一段 Dataview 查询、每一个 Templater 脚本，
-      都是我和 Claude Code 反复对话出来的。
-    </p>
-    <p>
-      每一个视图的设计、每一个字段的取舍、每一次迭代的方向，
-      都是我基于自己日常使用的感受决定的——
-      AI 帮我写出来，但<em>用不用、改不改、改成什么样</em>，
-      是我自己在日复一日的使用里慢慢摸出来的。
-    </p>
   </section>
 </div>
 
@@ -489,47 +590,116 @@
 </script>
 
 
-<!-- ============ 烟花点击效果（参考 eduardbodak.com） ============ -->
-<style>
-.spark{
-  position:fixed; pointer-events:none; z-index:9998;
-  width:6px; height:6px; border-radius:50%;
-  will-change:transform, opacity;
-}
-@media (hover:none), (pointer:coarse){
-  /* 移动端禁用，避免在滚动时误触 */
-  .spark{display:none}
-}
-</style>
+<!-- ============ Cursor particle trail, same as homepage ============ -->
+<canvas id="particleBg" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9997"></canvas>
 <script>
 (function(){
-  // 8 方向 + 中式书院 5 色
-  var COLORS = ['#7F2020','#a02828','#869B7E','#C9CAAC','#c9a35a'];
-  function spark(x, y, angle, color){
-    var s = document.createElement('div');
-    s.className = 'spark';
-    s.style.left = x + 'px';
-    s.style.top = y + 'px';
-    s.style.background = color;
-    document.body.appendChild(s);
-    var anim = s.animate([
-      {transform:'translate(-50%,-50%) rotate('+angle+'deg) translate(8px,0) scale(1)', opacity:1},
-      {transform:'translate(-50%,-50%) rotate('+angle+'deg) translate(28px,0) scale(.6,.85)', opacity:.9, offset:.65},
-      {transform:'translate(-50%,-50%) rotate('+angle+'deg) translate(38px,0) scale(0,0)', opacity:0}
-    ], {duration:480, easing:'cubic-bezier(.22,.6,.4,1)', fill:'forwards'});
-    anim.onfinish = function(){ s.remove(); };
+  var c = document.getElementById('particleBg');
+  var gl = c.getContext('2d');
+  var W, H, dpr;
+  var pool = [];
+  var mx = -9999, my = -9999, pmx = -9999, pmy = -9999;
+
+  var PALETTE = [
+    [127,32,32],[160,40,40],[134,155,126],
+    [201,202,172],[201,163,90],[180,80,60],
+    [100,60,50],[170,130,80],[90,120,90]
+  ];
+
+  function resize(){
+    dpr = window.devicePixelRatio || 1;
+    W = window.innerWidth; H = window.innerHeight;
+    c.width = W * dpr; c.height = H * dpr;
+    gl.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
+  window.addEventListener('resize', resize);
+  resize();
+
+  function spawn(x, y, vxBase, vyBase){
+    var col = PALETTE[Math.floor(Math.random() * PALETTE.length)];
+    var angle = Math.random() * Math.PI * 2;
+    var speed = 0.5 + Math.random() * 2.5;
+    pool.push({
+      x: x + (Math.random() - 0.5) * 4,
+      y: y + (Math.random() - 0.5) * 4,
+      vx: Math.cos(angle) * speed + vxBase * 0.15,
+      vy: Math.sin(angle) * speed + vyBase * 0.15 - 0.5,
+      r: 1.5 + Math.random() * 3.5,
+      life: 1,
+      decay: 0.008 + Math.random() * 0.012,
+      gravity: -0.02 - Math.random() * 0.03,
+      friction: 0.985 + Math.random() * 0.01,
+      cr: col[0], cg: col[1], cb: col[2],
+      glow: Math.random() < 0.3,
+      spin: (Math.random() - 0.5) * 0.1
+    });
+  }
+
+  var throttle = 0;
+  document.addEventListener('mousemove', function(e){
+    pmx = mx; pmy = my;
+    mx = e.clientX; my = e.clientY;
+    if(pmx === -9999){ pmx = mx; pmy = my; }
+    throttle++;
+    if(throttle % 4 !== 0) return;
+    spawn(mx, my, mx - pmx, my - pmy);
+  }, {passive:true});
+
+  document.addEventListener('mouseleave', function(){
+    mx = -9999; my = -9999; pmx = -9999; pmy = -9999;
+  });
+
   document.addEventListener('click', function(e){
-    // 触屏 / pointer 设备跳过
-    if(!window.matchMedia('(hover:hover) and (pointer:fine)').matches) return;
-    // 主鼠标左键
     if(e.button !== 0) return;
-    for(var i = 0; i < 8; i++){
-      var ang = i * 45;
-      var col = COLORS[(i + Math.floor(Math.random()*COLORS.length)) % COLORS.length];
-      spark(e.clientX, e.clientY, ang, col);
+    for(var i = 0; i < 30; i++){
+      var angle = (i / 30) * Math.PI * 2;
+      var speed = 2 + Math.random() * 4;
+      var col = PALETTE[Math.floor(Math.random() * PALETTE.length)];
+      pool.push({
+        x: e.clientX, y: e.clientY,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        r: 2 + Math.random() * 4,
+        life: 1,
+        decay: 0.012 + Math.random() * 0.008,
+        gravity: -0.04 - Math.random() * 0.03,
+        friction: 0.97,
+        cr: col[0], cg: col[1], cb: col[2],
+        glow: Math.random() < 0.5,
+        spin: 0
+      });
     }
   }, {passive:true});
+
+  function frame(){
+    gl.clearRect(0, 0, W, H);
+    for(var i = pool.length - 1; i >= 0; i--){
+      var p = pool[i];
+      p.life -= p.decay;
+      if(p.life <= 0){ pool.splice(i, 1); continue; }
+      p.vy += p.gravity;
+      p.vx *= p.friction;
+      p.vy *= p.friction;
+      p.vx += p.spin;
+      p.x += p.vx;
+      p.y += p.vy;
+      var alpha = p.life * p.life;
+      var r = p.r * (0.4 + p.life * 0.6);
+      if(p.glow && alpha > 0.15){
+        gl.beginPath();
+        gl.arc(p.x, p.y, r * 3, 0, Math.PI * 2);
+        gl.fillStyle = 'rgba('+p.cr+','+p.cg+','+p.cb+','+(alpha * 0.08)+')';
+        gl.fill();
+      }
+      gl.beginPath();
+      gl.arc(p.x, p.y, r, 0, Math.PI * 2);
+      gl.fillStyle = 'rgba('+p.cr+','+p.cg+','+p.cb+','+alpha+')';
+      gl.fill();
+    }
+    if(pool.length > 600) pool.splice(0, pool.length - 600);
+    requestAnimationFrame(frame);
+  }
+  frame();
 })();
 </script>
 
