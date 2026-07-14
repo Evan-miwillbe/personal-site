@@ -131,6 +131,14 @@
   .ver-switch a{background:var(--card);border:1px solid var(--line);padding:7px 13px;border-radius:99px;font-family:var(--mono);font-size:10.5px;font-weight:500;color:var(--ink-soft);letter-spacing:.08em;box-shadow:0 4px 14px rgba(42,37,32,.06);transition:all .25s}
   .ver-switch a:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
 
+
+  .project-next-bar{max-width:var(--measure);margin:44px auto 0;padding-top:30px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:18px}
+  .project-next-bar a{display:flex;flex-direction:column;gap:4px;font-family:var(--sans);text-decoration:none}
+  .project-next-bar a.right{text-align:right}
+  .project-next-bar .nb-lbl{font-family:var(--mono);font-size:11px;color:var(--ink-mute);letter-spacing:.14em;text-transform:uppercase}
+  .project-next-bar .nb-name{font-family:var(--serif);font-size:19px;font-weight:600;color:var(--ink)}
+  .project-next-bar a:hover .nb-name{color:var(--accent)}
+
   @media(max-width:680px){
     body{font-size:16.5px}
     .topbar{padding:22px 22px}
@@ -353,6 +361,11 @@
       <p>受益于这个开源精神回归的时代，所以也会想：如果我做的一些事，能为「知识平权」出一点力——<strong>让一个普通人，也能在二十分钟里把一个复杂问题拆开看清</strong>——那这件事便值得期待！</p>
 
       <div class="end-sig">滕美名　·　Multi-Agent-Research v9.4　·　2026　·　Shanghai</div>
+
+      <div class="project-next-bar">
+        <a href="projects/auto-new.html"><span class="nb-lbl">← 上一个项目</span><span class="nb-name">auto-new</span></a>
+        <a href="projects/knowledge-healer.html" class="right"><span class="nb-lbl">下一个项目 →</span><span class="nb-name">knowledge-healer</span></a>
+      </div>
     </section>
 
   </div>

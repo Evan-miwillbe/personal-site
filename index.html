@@ -943,7 +943,7 @@
     <div class="section-head">
       <div class="sh-left">
         <div class="eyebrow">§ Selected work · 2026</div>
-        <h2>最近做的<br/><em>6 个东西</em></h2>
+        <h2><em>5 个项目</em></h2>
       </div>
       <div class="sh-right">
         从 2026 年 3 月开始，和 Claude Code 协作做下来的。<br/>
@@ -975,9 +975,9 @@
         <div class="p-num">01</div>
         <div class="p-body">
           <div class="p-tags-mini"><span>RESEARCH</span><span class="sep">/</span><span>CLAUDE CODE</span><span class="sep">/</span><span>MULTI-AGENT</span></div>
-          <h3><span class="hl-text">Multi-Agent Research</span></h3>
-          <div class="p-meta"><span>2026.04 — 05</span><span>13 天 · v1 → v9.0</span><span>77 commits · 47 轮实验</span></div>
-          <p>和 Claude Code 协作完成 v1→v9 架构重构 + 47 轮控制实验（31 验证 + 16 消融）。主导把以协调中枢为核心的层级式架构精简为<em>扁平直连</em>；实证 <em>Lost in Middle</em>——关键约束放 prompt 中段合规率 <strong>0%</strong>、放首尾 <strong>100%</strong>。最终把“Agent 越多越好”修正为<em>按 ROI 投入</em>：多数任务 2-Agent 即可在质量不降下省约 <strong>38%</strong> 算力，运行成本累计下降约 <strong>80%</strong>。</p>
+          <h3><span class="hl-text">Multi-Agent-Research</span></h3>
+          <div class="p-meta"><span>2026.04 —</span></div>
+          <p>输入调研主题，产出一份可深度覆盖全网实时数据的报告。将原本需数天的人工桌面调研压缩到约25分钟。针对单agent调研深度不足、同一角色兼写作和自审查容易自信的痛点，设计“课题输入→可信报告输出”的多Agent工作流（分工调研+独立质检+综合成稿），已落地跨境电商选品、行业与竞品调研、产品开发等真实决策场景。</p>
         </div>
         <div class="p-right">
           <div class="p-arrow" data-magnet><svg class="icon"><use href="#i-arrow-right"/></svg></div>
@@ -985,8 +985,7 @@
         </div>
       </a>
       <div class="mar-readme-row">
-        <span class="p-pricetag">每一个机制都接受了消融测试，整条因果链都写在完整 README 里。</span>
-        <a class="readme-sublink" href="projects/multi-agent-research-readme.html" data-cursor="阅读">→ 读完整 README · v1→v9 设计决策叙事</a>
+        <a class="readme-sublink" href="notes.html" data-cursor="阅读">→ 阅读·项目阶段性结项方式</a>
       </div>
 
       <a class="project-row" href="projects/auto-new.html" data-cursor="阅读" data-hl-trigger>
@@ -994,9 +993,8 @@
         <div class="p-body">
           <div class="p-tags-mini"><span>META-FRAMEWORK</span><span class="sep">/</span><span>SKILL FACTORY</span><span class="sep">/</span><span>SELF-EVOLUTION</span></div>
           <h3><span class="hl-text">auto-new</span></h3>
-          <div class="p-meta"><span>2026.05 · v3.5</span><span>元工具迭代母工具</span><span>4 范式 + 16 铁律</span></div>
-          <p>从 Multi-Agent Research 31 轮迭代中抽离出「读经验→诊断瓶颈→选变量→实验→评估→沉淀」通用循环，工程化为独立 Skill。4 种实验范式 + 16 条工程铁律。Multi-Agent v6.4→v9.0 全 31 轮由 auto-new 驱动——<em>元工具迭代它的母工具</em>，形成「应用层→元层→反哺应用层」闭环。</p>
-          <span class="p-pricetag">把"提炼方法论"本身工程化为元工具的一次尝试。</span>
+          <div class="p-meta"><span>2026.05 · v3.9</span><span>自迭代范式</span></div>
+          <p>让任何skill/脚本/prompt在真实使用中自我进化（self-correction自我校正循环），提前定义“什么是好”和验收标准，AI执行“改→实验→批评式评估（指出哪里不好+为什么，而非只打分）→保留/回滚”循环。实现离场持续运行，直至匹配最终量化目标并验收。把原本需要全程监督、反复手动调试好几天的“优化AI系统”的工作，变成无人值守的自动循环。</p>
         </div>
         <div class="p-right">
           <div class="p-arrow" data-magnet><svg class="icon"><use href="#i-arrow-right"/></svg></div>
@@ -1004,14 +1002,27 @@
         </div>
       </a>
 
-      <a class="project-row" href="projects/knowledge-healer.html" data-cursor="阅读" data-hl-trigger>
+      <a class="project-row" href="notes.html" data-cursor="阅读" data-hl-trigger>
         <div class="p-num">03</div>
+        <div class="p-body">
+          <div class="p-tags-mini"><span>CONTEXT</span><span class="sep">/</span><span>MEMORY</span><span class="sep">/</span><span>AI WORKFLOW</span></div>
+          <h3><span class="hl-text">Personal Context System</span></h3>
+          <div class="p-meta"><span>2026.03 — 2026.06</span><span>可维护个人 Context 系统</span><span>Human-in-the-loop</span></div>
+          <p>将个人经历、偏好、目标蒸馏为结构化画像库。针对信息过载时人无法全程在线逐一判断，AI基于个人context先做预判断（哪些与“我”相关），再由人最终决策：把个性化匹配从依赖现场判断，前置为可复用的context资产。目前已落地于求职岗位初筛（海量岗位→按方向+画像预筛→人综合评定），同一模式可迁移至任何信息密集决策场景。</p>
+        </div>
+        <div class="p-right">
+          <div class="p-arrow" data-magnet><svg class="icon"><use href="#i-arrow-right"/></svg></div>
+          <div class="p-stamp-mini">人</div>
+        </div>
+      </a>
+
+      <a class="project-row" href="projects/knowledge-healer.html" data-cursor="阅读" data-hl-trigger>
+        <div class="p-num">04</div>
         <div class="p-body">
           <div class="p-tags-mini"><span>★ 飞书十佳</span><span class="sep">/</span><span>FEISHU CLI</span><span class="sep">/</span><span>MIT</span></div>
           <h3><span class="hl-text">knowledge-healer</span><span class="star">★</span></h3>
           <div class="p-meta"><span>2026.05</span><span>飞书知识库自愈巡检</span></div>
-          <p>3+2 多 Agent 并行架构，7 维健康诊断。关键创新：<em>跨源交叉验证</em>（文档 vs 群聊）检测知识漂移——文档没改，但群里有人说"现在不这么做了"。</p>
-          <span class="p-pricetag">把 Multi-Agent 方法论用到一个真实场景（飞书知识库），验证它跑得通。</span>
+          <p>吸收Multi-Agent Research构建的经验，通过多agent协作，以解决知识库持续增长过程中的健康维护问题。skill可以实现团队知识系统的体检和免疫功能：通过持续对比正式文档与团队群聊消息记录，诊断知识库和团队真实业务中不一致的内容，及时处理知识库过期、冲突、缺失和泄漏的知识，并把它们变成可执行的修复任务。</p>
         </div>
         <div class="p-right">
           <div class="p-arrow" data-magnet><svg class="icon"><use href="#i-arrow-right"/></svg></div>
@@ -1020,47 +1031,16 @@
       </a>
 
       <a class="project-row" href="projects/lark-survey-scoreboard.html" data-cursor="阅读" data-hl-trigger>
-        <div class="p-num">04</div>
+        <div class="p-num">05</div>
         <div class="p-body">
           <div class="p-tags-mini"><span>★ 飞书十佳</span><span class="sep">/</span><span>ECHARTS</span><span class="sep">/</span><span>FROM INTERNSHIP</span></div>
           <h3><span class="hl-text">lark-survey-scoreboard</span><span class="star">★</span></h3>
           <div class="p-meta"><span>2026.04</span><span>飞书实时评分大屏</span></div>
-          <p>培训结束，对着飞书妙记说一句话，AI 替你想题目。手机评分，大屏 1 秒刷新，数据存自己的飞书 Base。<em>总成本 ¥0</em>。来自美动医疗实习的真实需求。</p>
-          <span class="p-pricetag">从美动 HR 实习的真实需求长出来的工具——我尝试理解产品的起点。</span>
+          <p>这是一个基于飞书 Base 的实时评分系统搭建 skill。它把问卷设计、数据存储、维度统计、仪表盘生成、手机评分页、大屏展示和部署踩坑整合成一套可重复执行的流程，让团队可以用接近零成本的方式搭建培训、年会、评审、投票、360 评估等现场互动场景的数据大屏。</p>
         </div>
         <div class="p-right">
           <div class="p-arrow" data-magnet><svg class="icon"><use href="#i-arrow-right"/></svg></div>
           <div class="p-stamp-mini">★</div>
-        </div>
-      </a>
-
-      <a class="project-row" href="projects/obsidian-lifeos.html" data-cursor="阅读" data-hl-trigger>
-        <div class="p-num">05</div>
-        <div class="p-body">
-          <div class="p-tags-mini"><span>CONTEXT</span><span class="sep">/</span><span>MEMORY</span><span class="sep">/</span><span>AI WORKFLOW</span></div>
-          <h3><span class="hl-text">Personal Context System</span></h3>
-          <div class="p-meta"><span>2026.03 — 2026.06</span><span>可维护个人 Context 系统</span><span>Human-in-the-loop</span></div>
-          <p>把个人画像、经历证据、项目时间线、录音复盘和 AI 协作记录沉淀进知识库，再用真实使用的 skill 串起来。核心不是让 AI 替我做决定，而是让 AI 先处理噪音、召回材料、发现遗漏。</p>
-          <span class="p-pricetag">把经历变成证据，把证据变成 context，把 context 变成更清晰的行动。</span>
-        </div>
-        <div class="p-right">
-          <div class="p-arrow" data-magnet><svg class="icon"><use href="#i-arrow-right"/></svg></div>
-          <div class="p-stamp-mini">私</div>
-        </div>
-      </a>
-
-      <a class="project-row" href="projects/bitable-orchestrator.html" data-cursor="阅读" data-hl-trigger>
-        <div class="p-num">06</div>
-        <div class="p-body">
-          <div class="p-tags-mini"><span>FEISHU BITABLE</span><span class="sep">/</span><span>TOB ENTERPRISE</span><span class="sep">/</span><span>SAFETY PIPELINE</span></div>
-          <h3><span class="hl-text">bitable-orchestrator</span></h3>
-          <div class="p-meta"><span>2026.05</span><span>飞书多维表格批量编排</span><span>5 阶段安全管线</span></div>
-          <p>飞书 CLI 大赛投稿作品，关注飞书多维表格批量操作的安全性——5 阶段管线 + Dry-Run 预演 + 原子回滚 + 依赖图拓扑排序，让批量改表前能<em>看清楚再决定</em>。</p>
-          <span class="p-pricetag">解决多维表批量编辑'误改难撤销'的真实问题。</span>
-        </div>
-        <div class="p-right">
-          <div class="p-arrow" data-magnet><svg class="icon"><use href="#i-arrow-right"/></svg></div>
-          <div class="p-stamp-mini">实</div>
         </div>
       </a>
     </div>
@@ -1070,7 +1050,7 @@
   <section class="interlude">
     <div class="interlude-head">
       <span class="label">Interlude · 间章</span>
-      <h3>看上去是 6 个项目。<br/>其实是<em>一套方法论</em>在不同场景的复用。</h3>
+      <h3>看上去是 5 个项目。<br/>其实是<em>一套方法论</em>在不同场景的复用。</h3>
     </div>
     <style>
       .loop-chain.five-node{
@@ -1139,7 +1119,7 @@
     </div>
     <div class="why-table-matters">
       <div class="wt-head">§ 这条线为什么我自己看重</div>
-      <p>这 6 个项目其实是<em>同一条线索的不同切片</em>——</p>
+      <p>这 5 个项目其实是<em>同一条线索的不同切片</em>——</p>
       <p>理论里产生的方法被工程验证，工程验证后被认证认可，元层 auto-new 反过来驱动应用层迭代，最终方法论跨领域复用到编程。</p>
       <div class="punch">对我自己来说，<strong style="font-weight:600">这条线比单独一个项目本身更重要</strong>——这是我现在最想继续走的方向。</div>
     </div>
@@ -1330,50 +1310,44 @@
         <div class="sc-desc">飞书培训反馈实时大屏。1 秒刷新，¥0 成本。</div>
         <div class="sc-tags"><span class="sc-tag hot">★ 飞书十佳</span><span class="sc-tag official">larksuite 官方</span></div>
       </a>
-      <a class="skill-card" href="projects/bitable-orchestrator.html" data-cursor="阅读">
-        <div class="sc-num">05</div>
-        <div class="sc-name">bitable-orchestrator</div>
-        <div class="sc-desc">飞书多维表批量编排，5 阶段安全管线。</div>
-        <div class="sc-tags"><span class="sc-tag">飞书 CLI 投稿</span><span class="sc-tag">ToB</span></div>
-      </a>
       <div class="skill-card">
-        <div class="sc-num">06</div>
+        <div class="sc-num">05</div>
         <div class="sc-name">multi-coder</div>
         <div class="sc-desc">Multi-Agent 方法论跨领域迁移到编程。</div>
         <div class="sc-tags"><span class="sc-tag">方法论复用</span><span class="sc-tag">664 行</span></div>
       </div>
       <div class="skill-card">
-        <div class="sc-num">07</div>
+        <div class="sc-num">06</div>
         <div class="sc-name">academic-research</div>
         <div class="sc-desc">学术研究多 Agent 框架。PDF 解析 + 文献引用。</div>
         <div class="sc-tags"><span class="sc-tag">Skill 生态</span><span class="sc-tag">配合 multi-agent</span></div>
       </div>
       <div class="skill-card">
-        <div class="sc-num">08</div>
+        <div class="sc-num">07</div>
         <div class="sc-name">pdf-to-md</div>
         <div class="sc-desc">PDF 转 Markdown（MinerU API，3 worker 并发）。</div>
         <div class="sc-tags"><span class="sc-tag">工程工具</span><span class="sc-tag">11x 加速</span></div>
       </div>
       <div class="skill-card">
-        <div class="sc-num">09</div>
+        <div class="sc-num">08</div>
         <div class="sc-name">dream / insights</div>
         <div class="sc-desc">基于 Claude Code 源码机制的经验沉淀系统。</div>
         <div class="sc-tags"><span class="sc-tag">元工具</span><span class="sc-tag">持续迭代</span></div>
       </div>
       <div class="skill-card">
-        <div class="sc-num">10</div>
+        <div class="sc-num">09</div>
         <div class="sc-name">start-my-day</div>
         <div class="sc-desc">每日工作流自动化——回顾昨日 + 规划今日。</div>
         <div class="sc-tags"><span class="sc-tag">个人工具</span><span class="sc-tag">日常使用</span></div>
       </div>
       <div class="skill-card">
-        <div class="sc-num">11</div>
+        <div class="sc-num">10</div>
         <div class="sc-name">大V思维框架蒸馏</div>
         <div class="sc-desc">把常读公众号大V的文章蒸馏成思维框架 Skill。</div>
         <div class="sc-tags"><span class="sc-tag">内容工具</span><span class="sc-tag">审美外包</span></div>
       </div>
       <div class="skill-card">
-        <div class="sc-num">12</div>
+        <div class="sc-num">11</div>
         <div class="sc-name">金龟宠物</div>
         <div class="sc-desc">Claude Code 宠物 Skill。第一个自研 Skill。</div>
         <div class="sc-tags"><span class="sc-tag">2026.04 首作</span><span class="sc-tag">致敬卡兹克</span></div>

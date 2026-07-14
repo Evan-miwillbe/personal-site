@@ -235,10 +235,10 @@ const D = window.SITE_DATA || { projects: [], contacts: [], awards: [], experien
 
 const P_NAMES = {
   'p-multi-agent-research': '听雨阁',
+  'p-auto-new':             '自新阁',
+  'p-personal-context-system':'识己亭',
   'p-knowledge-healer':     '鉴心亭',
   'p-lark-survey-scoreboard':'应实榭',
-  'p-obsidian-lifeos':      '墨守轩',
-  'p-bitable-orchestrator': '格物台',
   'a-feishu-top10':         '云阙碑',
   'a-shanghai-campus-news': '海鸥碑',
   'a-pap-merit':            '戎籍碑',
@@ -957,10 +957,10 @@ function buildPavilion(project, def) {
 (function buildPavilions() {
   const defs = {
     'p-multi-agent-research': { x: 0,   z: -30, baseSize: 7, colH: 4.2 },
-    'p-knowledge-healer':     { x: +30, z: -8,  baseSize: 5, colH: 3.6 },
-    'p-lark-survey-scoreboard':{ x: 0,  z: +25, baseSize: 5.5, colH: 3.8 },
-    'p-obsidian-lifeos':      { x: -30, z: -15, baseSize: 4.5, colH: 3.4 },
-    'p-bitable-orchestrator': { x: +28, z: +25, baseSize: 5, colH: 3.4 },
+    'p-auto-new':             { x: +30, z: -8,  baseSize: 5, colH: 3.6 },
+    'p-personal-context-system':{ x: -30, z: -15, baseSize: 4.5, colH: 3.4 },
+    'p-knowledge-healer':     { x: 0,  z: +25, baseSize: 5.5, colH: 3.8 },
+    'p-lark-survey-scoreboard':{ x: +28, z: +25, baseSize: 5, colH: 3.4 },
   };
   for (const p of D.projects) {
     const def = defs[p.id];
