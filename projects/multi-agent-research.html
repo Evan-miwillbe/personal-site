@@ -237,7 +237,7 @@
     <h1>Multi-Agent Research</h1>
     <div class="subtitle">
       Claude Code 平台上的虚拟研究团队 Skill。
-      输入一个题目，还你一份有数据支撑、有来源可查、经过交叉验证的研究报告。
+      输入一个题目，输出一份有数据、有来源、经过交叉验证的研究报告。
     </div>
     <div class="case-meta">
       <div class="meta-item"><div class="lbl">时间</div><div class="val">2026.04 — 05 · 13 天</div></div>
@@ -262,18 +262,18 @@
     <h2>起点：小红书上<br/>晓辉博士的一场分享</h2>
     <p>
       2026 年 3 月，我第一次在小红书听到晓辉博士谈到：她用 Multi-Agent 组建了一个 Agent team，
-      各个专家 Agent 各司其职，产出了一份结构清晰、极具深度的研究报告——而且 Agent 做完任务规划后，
-      竟然不间断地跑了两个小时。我于是也向自己提问，埋下了一颗<strong>种子</strong>。
+      不同专家 Agent 分头研究，最后合成一份结构清晰的报告。任务规划完成后，
+      整个团队连续运行了两个小时。这让我开始认真考虑：我能不能也做一个自己可控的版本？
     </p>
     <div class="quote">
-      如果我做的一些事，能为「知识平权」出一点力——让一个普通人，
-      也能在二十多分钟里把一个复杂问题拆开看清——那这件事便值得做。
+      我想让普通人也能在二十多分钟里，把一个复杂问题拆开、看清。
+      如果工具能把专业研究的门槛再压低一点，我愿意继续做下去。
       <span class="src">— 观点页《Multi-Agent 协作的调性与瓶颈》</span>
     </div>
     <p>
       我想要的，是一个自己能看懂、能控制、过程可复现的版本：输入一个题目，
-      还我一份有数据支撑、来源可查、经过交叉验证的报告。所以这不是"做个工具"——
-      是<strong>把 47 轮实验里发现的协作规律，凝固成一份可复现的 Skill</strong>。
+      输出一份有数据支撑、来源可查、经过交叉验证的报告。为此，我把
+      <strong>47 轮实验里发现的协作规律写进一份可复现的 Skill</strong>。
     </p>
   </section>
 </div>
@@ -289,15 +289,15 @@
       看起来全面，但实测时发现：<strong>很多"机制"只是写在 prompt 里</strong>，AI 并不真的执行，只是"看起来在执行"。
     </p>
     <p>
-      v5.0 第一次大规模精简到 <strong>647 行</strong>（−53%）。真正的转折是 v6.0 的<strong>扁平化重构</strong>——砍掉 PM 中间层、改星型直连、角色从 9 类压到 4 类；
-      到 v6.3 进一步自包含压缩到 <strong>213 行</strong>（−72% context）。但同样的研究题目，输出质量反而更好——说明一件事：
+      v5.0 第一次大规模精简到 <strong>647 行</strong>（−53%）。v6.0 又做了<strong>扁平化重构</strong>：砍掉 PM 中间层、改成星型直连，角色从 9 类压到 4 类；
+      v6.3 进一步压缩到 <strong>213 行</strong>（−72% context）。用同一研究题目复测后，输出质量反而更好。
     </p>
     <div class="quote">
-      不是越多机制越好。是<em>能被验证有效的</em>机制才值得保留。
+      机制多少不重要，<em>实验确认有效</em>的才保留。
       <span class="src">— v6.x 重构后的核心 learning</span>
     </div>
     <p>
-      最终 v8.0 把 17 个被实验验证的钩子分层整合（420 行），v9.0 收敛到 <strong>453 行</strong>稳定版——精简结构 + 被消融证明必要的机制。
+      v8.0 分层整合了 17 个实验钩子（420 行）；v9.0 最终收敛到 <strong>453 行</strong>，只保留精简结构和消融实验确认必要的机制。
     </p>
   </section>
 </div>
@@ -344,9 +344,9 @@
       </div>
     </div>
     <p>
-      裁掉中层（PM）不是为了精简——是 4 个真实项目证明二跳链路不可靠。
-      合并 FactChecker + Critic 不是偷懒——是发现两者工作内容 >50% 重叠。
-      <strong>每一次删减都有数据支撑，不是审美选择。</strong>
+      4 个真实项目都出现了二跳链路断线，所以我裁掉了 PM。
+      FactChecker 和 Critic 的工作内容重叠超过 50%，于是合并为一个角色。
+      <strong>这些删减都来自运行数据。</strong>
     </p>
   </section>
 </div>
@@ -357,8 +357,7 @@
     <div class="chapter-label">02c · Causal Chain</div>
     <h2>从 R1 到 R6 的多米诺效应</h2>
     <p>
-      最值得反复读的是这条因果链——每一步改动都是前一步的逻辑推论，
-      像剥洋葱一样一层层发现"原来这一步是多余的"：
+      R1 到 R6 的改动首尾相连。每轮都顺着上一轮暴露的问题继续往下改：
     </p>
     <div style="background:var(--card);border:1px solid var(--line);border-radius:20px;padding:28px 32px;margin:24px 0;box-shadow:var(--shadow-sm);font-size:15px;line-height:2.2">
       <div style="font-family:var(--mono);font-size:11px;color:var(--orange);letter-spacing:.12em;margin-bottom:12px">DOMINO CHAIN · R1 → R6</div>
@@ -369,7 +368,7 @@
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ <strong>R5</strong> 执笔人只需读交班条，不需原文<br/>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ <strong>R6</strong> 主 CC 自己就能写 → <span style="color:var(--sage);font-weight:600">执笔人角色被消灭</span><br/>
       <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-soft)">
-        从 4 种角色（研究员 + 质检 + 批评 + 执笔）→ 只需 2 种（研究员 + 质检）。不是"想砍而砍"，是"观察到信息根本不需要经过这个人"。
+        角色从 4 种（研究员 + 质检 + 批评 + 执笔）降到 2 种（研究员 + 质检），因为实验发现信息不需要经过另外两个角色。
       </div>
     </div>
   </section>
@@ -434,7 +433,7 @@
       <div class="compare-card bad">
         <div class="cc-tag">关键约束放 prompt 中间</div>
         <div class="cc-num">0% <small style="font-size:18px;color:var(--ink-mute);">合规率 (0 / 6)</small></div>
-        <p>6 次测试里 <strong>0 次</strong>被执行。AI 完全跳过了中间段的关键指令——和论文里"Lost in Middle"效应吻合。</p>
+        <p>6 次测试里 <strong>0 次</strong>被执行。AI 跳过了中间段的关键指令，结果与论文中的 "Lost in Middle" 效应一致。</p>
       </div>
       <div class="compare-card good">
         <div class="cc-tag">同一约束放首尾</div>
@@ -443,8 +442,8 @@
       </div>
     </div>
     <p>
-      这是 v9.0 所有 prompt 模板硬规则的起点：<strong>关键约束必须放首尾，禁止藏在中间</strong>。
-      这不是经验之谈，是 47 轮实验里通过 A/B 切换位置反复验证过的因果结论。
+      因此，v9.0 的 prompt 模板都遵守同一条硬规则：<strong>关键约束放在首尾，不藏在中间</strong>。
+      这条规则来自 A/B 切换位置的重复实验。
     </p>
   </section>
 </div>
@@ -463,13 +462,12 @@
     <div class="chapter-label">04 · Outcome</div>
     <h2>方法论落地为 knowledge-healer，<br/>入选飞书 CLI 创作者大赛十佳</h2>
     <p>
-      Multi-Agent Research 自己没有真实用户——它的"用户"就是我，跑 47 轮实验的我。
-      这是它的局限，也是它的定位：
-      <strong>它是方法论沉淀的容器</strong>。
+      Multi-Agent Research 当时没有外部用户，47 轮实验都是我自己在跑。
+      因此它更像一份<strong>方法实验记录</strong>，而不是已经被市场验证的产品。
     </p>
     <p>
-      验证这套方法论是否真的有用的方式是：把它<strong>用到一个有真实用户的产品上</strong>。
-      所以我做了 <a href="knowledge-healer.html"><strong>knowledge-healer</strong></a>——
+      下一步是把这套方法用于<strong>有真实用户的产品</strong>。
+      我随后做了 <a href="knowledge-healer.html"><strong>knowledge-healer</strong></a>，
       用 3+2 多 Agent 并行架构（Multi-Agent Research 的直接派生），
       解决企业知识库自愈这个真实痛点。
     </p>
@@ -498,7 +496,7 @@
     <h2>17 个机制，逐一接受消融测试</h2>
     <p>
       每个机制都来自学术论文或实战失败。加入前必须设计触发场景跑完整研究。
-      最终 <strong>2 个被证明有不可替代的因果影响</strong>（KEEP），14 个已被模型内化或仅在特定场景触发（NOISE），1 个有条件保留。
+      最终有 <strong>2 个机制测到明确的因果影响</strong>（KEEP），14 个已被模型内化或只在特定场景触发（NOISE），另有 1 个按条件保留。
     </p>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0">
       <div style="background:var(--card);border:1px solid var(--line);border-left:4px solid var(--sage);border-radius:12px;padding:16px 18px">
@@ -526,7 +524,7 @@
       </div>
     </div>
     <p>
-      "NOISE"不是"没用"——这些机制在特定场景下仍有价值（如异议触发在学术争议主题中发现了 2 个 P0）。
+      "NOISE"不等于没用。这些机制在特定场景下仍有价值，例如异议触发在学术争议主题中发现了 2 个 P0。
       但在标准流程中，<strong>Claude 已经内化了这些行为</strong>，显式写在 prompt 里不增加额外收益。
     </p>
   </section>
@@ -536,20 +534,19 @@
 <div class="container">
   <section class="chapter">
     <div class="chapter-label">05 · Reflection</div>
-    <h2>我做的不是产品，是"过程"</h2>
+    <h2>我真正积累下来的是过程</h2>
     <p>
       做 Multi-Agent Research 之前，我花过几年时间在部队的文书 SOP、天风证券的 REITs 周报 SOP、
-      美动医疗的 VBA 自动化上。这一路我学到的不是"怎么写代码"，是<strong>怎么把一件做过的事拆解成可复用的流程</strong>。
+      美动医疗的 VBA 自动化上。一路做下来，我最熟悉的是<strong>把做过的事拆成可复用的流程</strong>。
     </p>
     <p>
       Multi-Agent Research 是这条主线在 AI 时代的版本。47 轮实验的每一轮，
-      我都不是为了"做出一个更好的产品"，是为了<strong>把上一轮的发现固化成下一轮的硬规则</strong>。
-      这是慢工——但回头看，13 天能跑完 77 个 commit、47 轮控制实验、
-      并把整个过程的因果链写进 README，这种密度本身就是一种"产品力"。
+      我都在做同一件事：<strong>把上一轮的发现写成下一轮的硬规则</strong>。
+      13 天里一共留下 77 个 commit 和 47 轮控制实验，
+      每次改动的原因都记录在 README 里。
     </p>
     <p>
-      非 CS 科班，没什么"工程师光环"。我做这件事的底气是<strong>把模糊的协作直觉变成可验证的实验</strong>——
-      这是过去几年 SOP 训练给我的真正能力。
+      我不是 CS 科班。过去几年的 SOP 训练让我擅长一件事：<strong>把模糊的协作直觉改写成可验证的实验</strong>。
     </p>
   </section>
 
@@ -557,7 +554,7 @@
     <div class="chapter-label">附 · 后续 · multi-coder</div>
     <h2>方法论<em style="color:var(--accent);font-style:italic">跨领域</em>迁移：研究 → 编程</h2>
     <p>
-      v9.0 收敛后，我做了一个实验——把 Multi-Agent Research 里被验证有效的机制，
+      v9.0 收敛后，我把 Multi-Agent Research 中验证有效的机制
       迁移到完全不同的领域：<strong>编程</strong>。结果是 <code>multi-coder</code>（v1.2，664 行 SKILL.md）。
     </p>
     <p>
@@ -565,12 +562,12 @@
       5 个是编程场景新增的（Phase 0.5 写前检测、安全 Gate、EII 现有实现目录、arch_fingerprint 架构指纹、Architecture Gate）。
     </p>
     <p>
-      为了做这件事，我用 multi-agent-research 本身又跑了一次<strong>3 Agent 并行研究</strong>——
+      为此，我又用 multi-agent-research 跑了一次<strong>3 Agent 并行研究</strong>，
       44 个来源 + 8 位开发者反馈，回答的问题是"AI 不知道什么时候<em>不该</em>写代码"。
       这是我目前为止最满意的"用工具改进工具"的循环。
     </p>
     <div class="quote">
-      继承不是复制——是<em>知道哪些规律跨领域成立</em>。<br/>
+      真正要找的是<em>哪些规律跨领域仍然成立</em>。<br/>
       三问筛选、Spawn 协议、Lost in Middle，这些检测的是"任务本身的结构属性"，<br/>
       不依赖领域知识。所以它们从研究跨到编程的时候，能直接活下来。
       <span class="src">— multi-coder README · 设计决策叙事</span>

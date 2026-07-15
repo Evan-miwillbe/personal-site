@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>auto-new · Skill 自迭代框架 · 滕美名</title>
-<meta name="description" content="从 31 轮迭代抽离出通用循环 · 4 范式 + 16 铁律 · 元工具迭代它的母工具" />
+  <meta name="description" content="从 31 轮实验中整理出的 Skill 自迭代框架，包含 4 种实验范式和 16 条工程规则。" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -244,17 +244,17 @@
     <div class="chapter-label">01 · The Meta-shift</div>
     <h2>做完 Multi-Agent 第 7 轮，<br/>我发现一件有趣的事</h2>
     <p>
-      做 Multi-Agent Research 做到第 7 轮的时候，我注意到一件有趣的事——每一轮做的事其实是同一套循环：
+      Multi-Agent Research 做到第 7 轮时，我发现每一轮都在重复同一套循环：
       <strong>读上轮经验 → 诊断瓶颈 → 选 1–2 个变量 → 跑实验 → 评估 → 决定保留或回退 → 写新经验</strong>。
     </p>
     <p>
-      这不是研究框架特有的——这是<strong>任何可编辑资产</strong>的通用迭代模式。
+      这套循环同样适用于<strong>任何可编辑资产</strong>。
     </p>
     <p>
-      更进一步，我发现自己反复踩同一些坑——<strong>水床效应</strong>（压缩 A 组件，B 组件膨胀）、
+      我也在反复踩同一些坑：<strong>水床效应</strong>（压缩 A 组件，B 组件膨胀）、
       <strong>目标漂移</strong>（从"改进 skill"滑向"跑研究确认内容"）、
       <strong>验证完成后该转型却继续验证</strong>。
-      这些不是研究框架的 bug，这是<em style="color:var(--accent);font-style:italic">长程自迭代本身的失败模式</em>。
+      换了任务，这些问题照样出现。它们属于<em style="color:var(--accent);font-style:italic">长程自迭代本身的失败模式</em>。
     </p>
     <div class="quote">
       Multi-Agent 是我做的产品。<br/>
@@ -262,7 +262,7 @@
       <span class="src">— auto-new 设计动机</span>
     </div>
     <p>
-      于是我做了第二件事——把这套迭代方法工程化为独立 Skill，叫 <strong>auto-new</strong>。
+      我把这套迭代方法做成了一个独立 Skill，叫 <strong>auto-new</strong>。
       它接受任何 target 文件、任何 objective、N 轮实验。
     </p>
   </section>
@@ -272,8 +272,8 @@
 <div class="container">
   <section class="chapter">
     <div class="chapter-label">02 · Four Paradigms</div>
-    <h2>4 种实验范式——<br/><em>不同任务用不同手</em></h2>
-    <p>不同任务需要不同的实验设计。auto-new 提供 4 种范式让你选：</p>
+    <h2>4 种实验范式<br/><em>任务不同，实验设计也不同</em></h2>
+    <p>auto-new 提供 4 种实验范式：</p>
     <div class="paradigm-grid">
       <div class="paradigm-card">
         <div class="pc-tag">i · iterative</div>
@@ -303,8 +303,8 @@
 <div class="container">
   <section class="chapter">
     <div class="chapter-label">03 · Sixteen Iron Rules</div>
-    <h2>16 条工程铁律——<br/><em>从血泪中沉淀</em></h2>
-    <p>每一条都对应至少一次实战中的失败。挑几条关键的：</p>
+    <h2>16 条工程规则<br/><em>每一条都来自一次实际失败</em></h2>
+    <p>这里列出其中几条：</p>
     <div class="iron-list">
       <div class="iron-item">
         <div class="ii-rule"><em>架构 vs 参数</em> 10–100x 杠杆差异</div>
@@ -345,7 +345,7 @@
     <p>这是 auto-new 最有意思的一件事。</p>
     <p>
       Multi-Agent v6.4 → v9.0 全 <strong>31 轮迭代</strong>由 auto-new 驱动。
-      元工具迭代它的母工具——形成「应用层 → 元层 → 反哺应用层」完整闭环。
+      auto-new 从 Multi-Agent 的迭代中抽象出来，又反过来驱动它继续升级。
     </p>
     <div class="loop-diagram">
       <div class="ld-row">
@@ -358,7 +358,7 @@
       <div class="ld-caption">META-LOOP · 31 ROUNDS · v6.4 → v9.0</div>
     </div>
     <p>
-      同时，我用 auto-new 的 quantitative 模式跑了另一个完全不同领域的任务——
+      我还用 auto-new 的 quantitative 模式跑了另一个任务：
       <strong>MinerU PDF 转 Markdown</strong>。通过参数扫描确定 3 worker 最优配置（41 篇 / 6.4min，11x 加速）。
     </p>
     <div class="stat-row">
@@ -367,7 +367,7 @@
       <div class="stat-item"><div class="num">2<small>领域</small></div><div class="lbl">研究框架 + 工程工具<br/>同一引擎跨领域复用</div></div>
     </div>
     <p>
-      这证明了一件事：<strong>auto-new 不是 Multi-Agent 的副产品，它是真正的通用 Skill 自迭代引擎</strong>。
+      两类任务都跑通后，我把 auto-new 定位为<strong>可复用的 Skill 自迭代引擎</strong>。
     </p>
   </section>
 </div>
@@ -376,7 +376,7 @@
 <div class="container">
   <section class="chapter">
     <div class="chapter-label">05 · Reflection</div>
-    <h2>为什么我自己<em>看重</em>这件事</h2>
+    <h2>为什么我<em>看重</em> auto-new</h2>
     <div class="quote">
       做 Multi-Agent 做到第 7 轮的时候，我发现自己每一轮在做的事其实是<em style="color:var(--accent);font-style:italic;font-family:var(--display)">同一套循环</em>。<br/>
       把这套循环抽出来工程化，是我现在最感兴趣的方向。
@@ -389,9 +389,9 @@
       <strong>ClawHub 社区</strong>的 Skill 设计实践。
     </p>
     <p>
-      auto-new 是我和 Claude Code 协作完成的第一个<em style="color:var(--accent);font-style:italic">元层工具</em>——
-      它的"用户"就是我自己迭代别的 Skill 时的我。能不能扩展到更广的场景、能不能真正成为通用引擎，
-      还需要更多任务来验证；目前只能说<strong>在我自己这套工作流里跑得通</strong>。
+      auto-new 是我和 Claude Code 协作完成的第一个<em style="color:var(--accent);font-style:italic">元层工具</em>。
+      它目前最稳定的用户就是我自己：我用它迭代其他 Skill。它能否扩展到更广的场景，
+      还需要更多任务验证；现在可以确认的是，<strong>它在我的工作流里跑得通</strong>。
     </p>
 
     <div class="jd-block">

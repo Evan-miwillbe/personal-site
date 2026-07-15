@@ -434,8 +434,8 @@
     </div>
     <h1>knowledge-healer</h1>
     <div class="subtitle">
-      3+2 多 Agent 并行架构，对飞书知识库做 7 维健康诊断——
-      不只找"文档有没有问题"，还找"该有但没有的内容"。
+      用 3+2 多 Agent 并行架构检查飞书知识库。7 个诊断维度既看现有文档的问题，
+      也检查本该存在却缺失的内容。
     </div>
     <div class="case-meta">
       <div class="meta-item">
@@ -473,16 +473,15 @@
     <h2>新人入职第一天，主管说<br/>"去看 wiki 上的报销流程"</h2>
     <p>
       照着走一遍，被财务打回来。主管说"哦那个早改了，直接提交就行"。
-      这不是个案。
+      类似的情况并不少见。
     </p>
     <div class="quote">
       过时文档消耗的时间比没有文档还多，因为人们会按错误步骤操作、搞坏东西，然后需要老员工花时间来修复。
       <span class="src">— r/ExperiencedDevs, 2025</span>
     </div>
     <p>
-      调研显示 <strong>70% 以上企业知识库"几乎无人用或仅勉强有人用"</strong>。
-      根本原因很简单：写一篇文档是一次性成本，人们愿意付；
-      <strong>维护一篇文档是持续成本，没人愿意管。</strong>
+      调研中，<strong>70% 以上企业知识库"几乎无人用或仅勉强有人用"</strong>。
+      写文档只花一次时间，维护却要长期投入，后者往往没人负责。
     </p>
     <p>
       Knowledge Healer 做一件事：<strong>让机器替你检查，你只管修。</strong>
@@ -504,8 +503,8 @@
     <div class="chapter-label">02 · The Solution</div>
     <h2>7 维健康诊断 + 跨源验证</h2>
     <p>
-      Knowledge Healer 不是简单的"90 天没改就标红"——会议纪要三年不更新也正常，
-      入职指南 30 天没改可能就出问题了。系统按文档类型区分有效期，
+      判断文档是否过期，不能只看"90 天没修改"。会议纪要三年不更新很正常，
+      入职指南 30 天没改却可能已经有问题。系统会按文档类型设置有效期，再做
       <strong>多信号加权判定</strong>。
     </p>
     <div class="dim-grid">
@@ -551,8 +550,8 @@
       </div>
     </div>
     <p>
-      <strong>关键创新</strong>是最后那一维——<em>跨源交叉验证</em>。
-      文档没改，但群里有人说"我们现在不这么做了"，这是纯文档检查工具做不到的。
+      第七个维度是<em>跨源交叉验证</em>。
+      文档没改，群里却有人说"我们现在不这么做了"，这种变化只检查文档本身看不出来。
     </p>
   </section>
 </div>
@@ -572,13 +571,13 @@
     <h2>多 Agent 并行 + 信号融合</h2>
     <p>
       架构上用 <strong>3+2 并行</strong>：3 个诊断 Agent（结构/内容/使用）分头扫描，
-      2 个验证 Agent（跨源/优先级）后置判定。这套思路直接来自我同期做的
-      <a href="multi-agent-research.html"><strong>Multi-Agent Research</strong> 框架</a>——
-      理论沉淀 → 工程落地 → 第三方认证的完整闭环。
+      2 个验证 Agent（跨源/优先级）后置判定。这套架构来自我同期做的
+      <a href="multi-agent-research.html"><strong>Multi-Agent Research</strong> 框架</a>，
+      knowledge-healer 是它第一次面对真实业务问题的实现。
     </p>
     <p>
       每个文档最终得到一个 <strong>0-100 的健康分</strong>和一份具体修复建议清单。
-      不是"你的知识库不行"，是"这 12 条 30 分钟可以修完"。
+      报告不会只说"知识库有问题"，而会列清楚"这 12 条可以在 30 分钟内修完"。
     </p>
   </section>
 </div>
@@ -654,21 +653,21 @@
 <div class="container">
   <section class="chapter">
     <div class="chapter-label">05 · Reflection</div>
-    <h2>这件事我学到了什么</h2>
+    <h2>我从这个项目里学到的</h2>
     <p>
-      做 knowledge-healer 之前，我做了 13 天的 <strong>Multi-Agent Research</strong>——
+      做 knowledge-healer 之前，我花 13 天做了 <strong>Multi-Agent Research</strong>，
       在没有真实用户的情况下，跑 47 轮控制实验，沉淀方法论。
       它是一个研究型作品，更像给自己看的实验报告。
     </p>
     <p>
       做完 knowledge-healer，这套方法论第一次有了真实的服务对象：
       <strong>任何一个被过期文档坑过的团队</strong>。
-      理论 → 工程 → 验证这条闭环让我意识到——
-      产品和研究不是对立的，它们是<em>同一件事的两个阶段</em>。
+      这次从研究走到实现，再拿到外部反馈，我才意识到：
+      产品和研究可以是<em>同一件事的两个阶段</em>。
     </p>
     <p>
-      飞书十佳给我的不是奖金（没有），是<strong>外部世界第一次告诉我："你做的东西，有人要"</strong>。
-      在那之前，我所有的作品只有一个用户——我自己。
+      飞书十佳没有奖金，但它给了我一次很具体的外部反馈：<strong>这个东西确实有人需要</strong>。
+      在那之前，我做的作品大多只有一个用户，就是我自己。
     </p>
 
     <figure style="margin:36px 0 0">

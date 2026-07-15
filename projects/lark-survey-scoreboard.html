@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>lark-survey-scoreboard · 飞书实时评分大屏 · 滕美名</title>
-<meta name="description" content="培训结束打开飞书妙记说一句话，AI 替你想题目，手机评分，大屏 1 秒刷新，总成本 ¥0 · 飞书 CLI 创作者大赛十佳" />
+  <meta name="description" content="根据飞书妙记生成培训评分题，手机扫码填写，大屏每秒刷新；总成本 ¥0，入选飞书 CLI 创作者大赛十佳。" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -233,8 +233,8 @@
     </div>
     <h1>lark-survey-scoreboard</h1>
     <div class="subtitle">
-      培训结束。打开飞书妙记，对着它说一句话，评分问卷就自己长出来了——
-      不是模板，是 AI 读完了你这场培训讲了什么，替你想好了该问什么。
+      培训结束后，把飞书妙记交给 AI。它会根据这场培训的实际内容生成评分题，
+      再把问卷和实时大屏接起来。
     </div>
     <div class="case-meta">
       <div class="meta-item"><div class="lbl">时间</div><div class="val">2026.04</div></div>
@@ -262,9 +262,9 @@
       领导转头问我：<strong>"能不能做个实时的反馈问卷？"</strong>
     </p>
     <p>
-      Poll Everywhere 是很好的工具，但很多想实现的功能并不能通过现成网站实现。
-      手动编十几道题再计算均分，是一件很麻烦的事——
-      而且之前用飞书看板做过类似的研究，实时显示这一步暂时做不到。
+      Poll Everywhere 很成熟，但现成网站覆盖不了这次培训想要的全部功能。
+      手动编十几道题、计算均分也很费时间；我之前用飞书看板做过类似尝试，
+      当时还做不到实时显示。
     </p>
     <div class="quote">
       飞书表格免费，调用飞书 CLI 能操作它，AI 能帮我想题目。
@@ -272,7 +272,7 @@
       <span class="src">— 仓库 README · 作者的话</span>
     </div>
     <p>
-      其实不是什么改变世界的伟大产品。<strong>就是一个来源于实习真实需求的解决方案</strong>。
+      <strong>这是一个从实习需求里长出来的小工具</strong>。
       花了 ¥0，省了重复劳动，数据还在自己手里。
     </p>
   </section>
@@ -292,8 +292,8 @@
     <div class="chapter-label">02 · The Workflow</div>
     <h2>把三件事串起来：飞书 + AI + ECharts</h2>
     <p>
-      工具的核心是<strong>把"重复劳动"压缩到接近 0</strong>——一个培训结束，
-      管理者最理想的体验是：说一句话，几分钟后拿到结果。所有中间步骤都不应该手动做。
+      我想把<strong>重复劳动压到接近 0</strong>。培训结束后，管理者只需说清楚需求，
+      几分钟后就能拿到问卷和结果，中间步骤由工具完成。
     </p>
     <div class="workflow">
       <div class="wf-step">
@@ -306,7 +306,7 @@
         <div class="wf-no">STEP 02</div>
         <div class="wf-emoji">🤖</div>
         <h4>AI 读妙记出题</h4>
-        <p>Claude 读完总结后，根据培训内容生成 5-10 道针对性评分题——不是模板。</p>
+        <p>Claude 读完总结后，根据培训内容生成 5-10 道针对性评分题，每场培训的问题都会不同。</p>
       </div>
       <div class="wf-step">
         <div class="wf-no">STEP 03</div>
@@ -322,8 +322,8 @@
       </div>
     </div>
     <p>
-      每一步都是"现成能力的拼装"。飞书妙记免费、飞书 Base 免费、Claude Code 本身已经在订阅、
-      ECharts 开源——<strong>真正的工程是"把它们之间的接缝抹平"</strong>。
+      飞书妙记、飞书 Base 和 ECharts 都是现成能力，Claude Code 也已经在订阅。
+      难点在于把它们接起来，让数据从录音一路流到问卷和大屏。
     </p>
 
     <figure style="margin:32px 0 0">
@@ -366,9 +366,8 @@
       将收录至 larksuite 官方开源库附作者署名。
     </p>
     <p>
-      这件事的特别之处不是"获奖"——是<strong>一个来自实习真实需求的小工具，
-      被字节官方认可</strong>。在做这个之前，我所有 AI 项目都是"自己用"。
-      这是第一个证明"我做的东西，别人也能用"的产品。
+      对我来说，比入选更重要的是：<strong>一个来自实习需求的小工具，拿到了真实用户和外部认可</strong>。
+      在此之前，我的 AI 项目大多只给自己用；这是第一个被别人实际用起来的产品。
     </p>
     <div class="stat-row">
       <div class="stat-item"><div class="num">¥0</div><div class="lbl">总成本 / 任何会议可用</div></div>
@@ -404,18 +403,17 @@
     <p>
       我之前做 <a href="multi-agent-research.html">Multi-Agent Research</a> 时，
       Claude 跟我说"你的项目没有真实用户"。这话我当时听了不舒服，但是对的。
-      <strong>lark-survey-scoreboard 是我第一次做"为别人解决问题"的产品</strong>——
-      就算这个"别人"只是我的带教老师，那也是真实的用户。
+      <strong>lark-survey-scoreboard 是我第一次为一个具体的人解决具体问题</strong>。
+      这个人是我的带教老师，但需求和反馈都是真实的。
     </p>
     <p>
-      做完这个我才理解一件事：<strong>用户需求不一定来自市场调研</strong>。
-      它可以来自一个领导随口的一句话——但前提是你愿意把那句话当回事，
-      花几个晚上把它做出来，然后让它真的好用。
+      做完之后我才发现，<strong>用户需求不一定来自正式的市场调研</strong>。
+      它也可能只是领导随口问的一句话。关键是把这句话当成需求，
+      花几个晚上做出来，再让对方真的用上。
     </p>
     <p>
-      工具做完了，培训照样开。但下次开完，再没人需要花两小时手动统计评分了。
-      这就是<strong>"做工具的人，最怕工具做完了自己都不用"</strong>这句话的反面——
-      工具做完，真的有人用，且用得上。
+      没有这个工具，培训也会照常进行。区别是下次培训结束后，
+      不再有人花两小时手动统计评分。工具做完以后，确实有人用，也确实省了时间。
     </p>
   </section>
 </div>

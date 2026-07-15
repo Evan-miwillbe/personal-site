@@ -49,7 +49,7 @@ window.SITE_DATA = {
     tagline_en: "I make AI things & tools.",
     tagline_supplement_cn: "22 岁 · AI Skill 与 Multi-Agent 协作框架开发者 · 飞书 CLI 创作者大赛十佳入选",
     bio_short_cn: "滕美名，22 岁，上海。上海对外经贸大学应届，退役军人。从 2026 年 3 月动手做 AI Skill，两个被字节飞书官方选入「十佳」。",
-    bio_origin_cn: "从 2026 年 1 月开始学 AI，感谢 Waytoagi 社区。跨过了很多困难，中间多次想过放弃，但知道这是喜欢的事情，所以，还在加油。",
+    bio_origin_cn: "2026 年 1 月，我从 Waytoagi 社区开始学 AI。很多概念在过去的经历里找不到对应物，我中间几次想放弃，但还是想把这件喜欢的事继续做下去。",
     hero_eyebrow: "Hello · 你好 · A PERSONAL INDEX, 2026",
     marathon_full_pb: "3:35",
     marathon_half_pb: "1:42",
@@ -118,7 +118,7 @@ window.SITE_DATA = {
       year: "2026.04 —",
       tagline: "多 Agent 深度研究框架",
       activity_meta: "深度调研报告 · 多角色协作",
-      description_short: "输入调研主题，产出一份可深度覆盖全网实时数据的报告。将原本需数天的人工桌面调研压缩到约25分钟。针对单agent调研深度不足、同一角色兼写作和自审查容易自信的痛点，设计“课题输入→可信报告输出”的多Agent工作流（分工调研+独立质检+综合成稿），已落地跨境电商选品、行业与竞品调研、产品开发等真实决策场景。",
+      description_short: "输入调研主题，约 25 分钟后得到一份有数据、有来源、经过交叉验证的报告。工作流把分工调研、独立质检和综合成稿拆给不同 Agent，已用于跨境电商选品、行业与竞品调研、产品开发等场景。",
       description_full: null,
       tags: ["RESEARCH", "CLAUDE CODE", "MULTI-AGENT"],
       tech_stack: [],
@@ -143,7 +143,7 @@ window.SITE_DATA = {
       year: "2026.05",
       tagline: "Skill / 脚本 / prompt 自迭代引擎",
       activity_meta: "v3.9 · 自迭代范式",
-      description_short: "让任何skill/脚本/prompt在真实使用中自我进化（self-correction自我校正循环），提前定义“什么是好”和验收标准，AI执行“改→实验→批评式评估（指出哪里不好+为什么，而非只打分）→保留/回滚”循环。实现离场持续运行，直至匹配最终量化目标并验收。把原本需要全程监督、反复手动调试好几天的“优化AI系统”的工作，变成无人值守的自动循环。",
+      description_short: "先定义验收标准，再让 AI 按“修改→实验→评估→保留或回滚”的顺序迭代 skill、脚本或 prompt。循环可以离场运行，直到达到量化目标；原本需要持续盯着调试的工作，可以改成批量验收。",
       description_full: null,
       tags: ["META-FRAMEWORK", "SKILL FACTORY", "SELF-EVOLUTION"],
       tech_stack: ["Claude Code", "Skill Engineering"],
@@ -156,7 +156,7 @@ window.SITE_DATA = {
       stamp_char: "元",
       role_in_loop: "meta · 元层",
       loop_meta: "自迭代范式 · v3.9",
-      pricetag: "把优化 AI 系统这件事本身，变成可无人值守运行的循环。",
+      pricetag: "让 AI 系统的优化过程可以离场运行，再由人统一验收。",
       sort_order: 2
     },
     {
@@ -167,7 +167,7 @@ window.SITE_DATA = {
       year: "2026.03 — 2026.06",
       tagline: "可维护个人 Context 系统",
       activity_meta: "Human-in-the-loop",
-      description_short: "将个人经历、偏好、目标蒸馏为结构化画像库。针对信息过载时人无法全程在线逐一判断，AI基于个人context先做预判断（哪些与“我”相关），再由人最终决策：把个性化匹配从依赖现场判断，前置为可复用的context资产。目前已落地于求职岗位初筛（海量岗位→按方向+画像预筛→人综合评定），同一模式可迁移至任何信息密集决策场景。",
+      description_short: "把个人经历、偏好和目标整理成可维护的 context。信息量太大时，AI 先按方向和画像做初筛，人再做最终判断。目前这套流程用于求职岗位筛选，也能迁移到其他信息密集的决策任务。",
       description_full: null,
       tags: ["CONTEXT", "MEMORY", "AI WORKFLOW"],
       tech_stack: ["Claude Code", "Personal Context"],
@@ -191,7 +191,7 @@ window.SITE_DATA = {
       year: "2026.05",
       tagline: "飞书知识库自愈巡检",
       activity_meta: null,
-      description_short: "吸收Multi-Agent Research构建的经验，通过多agent协作，以解决知识库持续增长过程中的健康维护问题。skill可以实现团队知识系统的体检和免疫功能：通过持续对比正式文档与团队群聊消息记录，诊断知识库和团队真实业务中不一致的内容，及时处理知识库过期、冲突、缺失和泄漏的知识，并把它们变成可执行的修复任务。",
+      description_short: "用多 Agent 检查持续增长的团队知识库。系统会对照正式文档和群聊记录，找出过期、冲突、缺失或归属错误的内容，再把问题整理成可以直接处理的修复任务。",
       description_full: null,
       tags: ["★ 飞书十佳", "FEISHU CLI", "MIT"],
       tech_stack: [],
@@ -215,7 +215,7 @@ window.SITE_DATA = {
       year: "2026.04",
       tagline: "飞书实时评分大屏",
       activity_meta: null,
-      description_short: "这是一个基于飞书 Base 的实时评分系统搭建 skill。它把问卷设计、数据存储、维度统计、仪表盘生成、手机评分页、大屏展示和部署踩坑整合成一套可重复执行的流程，让团队可以用接近零成本的方式搭建培训、年会、评审、投票、360 评估等现场互动场景的数据大屏。",
+      description_short: "一套基于飞书 Base 的实时评分流程，包含问卷生成、数据存储、维度统计、手机评分页和大屏展示。团队可以用接近零成本的方式搭建培训、年会、评审或投票现场。",
       description_full: null,
       tags: ["★ 飞书十佳", "ECHARTS", "FROM INTERNSHIP"],
       tech_stack: ["ECharts", "飞书 Base"],
@@ -228,7 +228,7 @@ window.SITE_DATA = {
       stamp_char: "★",
       role_in_loop: "v · 应用",
       loop_meta: "实时评分 · ¥0 成本",
-      pricetag: "从美动 HR 实习的真实需求长出来的工具——我尝试理解产品的起点。",
+      pricetag: "从美动 HR 实习的真实需求里长出来的工具。",
       sort_order: 5
     }
   ],
@@ -243,7 +243,7 @@ window.SITE_DATA = {
       role_en: "HR Intern · Training",
       role_cn: null,
       summary: "识别跨表汇总痛点 → AI 协作生成 VBA 多表自动化；操作北森 HR 系统；负责\"领航计划\"销售带教数据运营。",
-      note: "业务直接孵化项目：培训结束领导问\"能不能做个实时反馈问卷\"——这个真实需求三周后变成了 lark-survey-scoreboard，最终入选飞书 CLI 十佳。",
+      note: "培训结束后，领导问我“能不能做个实时反馈问卷”。三周后，这个需求变成了 lark-survey-scoreboard，并入选飞书 CLI 十佳。",
       related_project_ids: ["p-lark-survey-scoreboard"],
       side_tag: "医疗",
       type: "internship",
@@ -270,7 +270,7 @@ window.SITE_DATA = {
       org_en: null,
       role_en: "Service · Clerk",
       role_cn: null,
-      summary: "个人嘉奖一次。三公里考核连队第一，支队级比武三公里第二。代理文书期间处理基层表格 90+ 份——最早的 SOP 思维训练。",
+      summary: "个人嘉奖一次。三公里考核连队第一，支队级比武三公里第二。代理文书期间处理基层表格 90+ 份，这是我最早的 SOP 训练。",
       note: null,
       related_project_ids: [],
       side_tag: "武警",
@@ -437,24 +437,24 @@ window.SITE_DATA = {
   // § Skill Garden —— 12 个独立 Skill 卡片（从 Stack 拆出来）
   skill_garden: [
     { id: "sg-multi-agent", num: "01", name: "multi-agent-research", desc: "多 Agent 研究框架。47 轮控制实验 + 16 轮消融。", tags: ["主推", "Case Study"], featured: true, url: "projects/multi-agent-research.html" },
-    { id: "sg-auto-new", num: "02", name: "auto-new", desc: "Skill 自迭代引擎。元工具迭代它的母工具。", tags: ["NEW v3.5", "Case Study"], featured: true, url: "projects/auto-new.html" },
+    { id: "sg-auto-new", num: "02", name: "auto-new", desc: "从 31 轮实验中整理出的 Skill 自迭代引擎。", tags: ["NEW v3.5", "Case Study"], featured: true, url: "projects/auto-new.html" },
     { id: "sg-knowledge-healer", num: "03", name: "knowledge-healer", star: true, desc: "飞书知识库 7 维健康诊断 + 跨源验证。", tags: ["★ 飞书十佳", "larksuite 官方"], featured: true, url: "projects/knowledge-healer.html" },
     { id: "sg-lark-survey", num: "04", name: "lark-survey-scoreboard", star: true, desc: "飞书培训反馈实时大屏。1 秒刷新，¥0 成本。", tags: ["★ 飞书十佳", "larksuite 官方"], featured: true, url: "projects/lark-survey-scoreboard.html" },
     { id: "sg-multi-coder", num: "05", name: "multi-coder", desc: "Multi-Agent 方法论跨领域迁移到编程。", tags: ["方法论复用", "664 行"], featured: false, url: null },
     { id: "sg-academic", num: "06", name: "academic-research", desc: "学术研究多 Agent 框架。PDF 解析 + 文献引用。", tags: ["Skill 生态", "配合 multi-agent"], featured: false, url: null },
     { id: "sg-pdf2md", num: "07", name: "pdf-to-md", desc: "PDF 转 Markdown（MinerU API，3 worker 并发）。", tags: ["工程工具", "11x 加速"], featured: false, url: null },
     { id: "sg-dream", num: "08", name: "dream / insights", desc: "基于 Claude Code 源码机制的经验沉淀系统。", tags: ["元工具", "持续迭代"], featured: false, url: null },
-    { id: "sg-start-day", num: "09", name: "start-my-day", desc: "每日工作流自动化——回顾昨日 + 规划今日。", tags: ["个人工具", "日常使用"], featured: false, url: null },
+    { id: "sg-start-day", num: "09", name: "start-my-day", desc: "每日回顾昨日，再整理今天的计划。", tags: ["个人工具", "日常使用"], featured: false, url: null },
     { id: "sg-dav", num: "10", name: "大V思维框架蒸馏", desc: "把常读公众号大V的文章蒸馏成思维框架 Skill。", tags: ["内容工具", "审美外包"], featured: false, url: null },
     { id: "sg-pet", num: "11", name: "金龟宠物", desc: "Claude Code 宠物 Skill。第一个自研 Skill。", tags: ["2026.04 首作", "致敬卡兹克"], featured: false, url: null }
   ],
 
   // § What's Next —— 2026 下半年要做的（4 个方向）
   whats_next: [
-    { id: "wn-video", marker: "α", title_cn: "开一个视频分享账号，把过程讲出来", body_cn: "过去 3 个月做的东西大部分留在了 README 和 commit 里。下一步想把'怎么和 AI 协作做 Skill''47 轮实验里学到的东西'用视频讲清楚——不是教程，是过程的复盘。文字适合沉淀，视频适合传染。" },
-    { id: "wn-iterate", marker: "β", title_cn: "让现有 Skill 进入持续迭代状态", body_cn: "v9.0 是阶段性收敛，不是终点。日常阅读 / 看视频 / 学习里冒出来的新想法和见解，都应该有路径反哺到 Skill 里——让工具跟着我的认知一起长，而不是停在某一版冻起来。" },
-    { id: "wn-real", marker: "γ", title_cn: "做立足真实业务的 Skill", body_cn: "lark-survey-scoreboard 是个起点——它从美动 HR 实习的真实痛点长出来，而不是为了'做个 Skill 而做'。下一步继续找真实问题、真实需求、有真实用户的场景，用过往项目经验直接落地，不为技术炫技。" },
-    { id: "wn-input", marker: "δ", title_cn: "突破 AI 的输入端壁垒", body_cn: "AI 产出端工具已成熟，但输入端还是壁垒：AI 亲近 Markdown，对 PDF / 复杂图文 / 跨领域文献的理解远没到位。/mineru-pdf 解决了一部分（MinerU API 比 OCR 截图更结构化），但只是把 PDF 转 MD，不等于让 AI 读懂。更大的问题是预训练知识不够：某个小众领域 / 新兴学科 / 内部文档预训练里都没有。怎么通过工具 / 主动建知识库 / 辅助搜索，让 AI 真正读懂跨领域内容？方法还在摸索。", source_url: "https://www.bilibili.com/video/BV13BdfBoELd/", source_label: "张小珺对话 Axiom 洪乐潼" }
+    { id: "wn-video", marker: "α", title_cn: "开一个视频分享账号，把过程讲出来", body_cn: "过去 3 个月的工作大多留在 README 和 commit 里。下一步想用视频复盘：我怎么和 AI 协作做 Skill，以及 47 轮实验具体改掉了什么。" },
+    { id: "wn-iterate", marker: "β", title_cn: "让现有 Skill 继续迭代", body_cn: "v9.0 只是一次阶段性收敛。以后在阅读、看视频和真实使用中发现新问题，就把它们带回实验，再决定是否更新 Skill。" },
+    { id: "wn-real", marker: "γ", title_cn: "继续从真实业务里做 Skill", body_cn: "lark-survey-scoreboard 来自美动 HR 实习中的实际需求。接下来还想继续找有具体用户、能拿到反馈的问题，而不是为了展示技术再造一个工具。" },
+    { id: "wn-input", marker: "δ", title_cn: "继续补 AI 的输入端", body_cn: "AI 更容易处理 Markdown，面对 PDF、复杂图文和跨领域文献时仍会丢信息。/mineru-pdf 解决了格式转换，但“转成 MD”和“真正读懂”是两件事。我还在尝试用知识库和辅助搜索补足这部分。", source_url: "https://www.bilibili.com/video/BV13BdfBoELd/", source_label: "张小珺对话 Axiom 洪乐潼" }
   ],
 
   // § 三件我比较在意的事 —— Contact 段
