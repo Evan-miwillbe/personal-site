@@ -72,7 +72,7 @@
 ## 快速开始
 
 ```bash
-git clone https://github.com/Evan-miwillbe/multi-agent-research.git ~/.claude/skills/multi-agent-research
+git clone https://github.com/Evan-miwillbe/multi-agent-research-v9 ~/.claude/skills/multi-agent-research
 ```
 
 在 Claude Code 中输入 `/multi-agent-research` 或直接描述研究需求。前置要求：Claude Code + `web-access` skill。
