@@ -171,7 +171,7 @@ window.SITE_DATA = {
       description_full: null,
       tags: ["CONTEXT", "MEMORY", "AI WORKFLOW"],
       tech_stack: ["Claude Code", "Personal Context"],
-      url_detail: "projects/obsidian-lifeos.html",
+      url_detail: "projects/obsidian-lifeos-3d-preview.html",
       url_github: null,
       featured_award: null,
       cost: null,
