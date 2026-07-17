@@ -174,6 +174,21 @@
     color:var(--accent);font-style:italic;font-weight:500;
     border-bottom:1px solid var(--accent-soft);
   }
+  .tagline .intro-line{display:block;margin-top:14px}
+  .tagline .intro-line--context{color:var(--ink-soft)}
+  .tagline .memory-mark{white-space:nowrap}
+  .tagline .memory-mark--origin{
+    color:var(--accent);font-family:var(--serif);font-style:italic;font-weight:600;
+    border-bottom:1px dashed var(--accent-soft);
+  }
+  .tagline .memory-mark--research{
+    color:var(--accent);font-family:var(--display);font-style:italic;font-weight:600;
+    border-bottom:1px solid var(--accent-soft);letter-spacing:.01em;
+  }
+  .tagline .memory-mark--evolution{
+    color:var(--sage);font-family:var(--hanzi);font-style:italic;font-weight:600;
+    border-bottom:1px solid rgba(120,141,114,.36);letter-spacing:.04em;
+  }
 
   .hero-meta{
     display:flex;flex-wrap:wrap;gap:0;align-items:center;
@@ -1048,11 +1063,11 @@
 
         <p class="tagline">
           <span class="hanzi">滕美名</span>，22 岁，上海。上海对外经贸大学应届，<em>退役军人</em>。
-          <span style="display:block;margin-top:14px">
-            3 个月和 <em>Claude Code 协作</em>做出 Multi-Agent Research（47 轮控制实验）+ auto-new 元迭代引擎。飞书 CLI 创作者大赛 <em>「十佳优秀 Skill」入选 2 项</em>（3 投 2 中），收录至字节 larksuite 官方开源库。
+          <span class="intro-line intro-line--context">
+            从 2026 年 1 月开始学习 AI，自 <a class="memory-mark memory-mark--origin" href="https://waytoagi.feishu.cn/" target="_blank" rel="noopener noreferrer">Waytoagi 社区</a>出发。看到 AI 对组织和世界的改变，也开始理解一款产品从发心到孕育的过程。
           </span>
-          <span style="display:block;margin-top:14px;color:var(--ink-mute);font-size:.92em">
-            从 2026 年 1 月开始学 AI，感谢 <a href="https://waytoagi.feishu.cn/" target="_blank" style="color:var(--accent);border-bottom:1px dashed var(--accent-soft);font-weight:500">Waytoagi 社区</a>。跨过了很多困难，中间多次想过放弃，但知道这是<em>喜欢的事情</em>，所以，还在加油。
+          <span class="intro-line intro-line--projects">
+            用两个月时间和 AI Coding 工具协作，做出 <span class="memory-mark memory-mark--research">Multi-Agent Research 调研框架</span>，以结构规范信息的搜集、汇总与呈现，提高信息准确性，助力信息平权；搭建 AI 工作台（时间、知识与精力管理系统），划定“人”与“AI”的协作边界；让真实任务中的记忆进入下一轮，在评估与修正中实现 <span class="memory-mark memory-mark--evolution">AI自进化</span>，减少重复沟通与试错。
           </span>
         </p>
         <div class="v2-thesis">一个需求，需要被真实世界修正，要在有限的资源中自由起舞，也要在实时的交互中找到平衡点。逼近真相的过程中，原计划要经由现实的反复检验，旧我也会在一次次修正中被推翻。</div>
