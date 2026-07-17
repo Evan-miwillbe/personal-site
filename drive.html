@@ -1916,10 +1916,15 @@ function addStaticBox(x, y, z, hx, hy, hz, yaw = 0, pitch = 0, material = obstac
 // The main ground is y=0; the north ramp rises from z=-30 to the y=6 plateau.
 function getDriveSurfaceHeight(x, z) {
   let height = 0;
-  if (Math.abs(x) <= 20 && z <= -23.5 && z >= -44.5) {
+  // Keep rescue/camera height checks inside the actual 36 m-wide ramp
+  // collider. Treating the extra strip at 18 < |x| <= 20 as ramp made the
+  // chassis fall under gravity and then get teleported back up every frame.
+  if (Math.abs(x) <= 18 && z <= -24 && z >= -44) {
     height = Math.max(height, THREE.MathUtils.clamp((-z - 24) * 0.3, 0, 6));
   }
-  if (Math.abs(x) <= 20 && z < -44.5 && z >= -59) height = Math.max(height, 6);
+  // The plateau collider spans x +/-19 and z -59..-44. Keep the same exact
+  // footprint here so recovery never invents a surface beside the platform.
+  if (Math.abs(x) <= 19 && z < -44 && z >= -59) height = Math.max(height, 6);
   for (const slope of driveableSlopes) {
     const dx=x-slope.x,dz=z-slope.z,c=Math.cos(slope.yaw),s=Math.sin(slope.yaw);
     const lx=dx*c-dz*s,lz=dx*s+dz*c;
