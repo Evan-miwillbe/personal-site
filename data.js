@@ -532,10 +532,6 @@ window.SITE_DATA = {
       { label: "TIMELINE", href: "#timeline" },
       { label: "STACK", href: "#toolkit" },
       { label: "CONTACT", href: "#contact" }
-    ],
-    versions: [
-      { label: "编辑版", href: "index.html" },
-      { label: "3D 探索", href: "play.html" }
     ]
   }
 
