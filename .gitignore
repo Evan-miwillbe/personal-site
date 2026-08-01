@@ -16,3 +16,6 @@ monolith/
 monolith-site/
 PROMPT-*.md
 _codex-*
+design-spec-*.md
+scripts/verify-*.sh
+preview-*.html
